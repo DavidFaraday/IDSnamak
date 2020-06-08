@@ -48,6 +48,13 @@ class SettingsTableViewController: UITableViewController {
         
         performSegue(withIdentifier: "settingsToEditProfileSeg", sender: self)
     }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+       let headerView = UIView()
+        headerView.backgroundColor = UIColor(named: "tableBackgroundColor")
+        return headerView
+    }
+
 
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {

@@ -10,20 +10,23 @@ import UIKit
 
 class ChatsTableViewController: UITableViewController {
 
-    //MARK: - IBOutlets
-
-    
     //MARK: - Vars
     var allRecents:[RecentChat] = []
+    var filteredRecents:[RecentChat] = []
+
+    let searchController = UISearchController(searchResultsController: nil)
 
     //MARK: - ViewLifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+//        createUsers()
+        
         tableView.tableFooterView = UIView()
 
         navigationController?.navigationBar.prefersLargeTitles = true
         downloadRecentChats()
+        setupSearchController()
     }
 
     //MARK: - DownloadRecents
@@ -31,7 +34,7 @@ class ChatsTableViewController: UITableViewController {
         FirebaseRecentListener.shared.downloadRecentChatsFromFireStore { (allChats) in
 
             self.allRecents = allChats
-            
+
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
@@ -40,22 +43,17 @@ class ChatsTableViewController: UITableViewController {
 
     
     // MARK: - Table view data source
-    override func numberOfSections(in tableView: UITableView) -> Int {
+     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
-        return 0
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-
-        return allRecents.count
+        return searchController.isActive ? filteredRecents.count : allRecents.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! RecentTableViewCell
 
-        let recentChat = allRecents[indexPath.row]
-        
+        let recentChat = searchController.isActive ? filteredRecents[indexPath.row] : allRecents[indexPath.row]
+
         cell.configureCell(recent: recentChat)
         
         return cell
@@ -67,18 +65,21 @@ class ChatsTableViewController: UITableViewController {
         
         tableView.deselectRow(at: indexPath, animated: true)
         
-        FirebaseRecentListener.shared.clearUnreadCounter(recent: allRecents[indexPath.row])
-        goToChat(recent: allRecents[indexPath.row])
+        let recent = searchController.isActive ? filteredRecents[indexPath.row] : allRecents[indexPath.row]
+
+        FirebaseRecentListener.shared.clearUnreadCounter(recent: recent)
+        goToChat(recent: recent)
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         
         if editingStyle == .delete {
             
-            let recent = self.allRecents[indexPath.row]
+            let recent = searchController.isActive ? filteredRecents[indexPath.row] : allRecents[indexPath.row]
             recent.deleteRecent()
             
-            self.allRecents.remove(at: indexPath.row)
+            searchController.isActive ? self.filteredRecents.remove(at: indexPath.row) : self.allRecents.remove(at: indexPath.row)
+            
             tableView.deleteRows(at: [indexPath], with: .automatic)
         }
     }
@@ -86,6 +87,16 @@ class ChatsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         
         return true
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+       let headerView = UIView()
+        headerView.backgroundColor = UIColor(named: "tableBackgroundColor")
+        return headerView
+    }
+
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 0
     }
 
     
@@ -98,5 +109,34 @@ class ChatsTableViewController: UITableViewController {
 //        navigationController?.pushViewController(privateChatView, animated: true)
     }
 
+    //MARK: - SearchController
+    private func setupSearchController() {
+        
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = true
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search User"
+        searchController.searchResultsUpdater = self
+        definesPresentationContext = true
+    }
 
+    private func filteredContentForSearchText(searchText: String) {
+        
+        filteredRecents = allRecents.filter({ (recent) -> Bool in
+            
+            return recent.receiverName.lowercased().contains(searchText.lowercased())
+        })
+        
+        tableView.reloadData()
+    }
+
+}
+
+
+extension ChatsTableViewController: UISearchResultsUpdating {
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        filteredContentForSearchText(searchText: searchController.searchBar.text!)
+    }
+    
 }

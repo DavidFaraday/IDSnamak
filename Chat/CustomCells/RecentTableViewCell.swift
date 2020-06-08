@@ -60,11 +60,11 @@ class RecentTableViewCell: UITableViewCell {
 
     private func setAvatar(avatarLink: String) {
         
-//        FileStorage.downloadImage(imageUrl: avatarLink) { (avatarImage) in
-//            if avatarImage != nil {
-//                self.avatarImageView.image = avatarImage?.circleMasked
-//            }
-//        }
+        FileStorage.downloadImage(imageUrl: avatarLink) { (avatarImage) in
+            if avatarImage != nil {
+                self.avatarImageView.image = avatarImage?.circleMasked
+            }
+        }
     }
         
     func timeElapsed(_ date: Date) -> String {

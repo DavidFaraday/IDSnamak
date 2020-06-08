@@ -44,7 +44,7 @@ class FirebaseRecentListener {
     }
     
     func updateRecents(chatRoomId: String, lastMessage: String) {
-        print("last", lastMessage)
+
         FirebaseReference(.Recent).whereField(kCHATROOMID, isEqualTo: chatRoomId).getDocuments { (snapshot, error) in
             
             guard let snapshot = snapshot else { return }
@@ -70,7 +70,7 @@ class FirebaseRecentListener {
         
         let values = [kLASTMESSAGE : lastMessage, kUNREADCOUNTER : recent.unreadCounter, kDATE : Date()] as [String : Any]
         
-        FirebaseReference(.Recent).document(recent.objectId).updateData(values)
+        FirebaseReference(.Recent).document(recent.id).updateData(values)
     }
     
     
@@ -95,6 +95,6 @@ class FirebaseRecentListener {
         
         let values = [kUNREADCOUNTER : 0] as [String : Any]
         
-        FirebaseReference(.Recent).document(recent.objectId).updateData(values)
+        FirebaseReference(.Recent).document(recent.id).updateData(values)
     }
 }

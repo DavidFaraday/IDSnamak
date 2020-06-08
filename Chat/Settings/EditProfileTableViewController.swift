@@ -72,6 +72,13 @@ class EditProfileTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return section == 0 ? "" : "Status"
     }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+       let headerView = UIView()
+        headerView.backgroundColor = UIColor(named: "tableBackgroundColor")
+        return headerView
+    }
+
 
     //MARK: - IBActions
     @IBAction func editButtonPressed(_ sender: Any) {

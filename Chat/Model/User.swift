@@ -88,3 +88,33 @@ class User {
     }
 
 }
+
+
+//needed only to populate with dummy
+func createUsers() {
+    
+    let names = ["Alison Stamp", "Inayah Duggan", "Alfie Thornton", "Rachelle Neale", "Anya Gates", "Juanita Bate"]
+    var ImageIndex = 1
+    var UserIndex = 1
+
+    for _ in 0..<5 {
+
+        let id = UUID().uuidString
+        let randomNumber = Int.random(in: 0 ... 5)
+        
+        let fileDirectory = "Avatars/" + "\(id)" + ".jpg"
+
+        FileStorage.uploadImage(UIImage(named: "user\(ImageIndex)")!, directory: fileDirectory) { (avatarLink) in
+            
+            let user = User(id: id, userName: names[randomNumber], email: "user\(UserIndex)@mail.com", pushId: "", avatarLink: avatarLink ?? "")
+                
+            UserIndex += 1
+            user.saveUserToFireStore()
+        }
+
+        ImageIndex += 1
+        if ImageIndex == 5 {
+            ImageIndex = 1
+        }
+    }
+}

@@ -12,7 +12,7 @@ import Firebase
 
 class RecentChat {
     
-    var objectId = ""
+    var id = ""
     var chatRoomId = ""
     var senderId = ""
     var senderName = ""
@@ -28,7 +28,7 @@ class RecentChat {
     
     var dictionary: NSDictionary {
         
-        return NSDictionary(objects: [self.objectId,
+        return NSDictionary(objects: [self.id,
                                       self.chatRoomId,
                                       self.senderId,
                                       self.senderName,
@@ -59,7 +59,7 @@ class RecentChat {
     
     init(_ recentDocument: Dictionary<String, Any>) {
         
-        objectId = recentDocument[kID] as? String ?? ""
+        id = recentDocument[kID] as? String ?? ""
         chatRoomId = recentDocument[kCHATROOMID] as? String ?? ""
         senderId = recentDocument[kSENDERID] as? String ?? ""
         senderName = recentDocument[kSENDERNAME] as? String ?? ""
@@ -75,10 +75,10 @@ class RecentChat {
     
     //MARK: - Saving
     func saveToFirestore() {
-        FirebaseReference(.Recent).document(self.objectId).setData(self.dictionary as! [String : Any])
+        FirebaseReference(.Recent).document(self.id).setData(self.dictionary as! [String : Any])
     }
     
     func deleteRecent() {
-        FirebaseReference(.Recent).document(self.objectId).delete()
+        FirebaseReference(.Recent).document(self.id).delete()
     }
 }

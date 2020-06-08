@@ -15,6 +15,8 @@
 		557758C624880846000799E2 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557758C524880846000799E2 /* LoginViewController.swift */; };
 		557758C82488178A000799E2 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557758C72488178A000799E2 /* User.swift */; };
 		557758CA24881888000799E2 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557758C924881888000799E2 /* Constants.swift */; };
+		55897647248D4DE000D544F1 /* UsersTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55897646248D4DE000D544F1 /* UsersTableViewController.swift */; };
+		55897649248D4E4300D544F1 /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55897648248D4E4300D544F1 /* UserTableViewCell.swift */; };
 		55943D02248CAC2E00A7D557 /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55943D01248CAC2E00A7D557 /* Status.swift */; };
 		55943D05248CDF0200A7D557 /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55943D04248CDF0200A7D557 /* NotificationController.swift */; };
 		55943D07248CE0A600A7D557 /* FileStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55943D06248CE0A600A7D557 /* FileStorage.swift */; };
@@ -30,6 +32,8 @@
 		55C65B69248C0B7200B28303 /* FirebaseRecentListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C65B68248C0B7100B28303 /* FirebaseRecentListener.swift */; };
 		55C65B6B248C12A000B28303 /* EditProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C65B6A248C12A000B28303 /* EditProfileTableViewController.swift */; };
 		55C65B6D248C140300B28303 /* StatusTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C65B6C248C140300B28303 /* StatusTableViewController.swift */; };
+		55CE4B84248DF73600B74149 /* ProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55CE4B83248DF73600B74149 /* ProfileTableViewController.swift */; };
+		55CE4B87248DFFAD00B74149 /* StartChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55CE4B86248DFFAD00B74149 /* StartChat.swift */; };
 		BA4E709664C18642A7A8A6D9 /* Pods_Chat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6991365F8C9CEFFCB3ED9F10 /* Pods_Chat.framework */; };
 /* End PBXBuildFile section */
 
@@ -44,6 +48,8 @@
 		557758C524880846000799E2 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		557758C72488178A000799E2 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		557758C924881888000799E2 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		55897646248D4DE000D544F1 /* UsersTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersTableViewController.swift; sourceTree = "<group>"; };
+		55897648248D4E4300D544F1 /* UserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
 		55943D01248CAC2E00A7D557 /* Status.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Status.swift; sourceTree = "<group>"; };
 		55943D04248CDF0200A7D557 /* NotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationController.swift; sourceTree = "<group>"; };
 		55943D06248CE0A600A7D557 /* FileStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileStorage.swift; sourceTree = "<group>"; };
@@ -59,6 +65,8 @@
 		55C65B68248C0B7100B28303 /* FirebaseRecentListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseRecentListener.swift; sourceTree = "<group>"; };
 		55C65B6A248C12A000B28303 /* EditProfileTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileTableViewController.swift; sourceTree = "<group>"; };
 		55C65B6C248C140300B28303 /* StatusTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusTableViewController.swift; sourceTree = "<group>"; };
+		55CE4B83248DF73600B74149 /* ProfileTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTableViewController.swift; sourceTree = "<group>"; };
+		55CE4B86248DFFAD00B74149 /* StartChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartChat.swift; sourceTree = "<group>"; };
 		6991365F8C9CEFFCB3ED9F10 /* Pods_Chat.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Chat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9BB3995B2461CEEDCF6E42EA /* Pods-Chat.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Chat.debug.xcconfig"; path = "Target Support Files/Pods-Chat/Pods-Chat.debug.xcconfig"; sourceTree = "<group>"; };
 		ADAC571E70FD14D81805ED2A /* Pods-Chat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Chat.release.xcconfig"; path = "Target Support Files/Pods-Chat/Pods-Chat.release.xcconfig"; sourceTree = "<group>"; };
@@ -118,10 +126,12 @@
 				557758B324880184000799E2 /* SceneDelegate.swift */,
 				557758C524880846000799E2 /* LoginViewController.swift */,
 				55C65B64248C0A1600B28303 /* ChatsTableViewController.swift */,
-				55943D04248CDF0200A7D557 /* NotificationController.swift */,
+				55897646248D4DE000D544F1 /* UsersTableViewController.swift */,
+				55CE4B85248DFEE000B74149 /* Secondary Views */,
 				55943D03248CC21300A7D557 /* Settings */,
 				55C65B5F248C06E500B28303 /* CustomCells */,
 				55C65B58248909CF00B28303 /* FirebaseHelpers */,
+				55897643248D4C0E00D544F1 /* Notifications */,
 				55C65B53248908E000B28303 /* Model */,
 				55C65B52248908D700B28303 /* Helpers */,
 				557758B724880184000799E2 /* Main.storyboard */,
@@ -131,6 +141,14 @@
 				55C65B59248B9CDB00B28303 /* GoogleService-Info.plist */,
 			);
 			path = Chat;
+			sourceTree = "<group>";
+		};
+		55897643248D4C0E00D544F1 /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				55943D04248CDF0200A7D557 /* NotificationController.swift */,
+			);
+			path = Notifications;
 			sourceTree = "<group>";
 		};
 		55943D03248CC21300A7D557 /* Settings */ = {
@@ -149,6 +167,7 @@
 				557758C924881888000799E2 /* Constants.swift */,
 				55C65B62248C095400B28303 /* Extensions.swift */,
 				55943D08248CE0D200A7D557 /* Reachability.swift */,
+				55CE4B86248DFFAD00B74149 /* StartChat.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -178,8 +197,17 @@
 			isa = PBXGroup;
 			children = (
 				55C65B5D248C06BD00B28303 /* RecentTableViewCell.swift */,
+				55897648248D4E4300D544F1 /* UserTableViewCell.swift */,
 			);
 			path = CustomCells;
+			sourceTree = "<group>";
+		};
+		55CE4B85248DFEE000B74149 /* Secondary Views */ = {
+			isa = PBXGroup;
+			children = (
+				55CE4B83248DF73600B74149 /* ProfileTableViewController.swift */,
+			);
+			path = "Secondary Views";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -314,8 +342,12 @@
 				55C65B67248C0A9600B28303 /* SettingsTableViewController.swift in Sources */,
 				55943D02248CAC2E00A7D557 /* Status.swift in Sources */,
 				55C65B55248908FE00B28303 /* FirebaseUserListener.swift in Sources */,
+				55897649248D4E4300D544F1 /* UserTableViewCell.swift in Sources */,
 				55C65B63248C095400B28303 /* Extensions.swift in Sources */,
 				55C65B69248C0B7200B28303 /* FirebaseRecentListener.swift in Sources */,
+				55897647248D4DE000D544F1 /* UsersTableViewController.swift in Sources */,
+				55CE4B87248DFFAD00B74149 /* StartChat.swift in Sources */,
+				55CE4B84248DF73600B74149 /* ProfileTableViewController.swift in Sources */,
 				557758B424880184000799E2 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

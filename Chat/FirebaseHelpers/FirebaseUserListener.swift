@@ -77,7 +77,6 @@ class FirebaseUserListener {
     }
     
     //MARK: - Download 
-
     func downloadUserFromFirebase(userId: String, email: String? = nil) {
         
         FirebaseReference(.User).document(userId).getDocument { (snapshot, error) in
@@ -87,6 +86,35 @@ class FirebaseUserListener {
 
                 let user = User(dictionary: snapshot.data()!)
                 user.saveUserLocally()
+            }
+        }
+    }
+
+    func downloadAllUsersFromFirebase(completion: @escaping (_ allUsers: [User]) -> Void) {
+        
+        var users:[User] = []
+        
+        FirebaseReference(.User).limit(to: 500).getDocuments { (snapshot, error) in
+            
+            guard let snapshot = snapshot else { return }
+            
+            if !snapshot.isEmpty {
+                
+                for userData in snapshot.documents {
+                    
+                    let userObject = userData.data()
+                    
+                    //don't add current users
+                    if User.currentId() != userData[kID] as! String {
+                        users.append(User(dictionary: userObject))
+                    }
+                }
+                
+                completion(users)
+                
+            } else {
+                print("no users to fetch!")
+                completion(users)
             }
         }
     }
