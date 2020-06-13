@@ -9,7 +9,7 @@
 import Foundation
 import Firebase
 
-class User {
+class User: Equatable {
     
     var id: String
     var username: String
@@ -25,7 +25,7 @@ class User {
         self.email = email
         self.pushId = pushId
         self.avatarLink = avatarLink
-        self.status = ""
+        self.status = "Hey there I'm using Chat"
     }
     
     init(dictionary: [String : Any]) {
@@ -36,12 +36,16 @@ class User {
         pushId = dictionary[kPUSHID] as? String ?? ""
         avatarLink = dictionary[kAVATARLINK] as? String ?? ""
         status = dictionary[kSTATUS] as? String ?? ""
-
     }
     
     
     var dictionary : [String : Any] {
         return [kID : id, kUSERNAME: username, kEMAIL : email, kPUSHID : pushId, kAVATARLINK: avatarLink, kSTATUS: status]
+    }
+    
+    //for Equatable
+    static func == (lhs: User, rhs: User) -> Bool {
+        lhs.id == rhs.id
     }
     
     class func currentId() -> String {

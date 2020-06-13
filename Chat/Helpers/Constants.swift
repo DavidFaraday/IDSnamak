@@ -11,8 +11,10 @@ import Foundation
 let userDefaults = UserDefaults.standard
 
 //IDS and Keys
-public let kFILEREFERENCE = "gs://messagekittest-b4ee5.appspot.com/"
-public let kSERVERKEY = "AAAAQyMvrSc:APA91bEnFAss9dhCIqxuZnZ9Zjt6_qgzKf7LJb4MmIFv3DM5Kn56Uz20ZXZK503vPQCkmK7H5LgAF2bjPAWC3FnAX3K6lavPpUuwOf1WDHvrdMz_lenLZK1CmSXv6MYwUEKmTq7Ikp19"
+public let kFILEREFERENCE = "gs://messagekittest-b4ee5.appspot.com"
+public let kSERVERKEY = "AAAAoxx2iE0:APA91bHhR8ccuPtlIXTnsM25VhmZdByo4uy1N1Ai6wXaLr2u5rX1gNtu3BaV5HHqILkSxDRXdr2aH4X-KKlr3nNaMvL97TQ-q1FjMuyM6fgEDIW4dOi2O8Og2C7aDfgRunTc515VmYud"
+
+public let kNUMBEROFMESSAGES = 20
 
 
 //MARK: - User
@@ -37,5 +39,25 @@ public let kMEMBERIDS = "memberIds"
 public let kDATE = "date"
 
 public let kFIRSTRUN = "firstRun"
+
+//Message
+public let kREADDATE = "readDate"
+public let kTYPE = "type"
+public let kMESSAGE = "message"
+public let kPICTURE = "picture"
+public let kVIDEO = "video"
+public let kAUDIO = "audio"
+public let kWIDTH = "width"
+public let kHEIGHT = "height"
+public let kLATITUDE = "latitude"
+public let kLONGITUDE = "longitude"
+public let kSENDERINITIALS = "senderInitials"
+
+//message types
+public let kTEXT = "text"
+public let kLOCATION = "location"
+public let kSENT = "Sent"
+public let kREAD = "Read"
+
 
 

@@ -27,6 +27,7 @@ class RecentTableViewCell: UITableViewCell {
     //MARK: - ViewLifeCycle
     override func awakeFromNib() {
         super.awakeFromNib()
+        unreadCountBackgroundView.layer.cornerRadius = unreadCountBackgroundView.frame.width/2
         // Initialization code
     }
 
@@ -60,10 +61,12 @@ class RecentTableViewCell: UITableViewCell {
 
     private func setAvatar(avatarLink: String) {
         
-        FileStorage.downloadImage(imageUrl: avatarLink) { (avatarImage) in
-            if avatarImage != nil {
+        if avatarLink != "" {
+            FileStorage.downloadImage(imageUrl: avatarLink) { (avatarImage) in
                 self.avatarImageView.image = avatarImage?.circleMasked
             }
+        } else {
+            self.avatarImageView.image = UIImage(named: "avatar")?.circleMasked
         }
     }
         

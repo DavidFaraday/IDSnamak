@@ -24,10 +24,25 @@ class ChatsTableViewController: UITableViewController {
         
         tableView.tableFooterView = UIView()
 
-        navigationController?.navigationBar.prefersLargeTitles = true
         downloadRecentChats()
         setupSearchController()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        navigationItem.largeTitleDisplayMode = .always
+        navigationController?.navigationBar.prefersLargeTitles = true
+    }
+    
+    //MARK: - IBAction
+    @IBAction func composeButtonPressed(_ sender: Any) {
+        
+        let userView = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(identifier: "usersView") as! UsersTableViewController
+        
+        navigationController?.pushViewController(userView, animated: true)
+    }
+    
 
     //MARK: - DownloadRecents
     private func downloadRecentChats() {
@@ -102,11 +117,13 @@ class ChatsTableViewController: UITableViewController {
     
     //MARK: - Navigation
     private func goToChat(recent: RecentChat) {
-        print(":Go to chat")
-//        let privateChatView = ChatViewController(chatId: recent.chatRoomId, recipientId: recent.receiverId, recipientName: recent.receiverName)
-//
-//        privateChatView.hidesBottomBarWhenPushed = true
-//        navigationController?.pushViewController(privateChatView, animated: true)
+
+        restartChat(chatRoomId: recent.chatRoomId, memberIds: recent.memberIds)
+
+        let privateChatView = ChatViewController(chatId: recent.chatRoomId, recipientId: recent.receiverId, recipientName: recent.receiverName)
+
+        privateChatView.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(privateChatView, animated: true)
     }
 
     //MARK: - SearchController
@@ -129,7 +146,6 @@ class ChatsTableViewController: UITableViewController {
         
         tableView.reloadData()
     }
-
 }
 
 

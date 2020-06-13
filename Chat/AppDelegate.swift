@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import FirebaseMessaging
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -18,7 +19,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         FirebaseApp.configure()
+        Messaging.messaging().delegate = self
+        requestPushNotificationPermission()
+
         firstRunCheck()
+        
+        application.registerForRemoteNotifications()
+        application.applicationIconBadgeNumber = 0
+
         return true
     }
 
@@ -36,6 +44,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
 
+    //added for notifications
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
+        
+    }
+
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any],
+                     fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+
+      completionHandler(UIBackgroundFetchResult.newData)
+    }
+
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+      print("Unable to register for remote notifications: \(error.localizedDescription)")
+    }
+
+    
     //MARK: - FirstRunCheck
     private func firstRunCheck() {
         
@@ -51,6 +75,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
+    //MARK: - PushNotifications
+    private func requestPushNotificationPermission() {
+        UNUserNotificationCenter.current().delegate = self
+
+        let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+        UNUserNotificationCenter.current().requestAuthorization(
+          options: authOptions,
+          completionHandler: {_, _ in })
+
+    }
+    
+    private func updateUserPushId(newPushId: String) {
+        
+        if let user = User.currentUser() {
+            user.pushId = newPushId
+            user.saveUserLocally()
+            FirebaseUserListener.shared.updateUserInFireStore(withValues: [kPUSHID : newPushId]) { (error) in
+                print("updated push id and error is ", error)
+            }
+        }
+    }
 
 }
 
+extension AppDelegate : UNUserNotificationCenterDelegate {
+    
+    
+}
+
+
+extension AppDelegate : MessagingDelegate {
+    
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
+        print("token is", fcmToken)
+        updateUserPushId(newPushId: fcmToken)
+    }
+}

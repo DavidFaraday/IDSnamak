@@ -21,11 +21,18 @@ class UsersTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+
         tableView.tableFooterView = UIView()
         setupSearchController()
         downloadUsers()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        navigationItem.largeTitleDisplayMode = .always
+        navigationController?.navigationBar.prefersLargeTitles = true
+    }
 
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -103,7 +110,7 @@ class UsersTableViewController: UITableViewController {
         let profileVc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "ProfileView") as! ProfileTableViewController
         
         profileVc.user = user
-        self.present(profileVc, animated: true, completion: nil)
+        self.navigationController?.pushViewController(profileVc, animated: true)
     }
 
 }

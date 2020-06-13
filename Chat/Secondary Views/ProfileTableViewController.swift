@@ -22,6 +22,7 @@ class ProfileTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationItem.largeTitleDisplayMode = .never
         tableView.tableFooterView = UIView()
         setupUI()
     }
@@ -41,8 +42,12 @@ class ProfileTableViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         
         if indexPath.section == 1 {
-            let id = startChat(user1: User.currentUser()!, user2: user!)
-            print(id)
+            let chatId = startChat(user1: User.currentUser()!, user2: user!)
+            
+            let privateChatView = ChatViewController(chatId: chatId, recipientId: user!.id, recipientName: user!.username)
+
+            privateChatView.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(privateChatView, animated: true)
         }
     }
 
@@ -53,7 +58,7 @@ class ProfileTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return section == 0 ? 0 : 20
+        return 0
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {

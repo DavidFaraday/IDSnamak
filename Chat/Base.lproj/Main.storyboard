@@ -235,7 +235,6 @@
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZgZ-Wy-Ud7">
                                             <rect key="frame" x="83" y="11" width="182" height="26"/>
                                             <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="19"/>
-                                            <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LdK-c1-iWz">
@@ -282,7 +281,7 @@
                                             </constraints>
                                         </stackView>
                                     </subviews>
-                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="backgroundColor" name="CellColor"/>
                                     <constraints>
                                         <constraint firstItem="INE-H3-ukn" firstAttribute="leading" secondItem="CTF-Qk-UR2" secondAttribute="leading" constant="15" id="2Zf-a1-SmR"/>
                                         <constraint firstItem="LdK-c1-iWz" firstAttribute="leading" secondItem="INE-H3-ukn" secondAttribute="trailing" constant="8" id="AEq-BN-GxP"/>
@@ -313,7 +312,11 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Chats" largeTitleDisplayMode="always" id="dry-gv-yyf">
-                        <barButtonItem key="rightBarButtonItem" systemItem="compose" id="bKa-Ym-QWF"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="compose" id="bKa-Ym-QWF">
+                            <connections>
+                                <action selector="composeButtonPressed:" destination="UYi-dd-pKi" id="Xb4-vM-rkf"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QRT-LT-520" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -437,7 +440,7 @@
         <!--Users-->
         <scene sceneID="5Rq-mS-1Of">
             <objects>
-                <tableViewController id="kcR-6W-Ddw" customClass="UsersTableViewController" customModule="Chat" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="usersView" id="kcR-6W-Ddw" customClass="UsersTableViewController" customModule="Chat" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="80" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="PDn-hb-QCr">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -470,6 +473,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
+                                    <color key="backgroundColor" name="CellColor"/>
                                     <constraints>
                                         <constraint firstAttribute="trailing" secondItem="15l-O4-2UW" secondAttribute="trailing" id="1CP-gL-Tnj"/>
                                         <constraint firstItem="hw1-5h-5Pw" firstAttribute="centerY" secondItem="l5u-kw-z7K" secondAttribute="centerY" id="5UI-i9-GWV"/>
@@ -890,7 +894,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="avatar" width="184" height="184"/>
+        <image name="avatar" width="368" height="368"/>
         <image name="gear" catalog="system" width="128" height="119"/>
         <image name="loginBtn" width="294" height="62"/>
         <image name="person.2" catalog="system" width="128" height="81"/>

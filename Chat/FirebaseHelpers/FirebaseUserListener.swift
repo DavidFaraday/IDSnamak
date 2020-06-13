@@ -118,6 +118,39 @@ class FirebaseUserListener {
             }
         }
     }
+    
+    func downloadUserFromFirebase(withIds: [String], completion: @escaping (_ users: [User]) -> Void ) {
+
+        var count = 0
+        var usersArray: [User] = []
+        
+        //go through each user and download it from firestore
+        for userId in withIds {
+            
+            FirebaseReference(.User).document(userId).getDocument { (snapshot, error) in
+                
+                guard let snapshot = snapshot else {  return }
+                
+                if snapshot.exists {
+
+                    let user = User(dictionary: snapshot.data()!)
+                    
+                    usersArray.append(user)
+                    count += 1
+                    
+                    if count == withIds.count {
+                        //we have finished, return the array
+                        completion(usersArray)
+                    }
+
+                } else {
+                    completion(usersArray)
+                }
+            }
+        }
+    }
+
+
 
     
     //MARK: - Update

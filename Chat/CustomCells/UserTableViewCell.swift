@@ -29,12 +29,19 @@ class UserTableViewCell: UITableViewCell {
     func configure(user: User) {
         usernameLabel.text = user.username
         statusLabel.text = user.status
+        setAvatar(avatarLink: user.avatarLink)
+    }
+    
+    private func setAvatar(avatarLink: String) {
         
-        if user.avatarLink != "" {
-            FileStorage.downloadImage(imageUrl: user.avatarLink) { (avatarImage) in
+        if avatarLink != "" {
+            FileStorage.downloadImage(imageUrl: avatarLink) { (avatarImage) in
                 self.avatarImageView.image = avatarImage?.circleMasked
             }
+        } else {
+            self.avatarImageView.image = UIImage(named: "avatar")?.circleMasked
         }
     }
+
 
 }
