@@ -108,7 +108,6 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
 extension AppDelegate : MessagingDelegate {
     
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
-        print("token is", fcmToken)
         updateUserPushId(newPushId: fcmToken)
     }
 }

@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import Gallery
 
 class OutgoingMessage {
     
@@ -15,29 +16,22 @@ class OutgoingMessage {
     
     
     //MARK: - Initializer
-    //text message
-    init (message: LocalMessage, text: String, memberIds: [String]) {
-
-        message.type = kTEXT
-        message.message = text
-
+    init (message: LocalMessage, memberIds: [String]) {
         messageDictionary = message.dictionary as! [String : Any]
     }
 
-//    init (message: LocalMessage, photo: UIImage, photoURL: String, memberIds: [String]) {
-//
-//        message.type = kPICTURE
-//        message.message = "Picture message"
-//        message.photoWidth = Int(photo.size.width)
-//        message.photoHeight = Int(photo.size.height)
-//        message.mediaURL = photoURL
-//
-//        messageDictionary = message.dictionary as! [String : Any]
-//    }
+    init (pictureMessage: LocalMessage, memberIds: [String]) {
+
+        pictureMessage.type = kPICTURE
+        pictureMessage.message = "Picture message"
+
+        messageDictionary = pictureMessage.dictionary as! [String : Any]
+    }
+    
 
     //MARK: - Send Message
-    class func send(chatId: String, text: String?, photo: UIImage?, memberIds: [String]) {
-
+    class func send(chatId: String, text: String?, photo: UIImage?, video: Video?, audio: String?, memberIds: [String]) {
+        print("send chat")
         let currentUser = User.currentUser()!
         
         let message = LocalMessage()
@@ -49,42 +43,33 @@ class OutgoingMessage {
         message.date = Date()
         message.senderInitials = String(currentUser.username.first!)
         message.status = kSENT
-        message.message = text ?? "Picture message"
+        
         
         if text != nil {
-            let outgoingMessage = OutgoingMessage(message: message, text: text!, memberIds: memberIds)
-            outgoingMessage.sendMessage(chatRoomId: chatId, messageId: message.id, memberIds: memberIds)
-        } else  {
-//            if photo != nil {
-//
-//                let fileName = Date().stringDate()
-//                let fileDirectory = "MediaMessages/Photo/" + "\(chatId)/" + "_" + fileName + ".jpg"
-//
-//                FileStorage.saveImageLocally(imageData: photo!.jpegData(compressionQuality: 0.6)!, fileName: fileName)
-//
-//                FileStorage.uploadImage(photo!, directory: fileDirectory) { (imageURL) in
-//
-//                    if imageURL != nil {
-//                        let outgoingMessage = OutgoingMessage(message: message, photo: photo!, photoURL: imageURL!, memberIds: memberIds)
-//
-//                        outgoingMessage.sendMessage(chatRoomId: chatId, messageId: message.id, memberIds: memberIds)
-//
-//                    }
-//                }
-//            }
+            sendTextMessage(message: message, text: text!, memberIds: memberIds)
         }
+        
+        if photo != nil {
+            sendPictureMessage(message: message, photo: photo!, memberIds: memberIds)
+        }
+        
+        //video
+        if video != nil {
+            sendVideoMessage(message: message, video: video!, memberIds: memberIds)
+        }
+        
         
         PushNotificationService.shared.sendPushNotificationTo(userIds: removerCurrentUserFrom(userIds: memberIds) , body: message.message)
         FirebaseRecentListener.shared.updateRecents(chatRoomId: chatId, lastMessage: message.message)
-        
-        RealmManager.shared.saveToRealm(message)
     }
 
-    func sendMessage(chatRoomId: String, messageId: String, memberIds: [String]) {
+    func sendMessage(message: LocalMessage, memberIds: [String]) {
   
+        RealmManager.shared.saveToRealm(message)
+
         for memberId in memberIds {
             
-            FirebaseReference(.Messages).document(memberId).collection(chatRoomId).document(messageId).setData(messageDictionary)
+            FirebaseReference(.Messages).document(memberId).collection(message.chatRoomId).document(message.id).setData(messageDictionary)
         }
     }
 
@@ -98,4 +83,83 @@ class OutgoingMessage {
         }
     }
     
+}
+
+
+func sendTextMessage(message: LocalMessage, text: String, memberIds: [String]) {
+    
+    message.message = text
+    message.type = kTEXT
+    
+    let outgoingMessage = OutgoingMessage(message: message, memberIds: memberIds)
+    outgoingMessage.sendMessage(message: message, memberIds: memberIds)
+}
+
+
+func sendPictureMessage(message: LocalMessage, photo: UIImage, memberIds: [String]) {
+    
+    message.message = "Picture message"
+    message.type = kPICTURE
+    
+    
+    let fileName = Date().stringDate()
+    let fileDirectory = "MediaMessages/Photo/" + "\(message.chatRoomId)/" + "_" + fileName + ".jpg"
+
+    FileStorage.saveFileLocally(fileData: photo.jpegData(compressionQuality: 0.6)! as NSData, fileName: fileName)
+
+    FileStorage.uploadImage(photo, directory: fileDirectory) { (imageURL) in
+
+        if imageURL != nil {
+            message.pictureUrl = imageURL ?? ""
+            let outgoingMessage = OutgoingMessage(pictureMessage: message, memberIds: memberIds)
+
+            outgoingMessage.sendMessage(message: message, memberIds: memberIds)
+        }
+    }
+}
+
+
+func sendVideoMessage(message: LocalMessage, video: Video, memberIds: [String]) {
+    
+    message.message = "Video message"
+    message.type = kVIDEO
+    
+    let fileName = Date().stringDate()
+    let thumbnailDirectory = "MediaMessages/Photo/" + "\(message.chatRoomId)/" + "_" + fileName + ".jpg"
+    let videoDirectory = "MediaMessages/Video/" + "\(message.chatRoomId)/" + "_" + fileName + ".mov"
+    
+    
+    let editor = VideoEditor()
+    editor.process(video: video) { (processedVideo, videoURL) in
+        
+        if let tempPath = videoURL {
+            
+            let thumbnail = videoThumbnail(video: tempPath)
+            FileStorage.saveFileLocally(fileData: thumbnail.jpegData(compressionQuality: 0.7)! as NSData, fileName: fileName)
+            
+            //upload thumbnail and video
+            FileStorage.uploadImage(thumbnail, directory: thumbnailDirectory, isThumbnail: true) { (imageLink) in
+
+                if imageLink != nil {
+                    
+                    let videoData = NSData(contentsOfFile: tempPath.path)
+                    
+                    FileStorage.saveFileLocally(fileData: videoData!, fileName: fileName + ".mov")
+                    
+                    FileStorage.uploadVideo(video: videoData!, directory: videoDirectory) { (videoLink) in
+                        
+                        message.pictureUrl = imageLink ?? ""
+                        message.videoUrl = videoLink ?? ""
+                        
+                        let outgoingMessage = OutgoingMessage(message: message, memberIds: memberIds)
+                        outgoingMessage.sendMessage(message: message, memberIds: memberIds)
+                    }
+                }
+            } //End of Uploads
+            
+            
+        } else {
+            print("path is nil")
+        }
+    }
 }

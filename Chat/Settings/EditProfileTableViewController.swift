@@ -8,6 +8,7 @@
 
 import UIKit
 import Gallery
+import ProgressHUD
 
 class EditProfileTableViewController: UITableViewController {
 
@@ -18,15 +19,11 @@ class EditProfileTableViewController: UITableViewController {
     
     //MARK: - Vars
     var gallery: GalleryController!
-    var notificationController: NotificationController!
-
 
     //MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        notificationController = NotificationController(_view: self.view)
-
         tableView.tableFooterView = UIView()
         configureTextField()
         showUserInfo()
@@ -125,7 +122,7 @@ class EditProfileTableViewController: UITableViewController {
                 user.saveUserToFireStore()
             }
             
-            FileStorage.saveImageLocally(imageData: image.jpegData(compressionQuality: 1.0)!, fileName:  User.currentId())
+            FileStorage.saveFileLocally(fileData: image.jpegData(compressionQuality: 1.0)! as NSData, fileName:  User.currentId())
         }
     }
 
@@ -170,7 +167,7 @@ extension EditProfileTableViewController: GalleryControllerDelegate {
                     self.uploadAvatarImage(icon!)
                     self.avatarImageView.image = icon?.circleMasked
                 } else {
-                    self.notificationController.showNotification(text: "Couldn't select Image!", isError: true)
+                    ProgressHUD.showFailed("Couldn't select Image!")
                 }
             })
         }

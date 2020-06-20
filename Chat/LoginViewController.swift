@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ProgressHUD
 
 class LoginViewController: UIViewController {
 
@@ -32,14 +33,11 @@ class LoginViewController: UIViewController {
     
     //MARK: - Vars
     var isLogin = true
-    var notificationController: NotificationController!
 
     
     //MARK: - ViewLifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        notificationController = NotificationController(_view: self.view)
 
         updateUIFor(login: true)
         setupTextFieldDelegates()
@@ -52,7 +50,7 @@ class LoginViewController: UIViewController {
         if isDataInputedFor(type: isLogin ? "login" : "register") {
             isLogin ? loginUser() : registerUser()
         } else {
-            self.notificationController.showNotification(text: "All fields are required.", isError: true)
+            ProgressHUD.showFailed("All fields are required.")
         }
     }
     
@@ -60,7 +58,7 @@ class LoginViewController: UIViewController {
         if isDataInputedFor(type: "password") {
             resetPassword()
         } else {
-            self.notificationController.showNotification(text: "Email is required.", isError: true)
+            ProgressHUD.showFailed("Email is required.")
         }
     }
     
@@ -74,7 +72,7 @@ class LoginViewController: UIViewController {
         if isDataInputedFor(type: "password") {
             resendVerificationEmail()
         } else {
-            self.notificationController.showNotification(text: "Email is required.", isError: true)
+            ProgressHUD.showFailed("Email is required.")
         }
     }
     
@@ -136,11 +134,12 @@ class LoginViewController: UIViewController {
                 if  isEmailVerified {
                     self.goToApp()
                 } else {
-                    self.notificationController.showNotification(text: "Please verify email.", isError: true)
+                    ProgressHUD.showFailed("Please verify email.")
+
                     self.resendEmailButtonOutlet.isHidden = false
                 }
             } else {
-                self.notificationController.showNotification(text: error!.localizedDescription, isError: true)
+                ProgressHUD.showFailed(error!.localizedDescription)
             }
         }
     }
@@ -149,11 +148,11 @@ class LoginViewController: UIViewController {
         FirebaseUserListener.shared.registerUserWith(email: emailTextField.text!, password: passwordTextField.text!) { (error) in
             
             if error == nil {
-                self.notificationController.showNotification(text: "Verification email sent", isError: false)
+                ProgressHUD.showSucceed("Verification email sent.")
                 self.resendEmailButtonOutlet.isHidden = false
 
             } else {
-                self.notificationController.showNotification(text: error!.localizedDescription, isError: true)
+                ProgressHUD.showFailed(error!.localizedDescription)
             }
         }
     }
@@ -161,9 +160,9 @@ class LoginViewController: UIViewController {
     private func resetPassword() {
         FirebaseUserListener.shared.resetPasswordFor(email: emailTextField.text!) { (error) in
             if error == nil {
-                self.notificationController.showNotification(text: "Reset link sent to email.", isError: false)
+                ProgressHUD.showSucceed("Reset link sent to email.")
             } else {
-                self.notificationController.showNotification(text: error!.localizedDescription, isError: true)
+                ProgressHUD.showFailed(error!.localizedDescription)
             }
         }
     }
@@ -171,9 +170,9 @@ class LoginViewController: UIViewController {
     private func resendVerificationEmail() {
         FirebaseUserListener.shared.resendVerificationEmail(email: emailTextField.text!) { (error) in
             if error == nil {
-                self.notificationController.showNotification(text: "New verification email sent", isError: false)
+                ProgressHUD.showSucceed("New verification email sent.")
             } else {
-                self.notificationController.showNotification(text: error!.localizedDescription, isError: true)
+                ProgressHUD.showFailed(error!.localizedDescription)
             }
         }
     }

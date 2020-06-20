@@ -8,26 +8,30 @@
 
 import Foundation
 import FirebaseStorage
+import ProgressHUD
 
 let storage = Storage.storage()
 
 class FileStorage {
     
-    class func uploadImage(_ image: UIImage, directory: String, completion: @escaping (_ documentLink: String?) -> Void) {
+    //MARK: - Image
+    
+    class func uploadImage(_ image: UIImage, directory: String, isThumbnail: Bool = false, completion: @escaping (_ documentLink: String?) -> Void) {
         
         if Reachability.HasConnection() {
-                        
+            
             let storageRef = storage.reference(forURL: kFILEREFERENCE).child(directory)
             
-            let imageData = image.jpegData(compressionQuality: 0.5)
+            let imageData = image.jpegData(compressionQuality: isThumbnail ? 0.3 : 0.7)
             
             var task : StorageUploadTask!
-                    
+            
             
             task = storageRef.putData(imageData!, metadata: nil, completion: {
                 metadata, error in
                 
                 task.removeAllObservers()
+                ProgressHUD.dismiss()
                 
                 if error != nil {
                     
@@ -41,48 +45,59 @@ class FileStorage {
                         completion(nil)
                         return
                     }
-
+                    
                     completion(downloadUrl.absoluteString)
                 })
                 
             })
             
+            if !isThumbnail {
+                task.observe(StorageTaskStatus.progress, handler: {
+                    snapshot in
+                    let progress = snapshot.progress!.completedUnitCount / snapshot.progress!.totalUnitCount
+                    ProgressHUD.showProgress(CGFloat(progress))
+                })
+            }
+            
         } else {
             print("No Internet Connection!")
         }
     }
-
-
-
-    class func downloadImage(imageUrl: String, completion: @escaping (_ image: UIImage?) -> Void) {
+    
+    
+    class func downloadImage(imageUrl: String, isMessage: Bool = false, completion: @escaping (_ image: UIImage?) -> Void) {
         
-        let imageFileName = ((imageUrl.components(separatedBy: "_").last!).components(separatedBy: "?").first!).components(separatedBy: ".").first!
+        let imageFileName = fileNameFrom(fileUrl: imageUrl)
 
         if fileExistsAtPath(path: imageFileName) {
 
             if let contentsOfFile = UIImage(contentsOfFile: fileInDocumentsDirectory(filename: imageFileName)) {
                 completion(contentsOfFile)
-
             } else {
                 print("couldn't generate local image")
                 completion(UIImage(named: "samplePhoto"))
             }
             
         } else {
-
+            
             if imageUrl != "" {
-
+                
                 let documentURL = URL(string: imageUrl)
                 
                 let downloadQueue = DispatchQueue(label: "imageDownloadQueue")
-
+                
                 downloadQueue.async {
-                    
+
                     let data = NSData(contentsOf: documentURL!)
                     
                     if data != nil {
-                                    
+                        
                         let imageToReturn = UIImage(data: data! as Data)
+                        
+                        //save locally if its a message
+                        if isMessage {
+                            FileStorage.saveFileLocally(fileData: data!, fileName: imageFileName)
+                        }
                         
                         DispatchQueue.main.async {
                             completion(imageToReturn!)
@@ -95,23 +110,102 @@ class FileStorage {
                         }
                     }
                 }
-
+                
             } else {
                 completion(UIImage(named: "samplePhoto"))
             }
         }
     }
     
-       
-    class func saveImageLocally(imageData: Data, fileName: String) {
+    
+    //MARK: - Video
+    class func uploadVideo(video: NSData, directory: String, completion: @escaping (_ videoLink: String?) -> Void) {
+        
+        if Reachability.HasConnection() {
+                        
+            let storageRef = storage.reference(forURL: kFILEREFERENCE).child(directory)
+            var task : StorageUploadTask!
+            
+            task = storageRef.putData(video as Data, metadata: nil, completion: {
+                metadata, error in
+                
+                task.removeAllObservers()
+                ProgressHUD.dismiss()
+
+                if error != nil {
+                    print("error uploading video \(error!.localizedDescription)")
+                    return
+                }
+                
+                storageRef.downloadURL(completion: { (url, error) in
+                    
+                    guard let downloadUrl = url else {
+                        completion(nil)
+                        return
+                    }
+                    completion(downloadUrl.absoluteString)
+                })
+                
+            })
+            
+            task.observe(StorageTaskStatus.progress, handler: {
+                snapshot in
+                let progress = snapshot.progress!.completedUnitCount / snapshot.progress!.totalUnitCount
+                ProgressHUD.showProgress(CGFloat(progress))
+            })
+            
+            
+        } else {
+            print("No Internet Connection!")
+        }
+        
+    }
+    
+    class func downloadVideo(videoUrl: String, completion: @escaping (_ isReadyToPlay: Bool, _ videoFileName: String) -> Void) {
+        
+        let videoURL = URL(string: videoUrl)
+        let videoFileName = fileNameFrom(fileUrl: videoUrl) + ".mov"
+        
+        
+        if fileExistsAtPath(path: videoFileName) {
+
+            completion(true, videoFileName)
+            
+        } else {
+            
+            let dowloadQueue = DispatchQueue(label: "videoDownloadQueue")
+            
+            dowloadQueue.async {
+
+                let data = NSData(contentsOf: videoURL!)
+                
+                if data != nil {
+                    
+                    FileStorage.saveFileLocally(fileData: data!, fileName: videoFileName)
+                    
+                    DispatchQueue.main.async {
+                        completion(true, videoFileName)
+                    }
+                    
+                } else {
+                    print("No Video in database")
+                }
+            }
+        }
+    }
+    
+    
+    
+    //MARK: - Save locally
+    class func saveFileLocally(fileData: NSData, fileName: String) {
         
         var docURL = getDocumentsURL()
         
         docURL = docURL.appendingPathComponent(fileName, isDirectory: false)
         
-        (imageData as NSData).write(to: docURL, atomically: true)
+        (fileData as NSData).write(to: docURL, atomically: true)
     }
-
+    
 }
 
 //Helpers
@@ -124,7 +218,7 @@ func fileInDocumentsDirectory(filename: String) -> String {
 func getDocumentsURL() -> URL {
     
     let documentURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last
-
+    
     return documentURL!
 }
 

@@ -23,7 +23,7 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
 
         for component in inputBar.inputTextView.components {
             if let text = component as? String {
-                messageSend(text: text, photo: nil)
+                messageSend(text: text, photo: nil, video: nil, audio: nil)
             }
         }
         messageInputBar.inputTextView.text = ""

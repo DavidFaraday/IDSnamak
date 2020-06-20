@@ -157,7 +157,7 @@ class ChatViewController: MessagesViewController {
 
                     self.insertMessage(self.allLocalMessages[index])
                     self.messagesCollectionView.reloadData()
-                    self.messagesCollectionView.scrollToBottom(animated: true)
+                    self.messagesCollectionView.scrollToBottom(animated: false)
                 }
                 
             case .error(let error):
@@ -310,9 +310,9 @@ class ChatViewController: MessagesViewController {
     }
 
     
-    func messageSend(text: String?, photo: UIImage?) {
+    func messageSend(text: String?, photo: UIImage?, video: Video?, audio: String?) {
 
-        OutgoingMessage.send(chatId: chatId, text: text, photo: photo, memberIds: [User.currentId(), recipientId])
+        OutgoingMessage.send(chatId: chatId, text: text, photo: photo, video: video, audio: audio, memberIds: [User.currentId(), recipientId])
     }
 
     private func actionAttachMessage() {
@@ -437,10 +437,11 @@ class ChatViewController: MessagesViewController {
     private func showImageGalleryFor(camera: Bool) {
         self.gallery = GalleryController()
         self.gallery.delegate = self
-        Config.tabsToShow = camera ? [.cameraTab] : [.imageTab]
+        Config.tabsToShow = camera ? [.cameraTab] : [.imageTab, .videoTab]
         Config.Camera.imageLimit = 1
         Config.initialTab = .imageTab
-        
+        Config.VideoEditor.maximumDuration = 30
+
         self.present(self.gallery, animated: true, completion: nil)
     }
 
@@ -454,8 +455,8 @@ extension ChatViewController: GalleryControllerDelegate {
     func galleryController(_ controller: GalleryController, didSelectImages images: [Image]) {
         if images.count > 0 {
             images.first!.resolve(completion: { (image) in
-                
-                self.messageSend(text: nil, photo: image)
+                print("image")
+                self.messageSend(text: nil, photo: image, video: nil, audio: nil)
             })
         }
         
@@ -463,9 +464,12 @@ extension ChatViewController: GalleryControllerDelegate {
     }
     
     func galleryController(_ controller: GalleryController, didSelectVideo video: Video) {
+        
+        self.messageSend(text: nil, photo: nil, video: video, audio: nil)
+        
         controller.dismiss(animated: true, completion: nil)
     }
-    
+
     func galleryController(_ controller: GalleryController, requestLightbox images: [Image]) {
         controller.dismiss(animated: true, completion: nil)
     }

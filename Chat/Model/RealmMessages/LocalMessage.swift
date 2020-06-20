@@ -21,11 +21,11 @@ class LocalMessage: Object {
     @objc dynamic var type = ""
     @objc dynamic var status = ""
     @objc dynamic var message = ""
-    @objc dynamic var audio = ""
-    @objc dynamic var video = ""
-    @objc dynamic var picture = ""
-    @objc dynamic var width = 0.0
-    @objc dynamic var height = 0.0
+    @objc dynamic var audioUrl = ""
+    @objc dynamic var videoUrl = ""
+    @objc dynamic var pictureUrl = ""
+    @objc dynamic var photoWidth = 0//delete
+    @objc dynamic var photoHeight = 0//delete
     @objc dynamic var latitude = 0.0
     @objc dynamic var longitude = 0.0
     
@@ -45,11 +45,11 @@ class LocalMessage: Object {
                                       self.type,
                                       self.status,
                                       self.message,
-                                      self.audio,
-                                      self.video,
-                                      self.picture,
-                                      self.width,
-                                      self.height,
+                                      self.audioUrl,
+                                      self.videoUrl,
+                                      self.pictureUrl,
+                                      self.photoWidth,
+                                      self.photoHeight,
                                       self.latitude,
                                       self.longitude
                                       
@@ -64,11 +64,11 @@ class LocalMessage: Object {
                                       kTYPE as NSCopying,
                                       kSTATUS as NSCopying,
                                       kMESSAGE as NSCopying,
-                                      kAUDIO as NSCopying,
-                                      kVIDEO as NSCopying,
-                                      kPICTURE as NSCopying,
-                                      kWIDTH as NSCopying,
-                                      kHEIGHT as NSCopying,
+                                      kAUDIOURL as NSCopying,
+                                      kVIDEOURL as NSCopying,
+                                      kPICTUREURL as NSCopying,
+                                      kPICTUREWIDTH as NSCopying,
+                                      kPICTUREHEIGHT as NSCopying,
                                       kLATITUDE as NSCopying,
                                       kLONGITUDE as NSCopying
             ]

@@ -23,11 +23,11 @@ func createLocalMessage(messageDictionary: Dictionary<String, Any>)  {
     message.status = messageDictionary[kSTATUS] as? String ?? ""
     message.type = messageDictionary[kTYPE] as? String ?? ""
     message.message = messageDictionary[kMESSAGE] as? String ?? ""
-    message.picture = messageDictionary[kPICTURE] as? String ?? ""
-    message.video = messageDictionary[kVIDEO] as? String ?? ""
-    message.audio = messageDictionary[kAUDIO] as? String ?? ""
-    message.width = messageDictionary[kWIDTH] as? Double ?? 0.0
-    message.height = messageDictionary[kHEIGHT] as? Double ?? 0.0
+    message.pictureUrl = messageDictionary[kPICTUREURL] as? String ?? ""
+    message.videoUrl = messageDictionary[kVIDEOURL] as? String ?? ""
+    message.audioUrl = messageDictionary[kAUDIOURL] as? String ?? ""
+    message.photoWidth = messageDictionary[kPICTUREWIDTH] as? Int ?? 0
+    message.photoHeight = messageDictionary[kPICTUREHEIGHT] as? Int ?? 0
     message.latitude = messageDictionary[kLATITUDE] as? Double ?? 0.0
     message.longitude = messageDictionary[kLONGITUDE] as? Double ?? 0.0
 

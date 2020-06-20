@@ -19,7 +19,9 @@ class MKMessage: NSObject, MessageType {
     var sender: SenderType { return mksender }
     var senderInitials: String
 
-//    var photoItem: PhotoMessage?
+    var photoItem: PhotoMessage?
+    var videoItem: VideoMessage?
+
     var status: String
     var readDate: Date
     
@@ -34,13 +36,18 @@ class MKMessage: NSObject, MessageType {
             case kTEXT:
                 self.kind = MessageKind.text(message.message)
 
-//            case kPICTURE:
-//
-////                let photoItem = PhotoMessage(width: message.photoWidth, height: message.photoHeight)
-//
-//
-//                self.kind = MessageKind.photo(photoItem)
-////                self.photoItem = photoItem
+            case kPICTURE:
+
+                let photoItem = PhotoMessage(path: message.pictureUrl)
+
+                self.kind = MessageKind.photo(photoItem)
+                self.photoItem = photoItem
+            
+        case kVIDEO:
+            let videoItem = VideoMessage(url: nil)
+
+            self.kind = MessageKind.video(videoItem)
+            self.videoItem = videoItem
 
             default:
                 self.kind = MessageKind.text(message.message)

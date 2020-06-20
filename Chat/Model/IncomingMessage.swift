@@ -25,31 +25,44 @@ class IncomingMessage {
     func createMessage(localMessage: LocalMessage) -> MKMessage? {
 
         let mkMessage = MKMessage(message: localMessage)
-//
-//        if message.type == kPICTURE {
-//
-//            let photoItem = PhotoMessage(width: message.photoWidth, height: message.photoHeight)
-//
-//            mkMessage.photoItem = photoItem
-//            mkMessage.kind = MessageKind.photo(photoItem)
-//
-//            FileStorage.downloadImage(imageUrl: messageDictionary[kMEDIAURL] as? String ?? "") { (image) in
-//
-//                mkMessage.photoItem?.image = image
-//                self.messagesCollectionView.messagesCollectionView.reloadData()
-//            }
-//        }
+
+        if localMessage.type == kPICTURE {
+
+            let photoItem = PhotoMessage(path: localMessage.pictureUrl)
+
+            mkMessage.photoItem = photoItem
+            mkMessage.kind = MessageKind.photo(photoItem)
+            
+            FileStorage.downloadImage(imageUrl: localMessage.pictureUrl, isMessage: true) { (image) in
+
+                mkMessage.photoItem?.image = image
+                self.messagesCollectionView.messagesCollectionView.reloadData()
+            }
+        }
+        
+        if localMessage.type == kVIDEO {
+
+            FileStorage.downloadImage(imageUrl: localMessage.pictureUrl, isMessage: true) { (image) in
+
+                FileStorage.downloadVideo(videoUrl: localMessage.videoUrl) { (readyToPlay, fileName) in
+                    
+                    let videoURL = URL(fileURLWithPath: fileInDocumentsDirectory(filename: fileName))
+                    
+                    let videoItem = VideoMessage(url: videoURL)
+
+                    mkMessage.videoItem = videoItem
+                    mkMessage.kind = MessageKind.video(videoItem)
+                }
+
+
+                mkMessage.videoItem?.image = image
+                self.messagesCollectionView.messagesCollectionView.reloadData()
+            }
+        }
+
         
 
         return mkMessage
     }
-
-//    //MARK: Helper
-//
-//    func returnOutgoingStatusForUser(senderId: String) -> Bool {
-//
-//        return senderId == FUser.currentId()
-//    }
-
 
 }

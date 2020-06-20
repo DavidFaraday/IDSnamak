@@ -14,7 +14,7 @@ let userDefaults = UserDefaults.standard
 public let kFILEREFERENCE = "gs://messagekittest-b4ee5.appspot.com"
 public let kSERVERKEY = "AAAAoxx2iE0:APA91bHhR8ccuPtlIXTnsM25VhmZdByo4uy1N1Ai6wXaLr2u5rX1gNtu3BaV5HHqILkSxDRXdr2aH4X-KKlr3nNaMvL97TQ-q1FjMuyM6fgEDIW4dOi2O8Og2C7aDfgRunTc515VmYud"
 
-public let kNUMBEROFMESSAGES = 20
+public let kNUMBEROFMESSAGES = 12
 
 
 //MARK: - User
@@ -44,11 +44,11 @@ public let kFIRSTRUN = "firstRun"
 public let kREADDATE = "readDate"
 public let kTYPE = "type"
 public let kMESSAGE = "message"
-public let kPICTURE = "picture"
-public let kVIDEO = "video"
-public let kAUDIO = "audio"
-public let kWIDTH = "width"
-public let kHEIGHT = "height"
+public let kPICTUREURL = "pictureUrl"
+public let kVIDEOURL = "videoUrl"
+public let kAUDIOURL = "audioUrl"
+public let kPICTUREWIDTH = "pictureWidth"
+public let kPICTUREHEIGHT = "pictureHeight"
 public let kLATITUDE = "latitude"
 public let kLONGITUDE = "longitude"
 public let kSENDERINITIALS = "senderInitials"
@@ -56,6 +56,10 @@ public let kSENDERINITIALS = "senderInitials"
 //message types
 public let kTEXT = "text"
 public let kLOCATION = "location"
+public let kPICTURE = "picture"
+public let kVIDEO = "video"
+public let kAUDIO = "audio"
+
 public let kSENT = "Sent"
 public let kREAD = "Read"
 
