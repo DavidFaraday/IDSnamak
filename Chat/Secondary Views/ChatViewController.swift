@@ -310,9 +310,9 @@ class ChatViewController: MessagesViewController {
     }
 
     
-    func messageSend(text: String?, photo: UIImage?, video: Video?, audio: String?) {
+    func messageSend(text: String?, photo: UIImage?, video: Video?, audio: String?, location: String?) {
 
-        OutgoingMessage.send(chatId: chatId, text: text, photo: photo, video: video, audio: audio, memberIds: [User.currentId(), recipientId])
+        OutgoingMessage.send(chatId: chatId, text: text, photo: photo, video: video, audio: audio, location: location, memberIds: [User.currentId(), recipientId])
     }
 
     private func actionAttachMessage() {
@@ -326,19 +326,29 @@ class ChatViewController: MessagesViewController {
             self.showImageGalleryFor(camera: true)
         }
         
-        let sharePhoto = UIAlertAction(title: NSLocalizedString("Photo Library", comment: ""), style: .default) { (alert: UIAlertAction!) in
+        let shareMedia = UIAlertAction(title: NSLocalizedString("Library", comment: ""), style: .default) { (alert: UIAlertAction!) in
             
             self.showImageGalleryFor(camera: false)
         }
         
+        let shareLocation = UIAlertAction(title: NSLocalizedString("Share Location", comment: ""), style: .default) { (alert: UIAlertAction!) in
+            print(LocationManager.shared.currentLocation, "......")
+            if let _ = LocationManager.shared.currentLocation {
+                print("will send loc")
+                self.messageSend(text: nil, photo: nil, video: nil, audio: nil, location: kLOCATION)
+            }
+        }
+
+        
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
         takePhotoOrVideo.setValue(UIImage(named: "cameraIcon"), forKey: "image")
-        sharePhoto.setValue(UIImage(named: "pictureLibrary"), forKey: "image")
-
+        shareMedia.setValue(UIImage(named: "pictureLibrary"), forKey: "image")
+        shareLocation.setValue(UIImage(named: "locationIcon"), forKey: "image")
         
         optionMenu.addAction(takePhotoOrVideo)
-        optionMenu.addAction(sharePhoto)
+        optionMenu.addAction(shareMedia)
+        optionMenu.addAction(shareLocation)
         optionMenu.addAction(cancelAction)
         
         self.present(optionMenu, animated: true, completion: nil)
@@ -456,7 +466,7 @@ extension ChatViewController: GalleryControllerDelegate {
         if images.count > 0 {
             images.first!.resolve(completion: { (image) in
                 print("image")
-                self.messageSend(text: nil, photo: image, video: nil, audio: nil)
+                self.messageSend(text: nil, photo: image, video: nil, audio: nil, location: nil)
             })
         }
         
@@ -465,7 +475,7 @@ extension ChatViewController: GalleryControllerDelegate {
     
     func galleryController(_ controller: GalleryController, didSelectVideo video: Video) {
         
-        self.messageSend(text: nil, photo: nil, video: video, audio: nil)
+        self.messageSend(text: nil, photo: nil, video: video, audio: nil, location: nil)
         
         controller.dismiss(animated: true, completion: nil)
     }

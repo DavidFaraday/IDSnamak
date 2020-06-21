@@ -30,8 +30,8 @@ class OutgoingMessage {
     
 
     //MARK: - Send Message
-    class func send(chatId: String, text: String?, photo: UIImage?, video: Video?, audio: String?, memberIds: [String]) {
-        print("send chat")
+    class func send(chatId: String, text: String?, photo: UIImage?, video: Video?, audio: String?, location: String?, memberIds: [String]) {
+
         let currentUser = User.currentUser()!
         
         let message = LocalMessage()
@@ -53,9 +53,12 @@ class OutgoingMessage {
             sendPictureMessage(message: message, photo: photo!, memberIds: memberIds)
         }
         
-        //video
         if video != nil {
             sendVideoMessage(message: message, video: video!, memberIds: memberIds)
+        }
+        
+        if location != nil {
+            sendLocationMessage(message: message, memberIds: memberIds)
         }
         
         
@@ -162,4 +165,17 @@ func sendVideoMessage(message: LocalMessage, video: Video, memberIds: [String]) 
             print("path is nil")
         }
     }
+}
+
+
+func sendLocationMessage(message: LocalMessage, memberIds: [String]) {
+    
+    let currentLocation = LocationManager.shared.currentLocation
+    message.message = "Location message"
+    message.type = kLOCATION
+    message.latitude = currentLocation?.latitude ?? 0.0
+    message.longitude = currentLocation?.longitude ?? 0.0
+    
+    let outgoingMessage = OutgoingMessage(message: message, memberIds: memberIds)
+    outgoingMessage.sendMessage(message: message, memberIds: memberIds)
 }

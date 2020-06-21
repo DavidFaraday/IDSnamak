@@ -27,6 +27,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         application.registerForRemoteNotifications()
         application.applicationIconBadgeNumber = 0
 
+        LocationManager.shared.startUpdating()
+
         return true
     }
 

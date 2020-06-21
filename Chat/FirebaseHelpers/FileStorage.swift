@@ -173,9 +173,9 @@ class FileStorage {
             
         } else {
             
-            let dowloadQueue = DispatchQueue(label: "videoDownloadQueue")
+            let downloadQueue = DispatchQueue(label: "videoDownloadQueue")
             
-            dowloadQueue.async {
+            downloadQueue.async {
 
                 let data = NSData(contentsOf: videoURL!)
                 

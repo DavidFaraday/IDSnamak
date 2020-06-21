@@ -16,6 +16,8 @@
 		551B96DF248FED990028C2E4 /* FirebaseTypingListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551B96DE248FED990028C2E4 /* FirebaseTypingListener.swift */; };
 		551D53522496822B00548BF3 /* VideoMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551D53512496822B00548BF3 /* VideoMessage.swift */; };
 		553778FF248E6B7900634648 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553778FE248E6B7900634648 /* ChatViewController.swift */; };
+		5545A984249DE59B00AAAC30 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5545A983249DE59B00AAAC30 /* LocationManager.swift */; };
+		5545A986249E86A100AAAC30 /* LocationMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5545A985249E86A100AAAC30 /* LocationMessage.swift */; };
 		556EB49B2495F11200981245 /* PhotoMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 556EB49A2495F11200981245 /* PhotoMessage.swift */; };
 		557758B224880184000799E2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557758B124880184000799E2 /* AppDelegate.swift */; };
 		557758B424880184000799E2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557758B324880184000799E2 /* SceneDelegate.swift */; };
@@ -64,6 +66,8 @@
 		551B96DE248FED990028C2E4 /* FirebaseTypingListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseTypingListener.swift; sourceTree = "<group>"; };
 		551D53512496822B00548BF3 /* VideoMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoMessage.swift; sourceTree = "<group>"; };
 		553778FE248E6B7900634648 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
+		5545A983249DE59B00AAAC30 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		5545A985249E86A100AAAC30 /* LocationMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationMessage.swift; sourceTree = "<group>"; };
 		556EB49A2495F11200981245 /* PhotoMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoMessage.swift; sourceTree = "<group>"; };
 		557758AE24880184000799E2 /* Chat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Chat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		557758B124880184000799E2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -243,6 +247,8 @@
 				558162912493F92800343442 /* IncomingMessage.swift */,
 				556EB49A2495F11200981245 /* PhotoMessage.swift */,
 				551D53512496822B00548BF3 /* VideoMessage.swift */,
+				5545A985249E86A100AAAC30 /* LocationMessage.swift */,
+				5545A983249DE59B00AAAC30 /* LocationManager.swift */,
 				5592DE452493B5B90023EF5D /* RealmMessages */,
 			);
 			path = Model;
@@ -420,6 +426,8 @@
 				55943D07248CE0A600A7D557 /* FileStorage.swift in Sources */,
 				5592DE442493B3A50023EF5D /* LocalMessage.swift in Sources */,
 				55C65B67248C0A9600B28303 /* SettingsTableViewController.swift in Sources */,
+				5545A984249DE59B00AAAC30 /* LocationManager.swift in Sources */,
+				5545A986249E86A100AAAC30 /* LocationMessage.swift in Sources */,
 				55943D02248CAC2E00A7D557 /* Status.swift in Sources */,
 				55C65B55248908FE00B28303 /* FirebaseUserListener.swift in Sources */,
 				55897649248D4E4300D544F1 /* UserTableViewCell.swift in Sources */,

@@ -37,7 +37,7 @@ class ChatsTableViewController: UITableViewController {
     
     //MARK: - IBAction
     @IBAction func composeButtonPressed(_ sender: Any) {
-        
+
         let userView = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(identifier: "usersView") as! UsersTableViewController
         
         navigationController?.pushViewController(userView, animated: true)
