@@ -72,5 +72,7 @@
 	</array>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>$(PRODUCT_NAME) would like to use your location for location messages</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>$(PRODUCT_NAME) would like to use your microphone for audio messages</string>
 </dict>
 </plist>

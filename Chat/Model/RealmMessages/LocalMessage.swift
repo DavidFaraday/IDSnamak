@@ -28,7 +28,8 @@ class LocalMessage: Object {
     @objc dynamic var photoHeight = 0//delete
     @objc dynamic var latitude = 0.0
     @objc dynamic var longitude = 0.0
-    
+    @objc dynamic var audioDuration = 0.0
+
     override static func primaryKey() -> String? {
         return "id"
     }
@@ -51,8 +52,8 @@ class LocalMessage: Object {
                                       self.photoWidth,
                                       self.photoHeight,
                                       self.latitude,
-                                      self.longitude
-                                      
+                                      self.longitude,
+                                      self.audioDuration
             ],
                             forKeys: [kID as NSCopying,
                                       kCHATROOMID as NSCopying,
@@ -70,7 +71,8 @@ class LocalMessage: Object {
                                       kPICTUREWIDTH as NSCopying,
                                       kPICTUREHEIGHT as NSCopying,
                                       kLATITUDE as NSCopying,
-                                      kLONGITUDE as NSCopying
+                                      kLONGITUDE as NSCopying,
+                                      kAUDIODURATION as NSCopying
             ]
         )
     }

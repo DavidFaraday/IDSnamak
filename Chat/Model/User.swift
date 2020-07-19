@@ -101,16 +101,16 @@ func createUsers() {
     var ImageIndex = 1
     var UserIndex = 1
 
-    for _ in 0..<5 {
+    for i in 0..<5 {
 
         let id = UUID().uuidString
-        let randomNumber = Int.random(in: 0 ... 5)
+//        let randomNumber = Int.random(in: 0 ... 5)
         
         let fileDirectory = "Avatars/" + "\(id)" + ".jpg"
 
         FileStorage.uploadImage(UIImage(named: "user\(ImageIndex)")!, directory: fileDirectory) { (avatarLink) in
             
-            let user = User(id: id, userName: names[randomNumber], email: "user\(UserIndex)@mail.com", pushId: "", avatarLink: avatarLink ?? "")
+            let user = User(id: id, userName: names[i], email: "user\(UserIndex)@mail.com", pushId: "", avatarLink: avatarLink ?? "")
                 
             UserIndex += 1
             user.saveUserToFireStore()

@@ -13,10 +13,14 @@ import AVFoundation
 func removerCurrentUserFrom(userIds: [String]) -> [String] {
     
     var allIds = userIds
-    
-    allIds.remove(at: allIds.firstIndex(of: User.currentId())!)
-
+    for id in allIds {
+     
+        if id == User.currentId() {
+            allIds.remove(at: allIds.firstIndex(of: id)!)
+        }
+    }
     return allIds
+    
 }
 
 func fileNameFrom(fileUrl: String) -> String {

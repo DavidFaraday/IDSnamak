@@ -194,7 +194,97 @@ class FileStorage {
         }
     }
     
+    //MARK: - Audio
     
+    class func uploadAudio(audioFileName: String, directory: String, completion: @escaping (_ audioLink: String?) -> Void) {
+        
+        let fileName = audioFileName + ".m4a"
+        
+        if Reachability.HasConnection() {
+            
+            let storageRef = storage.reference(forURL: kFILEREFERENCE).child(directory)
+            var task : StorageUploadTask!
+            
+            if fileExistsAtPath(path: fileName) {
+                
+                if let audioData = NSData(contentsOfFile: fileInDocumentsDirectory(filename: fileName)) {
+                    
+                    print("have data")
+                    
+                    task = storageRef.putData(audioData as Data, metadata: nil, completion: {
+                        metadata, error in
+                        
+                        task.removeAllObservers()
+                        ProgressHUD.dismiss()
+                        
+                        if error != nil {
+                            print("error uploading audio \(error!.localizedDescription)")
+                            return
+                        }
+                        
+                        storageRef.downloadURL(completion: { (url, error) in
+                            
+                            guard let downloadUrl = url else {
+                                completion(nil)
+                                return
+                            }
+                            completion(downloadUrl.absoluteString)
+                        })
+                        
+                    })
+                    
+                    task.observe(StorageTaskStatus.progress, handler: {
+                        snapshot in
+                        let progress = snapshot.progress!.completedUnitCount / snapshot.progress!.totalUnitCount
+                        ProgressHUD.showProgress(CGFloat(progress))
+                    })
+                    
+                    
+                } else {
+                    print("nil data")
+                }
+                
+            } else {
+                print("NOTHING TO UPLOAD")
+            }
+            
+        } else {
+            print("No Internet Connection!")
+        }
+        
+    }
+
+    
+    class func downloadAudio(audioUrl: String, completion: @escaping ( _ audioFileName: String) -> Void) {
+        
+        let audioFileName = fileNameFrom(fileUrl: audioUrl)  + ".m4a"
+        
+        if fileExistsAtPath(path: audioFileName) {
+
+            completion(audioFileName)
+            
+        } else {
+            
+            let downloadQueue = DispatchQueue(label: "audioDownloadQueue")
+            
+            downloadQueue.async {
+
+                let data = NSData(contentsOf: URL(string: audioUrl)!)
+                
+                if data != nil {
+                    
+                    FileStorage.saveFileLocally(fileData: data!, fileName: audioFileName)
+                    
+                    DispatchQueue.main.async {
+                        completion(audioFileName)
+                    }
+                    
+                } else {
+                    print("No audio in database")
+                }
+            }
+        }
+    }
     
     //MARK: - Save locally
     class func saveFileLocally(fileData: NSData, fileName: String) {
@@ -203,7 +293,7 @@ class FileStorage {
         
         docURL = docURL.appendingPathComponent(fileName, isDirectory: false)
         
-        (fileData as NSData).write(to: docURL, atomically: true)
+        (fileData).write(to: docURL, atomically: true)
     }
     
 }
@@ -224,12 +314,11 @@ func getDocumentsURL() -> URL {
 
 
 func fileExistsAtPath(path: String) -> Bool {
-    
     var doesExist = false
     
     let filePath = fileInDocumentsDirectory(filename: path)
     let fileManager = FileManager.default
-    
+
     if fileManager.fileExists(atPath: filePath) {
         doesExist = true
     } else {

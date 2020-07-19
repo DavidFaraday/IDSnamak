@@ -16,8 +16,11 @@
 		551B96DF248FED990028C2E4 /* FirebaseTypingListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551B96DE248FED990028C2E4 /* FirebaseTypingListener.swift */; };
 		551D53522496822B00548BF3 /* VideoMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551D53512496822B00548BF3 /* VideoMessage.swift */; };
 		553778FF248E6B7900634648 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553778FE248E6B7900634648 /* ChatViewController.swift */; };
+		5542CC43249F380A00C2A399 /* MapViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5542CC42249F380A00C2A399 /* MapViewViewController.swift */; };
+		5542CC45249F3DD200C2A399 /* MapAnnotaion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5542CC44249F3DD200C2A399 /* MapAnnotaion.swift */; };
 		5545A984249DE59B00AAAC30 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5545A983249DE59B00AAAC30 /* LocationManager.swift */; };
 		5545A986249E86A100AAAC30 /* LocationMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5545A985249E86A100AAAC30 /* LocationMessage.swift */; };
+		556D779924C44DF900A9E475 /* BasicAudioControll.swift in Sources */ = {isa = PBXBuildFile; fileRef = 556D779824C44DF900A9E475 /* BasicAudioControll.swift */; };
 		556EB49B2495F11200981245 /* PhotoMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 556EB49A2495F11200981245 /* PhotoMessage.swift */; };
 		557758B224880184000799E2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557758B124880184000799E2 /* AppDelegate.swift */; };
 		557758B424880184000799E2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557758B324880184000799E2 /* SceneDelegate.swift */; };
@@ -38,6 +41,8 @@
 		55943D02248CAC2E00A7D557 /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55943D01248CAC2E00A7D557 /* Status.swift */; };
 		55943D07248CE0A600A7D557 /* FileStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55943D06248CE0A600A7D557 /* FileStorage.swift */; };
 		55943D09248CE0D200A7D557 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55943D08248CE0D200A7D557 /* Reachability.swift */; };
+		55A3616924A0C21E00048E1D /* AudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A3616824A0C21E00048E1D /* AudioRecorder.swift */; };
+		55A3616B24A1293000048E1D /* AudioMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A3616A24A1293000048E1D /* AudioMessage.swift */; };
 		55C65B55248908FE00B28303 /* FirebaseUserListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C65B54248908FE00B28303 /* FirebaseUserListener.swift */; };
 		55C65B572489092900B28303 /* FCollectionReference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C65B562489092900B28303 /* FCollectionReference.swift */; };
 		55C65B5E248C06BD00B28303 /* RecentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C65B5D248C06BD00B28303 /* RecentTableViewCell.swift */; };
@@ -66,8 +71,11 @@
 		551B96DE248FED990028C2E4 /* FirebaseTypingListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseTypingListener.swift; sourceTree = "<group>"; };
 		551D53512496822B00548BF3 /* VideoMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoMessage.swift; sourceTree = "<group>"; };
 		553778FE248E6B7900634648 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
+		5542CC42249F380A00C2A399 /* MapViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewViewController.swift; sourceTree = "<group>"; };
+		5542CC44249F3DD200C2A399 /* MapAnnotaion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapAnnotaion.swift; sourceTree = "<group>"; };
 		5545A983249DE59B00AAAC30 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		5545A985249E86A100AAAC30 /* LocationMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationMessage.swift; sourceTree = "<group>"; };
+		556D779824C44DF900A9E475 /* BasicAudioControll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicAudioControll.swift; sourceTree = "<group>"; };
 		556EB49A2495F11200981245 /* PhotoMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoMessage.swift; sourceTree = "<group>"; };
 		557758AE24880184000799E2 /* Chat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Chat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		557758B124880184000799E2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -90,6 +98,8 @@
 		55943D01248CAC2E00A7D557 /* Status.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Status.swift; sourceTree = "<group>"; };
 		55943D06248CE0A600A7D557 /* FileStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileStorage.swift; sourceTree = "<group>"; };
 		55943D08248CE0D200A7D557 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		55A3616824A0C21E00048E1D /* AudioRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorder.swift; sourceTree = "<group>"; };
+		55A3616A24A1293000048E1D /* AudioMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioMessage.swift; sourceTree = "<group>"; };
 		55C65B54248908FE00B28303 /* FirebaseUserListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseUserListener.swift; sourceTree = "<group>"; };
 		55C65B562489092900B28303 /* FCollectionReference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FCollectionReference.swift; sourceTree = "<group>"; };
 		55C65B5D248C06BD00B28303 /* RecentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentTableViewCell.swift; sourceTree = "<group>"; };
@@ -150,6 +160,17 @@
 				551B96D9248FEB9C0028C2E4 /* InputBarAccessoryViewDelegate.swift */,
 			);
 			path = ChatViewExtensions;
+			sourceTree = "<group>";
+		};
+		5542CC46249F3DF100C2A399 /* Media Messages */ = {
+			isa = PBXGroup;
+			children = (
+				556EB49A2495F11200981245 /* PhotoMessage.swift */,
+				551D53512496822B00548BF3 /* VideoMessage.swift */,
+				5545A985249E86A100AAAC30 /* LocationMessage.swift */,
+				55A3616A24A1293000048E1D /* AudioMessage.swift */,
+			);
+			path = "Media Messages";
 			sourceTree = "<group>";
 		};
 		557758A524880184000799E2 = {
@@ -245,10 +266,11 @@
 				5592DE412493B16F0023EF5D /* MKMessage.swift */,
 				5581628F2493E68E00343442 /* OutgoingMessage.swift */,
 				558162912493F92800343442 /* IncomingMessage.swift */,
-				556EB49A2495F11200981245 /* PhotoMessage.swift */,
-				551D53512496822B00548BF3 /* VideoMessage.swift */,
-				5545A985249E86A100AAAC30 /* LocationMessage.swift */,
+				55A3616824A0C21E00048E1D /* AudioRecorder.swift */,
+				5542CC46249F3DF100C2A399 /* Media Messages */,
 				5545A983249DE59B00AAAC30 /* LocationManager.swift */,
+				5542CC44249F3DD200C2A399 /* MapAnnotaion.swift */,
+				556D779824C44DF900A9E475 /* BasicAudioControll.swift */,
 				5592DE452493B5B90023EF5D /* RealmMessages */,
 			);
 			path = Model;
@@ -279,6 +301,7 @@
 			isa = PBXGroup;
 			children = (
 				55CE4B83248DF73600B74149 /* ProfileTableViewController.swift */,
+				5542CC42249F380A00C2A399 /* MapViewViewController.swift */,
 				553778FE248E6B7900634648 /* ChatViewController.swift */,
 				551B96DB248FEBD90028C2E4 /* ChatViewExtensions */,
 			);
@@ -407,10 +430,13 @@
 				55943D09248CE0D200A7D557 /* Reachability.swift in Sources */,
 				55C6CAD924954D2F006B0051 /* PushNotifications.swift in Sources */,
 				557758CA24881888000799E2 /* Constants.swift in Sources */,
+				5542CC45249F3DD200C2A399 /* MapAnnotaion.swift in Sources */,
 				557758C82488178A000799E2 /* User.swift in Sources */,
 				551B96DD248FEC0D0028C2E4 /* MessageKitDefaults.swift in Sources */,
+				55A3616924A0C21E00048E1D /* AudioRecorder.swift in Sources */,
 				5592DE422493B16F0023EF5D /* MKMessage.swift in Sources */,
 				55C65B6D248C140300B28303 /* StatusTableViewController.swift in Sources */,
+				556D779924C44DF900A9E475 /* BasicAudioControll.swift in Sources */,
 				55C65B572489092900B28303 /* FCollectionReference.swift in Sources */,
 				551B96DA248FEB9C0028C2E4 /* InputBarAccessoryViewDelegate.swift in Sources */,
 				556EB49B2495F11200981245 /* PhotoMessage.swift in Sources */,
@@ -420,6 +446,7 @@
 				551D53522496822B00548BF3 /* VideoMessage.swift in Sources */,
 				551B96D2248FEAA90028C2E4 /* MessageDataSource.swift in Sources */,
 				55C65B65248C0A1600B28303 /* ChatsTableViewController.swift in Sources */,
+				5542CC43249F380A00C2A399 /* MapViewViewController.swift in Sources */,
 				553778FF248E6B7900634648 /* ChatViewController.swift in Sources */,
 				558162922493F92800343442 /* IncomingMessage.swift in Sources */,
 				557758B224880184000799E2 /* AppDelegate.swift in Sources */,
@@ -440,6 +467,7 @@
 				55CE4B87248DFFAD00B74149 /* StartChat.swift in Sources */,
 				55CE4B84248DF73600B74149 /* ProfileTableViewController.swift in Sources */,
 				558162902493E68E00343442 /* OutgoingMessage.swift in Sources */,
+				55A3616B24A1293000048E1D /* AudioMessage.swift in Sources */,
 				557758B424880184000799E2 /* SceneDelegate.swift in Sources */,
 				5592DE472493B5DE0023EF5D /* RealmManager.swift in Sources */,
 				55C6CADB24954E76006B0051 /* GlobalFunctions.swift in Sources */,

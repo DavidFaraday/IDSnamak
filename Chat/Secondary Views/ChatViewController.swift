@@ -20,6 +20,8 @@ class ChatViewController: MessagesViewController {
     private var recipientId = ""
     private var recipientName = ""
 
+    open lazy var audioController = BasicAudioController(messageCollectionView: messagesCollectionView)
+
     let currentUser = MKSender(senderId: User.currentId(), displayName: User.currentUser()!.username)
     let refreshControl = UIRefreshControl()
     var gallery: GalleryController!
@@ -33,6 +35,8 @@ class ChatViewController: MessagesViewController {
     var allLocalMessages: Results<LocalMessage>!
 
     let realm = try! Realm()
+    
+    let micButton = InputBarButtonItem()
 
     //listeners
     var newChatListener: ListenerRegistration?
@@ -40,7 +44,10 @@ class ChatViewController: MessagesViewController {
     var updatedChatListener: ListenerRegistration?
     var notificationToken: NotificationToken?
 
-    
+    var longPressGesture: UILongPressGestureRecognizer!
+    var audioFileName:String = ""
+    var audioDuration:Date!
+
     //MARK: - Initialization
     init(chatId: String, recipientId: String, recipientName: String) {
 
@@ -68,6 +75,7 @@ class ChatViewController: MessagesViewController {
         configureLeftBarButton()
         
         configureMessageCollectionView()
+        configureGestureRecognizer()
         configureMessageInputBar()
         loadChats()
         listenForNewChats()
@@ -81,6 +89,7 @@ class ChatViewController: MessagesViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         FirebaseRecentListener.shared.resetRecentCounter(chatRoomId: chatId)
+        audioController.stopAnyOngoingPlaying()
     }
 
     //MARK: - Configurations
@@ -96,33 +105,55 @@ class ChatViewController: MessagesViewController {
         
         messagesCollectionView.refreshControl = refreshControl
     }
+    
+    private func configureGestureRecognizer() {
+        longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(recordAudio))
+        longPressGesture.minimumPressDuration = 0.5
+        longPressGesture.delaysTouchesBegan = true
 
+    }
 
     private func configureMessageInputBar() {
 
         messageInputBar.delegate = self
 
-        let button = InputBarButtonItem()
-        button.image = UIImage(named: "attach")
-        button.setSize(CGSize(width: 30, height: 30), animated: false)
+        let attachButton = InputBarButtonItem()
+        attachButton.image = UIImage(named: "attach")
+        attachButton.setSize(CGSize(width: 30, height: 30), animated: false)
 
-        button.onKeyboardSwipeGesture { item, gesture in
+        attachButton.onKeyboardSwipeGesture { item, gesture in
             if (gesture.direction == .left)     { item.inputBarAccessoryView?.setLeftStackViewWidthConstant(to: 0, animated: true)        }
             if (gesture.direction == .right) { item.inputBarAccessoryView?.setLeftStackViewWidthConstant(to: 36, animated: true)    }
         }
 
-        button.onTouchUpInside { item in
+        attachButton.onTouchUpInside { item in
             self.actionAttachMessage()
         }
 
-        messageInputBar.setStackViewItems([button], forStack: .left, animated: false)
-
+        micButton.image = UIImage(named: "mic")
+        micButton.setSize(CGSize(width: 30, height: 30), animated: false)
+        micButton.addGestureRecognizer(longPressGesture)
+        
+        
+        messageInputBar.setStackViewItems([attachButton], forStack: .left, animated: false)
 
         messageInputBar.setLeftStackViewWidthConstant(to: 36, animated: false)
 
+        updateMicButtonStatus(show: true)
+        
         messageInputBar.inputTextView.isImagePasteEnabled = false
         messageInputBar.backgroundView.backgroundColor = .systemBackground
         messageInputBar.inputTextView.backgroundColor = .systemBackground
+    }
+    
+    func updateMicButtonStatus(show: Bool) {
+        if show {
+            messageInputBar.setStackViewItems([micButton], forStack: .right, animated: false)
+            messageInputBar.setRightStackViewWidthConstant(to: 30, animated: false)
+        } else {
+            messageInputBar.setStackViewItems([messageInputBar.sendButton], forStack: .right, animated: false)
+            messageInputBar.setRightStackViewWidthConstant(to: 55, animated: false)
+        }
     }
     
     private func configureLeftBarButton() {
@@ -310,9 +341,9 @@ class ChatViewController: MessagesViewController {
     }
 
     
-    func messageSend(text: String?, photo: UIImage?, video: Video?, audio: String?, location: String?) {
+    func messageSend(text: String?, photo: UIImage?, video: Video?, audio: String?, location: String?, audioDuration: Float = 0.0) {
 
-        OutgoingMessage.send(chatId: chatId, text: text, photo: photo, video: video, audio: audio, location: location, memberIds: [User.currentId(), recipientId])
+        OutgoingMessage.send(chatId: chatId, text: text, photo: photo, video: video, audio: audio, audioDuration: audioDuration, location: location, memberIds: [User.currentId(), recipientId])
     }
 
     private func actionAttachMessage() {
@@ -453,6 +484,34 @@ class ChatViewController: MessagesViewController {
         Config.VideoEditor.maximumDuration = 30
 
         self.present(self.gallery, animated: true, completion: nil)
+    }
+    
+    //MARK: - AudioMessage
+    @objc func recordAudio() {
+
+        switch longPressGesture.state {
+        case .began:
+
+            audioDuration = Date()
+            audioFileName = Date().stringDate()
+            AudioRecorder.shared.startRecording(fileName: audioFileName)
+        case .ended:
+            
+            AudioRecorder.shared.finishRecording()
+
+            if fileExistsAtPath(path: audioFileName + ".m4a") {
+                let audioD = audioDuration.interval(ofComponent: .second, fromDate: Date())
+                print("have file, duration ", audioDuration.interval(ofComponent: .second, fromDate: Date()))
+                    
+                messageSend(text: nil, photo: nil, video: nil, audio: audioFileName, location: nil, audioDuration: audioD)
+            } else {
+                print("no file")
+            }
+            
+            audioFileName = ""
+        @unknown default:
+            print("unknown")
+        }
     }
 
 }

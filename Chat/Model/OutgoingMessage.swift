@@ -17,6 +17,7 @@ class OutgoingMessage {
     
     //MARK: - Initializer
     init (message: LocalMessage, memberIds: [String]) {
+
         messageDictionary = message.dictionary as! [String : Any]
     }
 
@@ -30,7 +31,7 @@ class OutgoingMessage {
     
 
     //MARK: - Send Message
-    class func send(chatId: String, text: String?, photo: UIImage?, video: Video?, audio: String?, location: String?, memberIds: [String]) {
+    class func send(chatId: String, text: String?, photo: UIImage?, video: Video?, audio: String?, audioDuration: Float = 0.0, location: String?, memberIds: [String]) {
 
         let currentUser = User.currentUser()!
         
@@ -59,6 +60,10 @@ class OutgoingMessage {
         
         if location != nil {
             sendLocationMessage(message: message, memberIds: memberIds)
+        }
+        
+        if audio != nil {
+            sendAudioMessage(message: message, audioFileName: audio!, audioDuration: audioDuration, memberIds: memberIds)
         }
         
         
@@ -100,7 +105,7 @@ func sendTextMessage(message: LocalMessage, text: String, memberIds: [String]) {
 
 
 func sendPictureMessage(message: LocalMessage, photo: UIImage, memberIds: [String]) {
-    
+
     message.message = "Picture message"
     message.type = kPICTURE
     
@@ -178,4 +183,25 @@ func sendLocationMessage(message: LocalMessage, memberIds: [String]) {
     
     let outgoingMessage = OutgoingMessage(message: message, memberIds: memberIds)
     outgoingMessage.sendMessage(message: message, memberIds: memberIds)
+}
+
+
+func sendAudioMessage(message: LocalMessage, audioFileName: String, audioDuration: Float = 0.0, memberIds: [String]) {
+
+    message.message = "Audio message"
+    message.type = kAUDIO
+    
+    let fileDirectory = "MediaMessages/Audio/" + "\(message.chatRoomId)/" + "_" + audioFileName + ".m4a"
+
+    FileStorage.uploadAudio(audioFileName: audioFileName, directory: fileDirectory) { (audioUrl) in
+        
+        if audioUrl != nil {
+            message.audioUrl = audioUrl ?? ""
+            message.audioDuration = Double(audioDuration)
+            let outgoingMessage = OutgoingMessage(message: message, memberIds: memberIds)
+            outgoingMessage.sendMessage(message: message, memberIds: memberIds)
+        }
+
+    }
+
 }

@@ -42,7 +42,7 @@ class IncomingMessage {
         }
         
         if localMessage.type == kVIDEO {
-
+    
             FileStorage.downloadImage(imageUrl: localMessage.pictureUrl, isMessage: true) { (image) in
 
                 FileStorage.downloadVideo(videoUrl: localMessage.videoUrl) { (readyToPlay, fileName) in
@@ -53,8 +53,8 @@ class IncomingMessage {
 
                     mkMessage.videoItem = videoItem
                     mkMessage.kind = MessageKind.video(videoItem)
+//                    self.messagesCollectionView.messagesCollectionView.reloadData()
                 }
-
 
                 mkMessage.videoItem?.image = image
                 self.messagesCollectionView.messagesCollectionView.reloadData()
@@ -66,6 +66,24 @@ class IncomingMessage {
             let locationItem = LocationMessage(location: CLLocation(latitude: localMessage.latitude, longitude: localMessage.longitude))
             mkMessage.kind = MessageKind.location(locationItem)
             mkMessage.locationItem = locationItem
+        }
+        
+        if localMessage.type == kAUDIO {
+
+            let audioMessage = AudioMessage(duration: Float(localMessage.audioDuration))
+            
+            mkMessage.audioItem = audioMessage
+            mkMessage.kind = MessageKind.audio(audioMessage)
+
+            FileStorage.downloadAudio(audioUrl: localMessage.audioUrl) { (fileName) in
+                
+                let audioURL = URL(fileURLWithPath: fileInDocumentsDirectory(filename: fileName))
+
+                mkMessage.audioItem?.url = audioURL
+
+            }
+            self.messagesCollectionView.messagesCollectionView.reloadData()
+
         }
 
         return mkMessage

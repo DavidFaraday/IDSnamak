@@ -52,6 +52,7 @@ public let kPICTUREHEIGHT = "pictureHeight"
 public let kLATITUDE = "latitude"
 public let kLONGITUDE = "longitude"
 public let kSENDERINITIALS = "senderInitials"
+public let kAUDIODURATION = "audioDuration"
 
 //message types
 public let kTEXT = "text"

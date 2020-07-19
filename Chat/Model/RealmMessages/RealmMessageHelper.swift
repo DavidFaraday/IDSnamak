@@ -30,6 +30,7 @@ func createLocalMessage(messageDictionary: Dictionary<String, Any>)  {
     message.photoHeight = messageDictionary[kPICTUREHEIGHT] as? Int ?? 0
     message.latitude = messageDictionary[kLATITUDE] as? Double ?? 0.0
     message.longitude = messageDictionary[kLONGITUDE] as? Double ?? 0.0
+    message.audioDuration = messageDictionary[kAUDIODURATION] as? Double ?? 0.0
 
     RealmManager.shared.saveToRealm(message)
 }

@@ -16,6 +16,8 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
         if text != "" {
             typingIndicatorUpdate()
         }
+        
+        updateMicButtonStatus(show: text == "")
     }
 
 
