@@ -80,6 +80,54 @@ class OutgoingMessage {
             FirebaseReference(.Messages).document(memberId).collection(message.chatRoomId).document(message.id).setData(messageDictionary)
         }
     }
+    
+    class func sendChannel(channel: Channel, text: String?, photo: UIImage?, video: Video?, audio: String?, audioDuration: Float = 0.0, location: String?) {
+        
+        let currentUser = User.currentUser()!
+        
+        let message = LocalMessage()
+        message.id = UUID().uuidString
+        message.chatRoomId = channel.id
+        message.senderId = currentUser.id
+        message.senderName = currentUser.username
+        
+        message.date = Date()
+        message.senderInitials = String(currentUser.username.first!)
+        message.status = kSENT
+        
+        
+        if text != nil {
+            sendTextMessage(message: message, text: text!, memberIds: channel.memberIds, channel: channel)
+        }
+        
+        if photo != nil {
+            sendPictureMessage(message: message, photo: photo!, memberIds: channel.memberIds, channel: channel)
+        }
+        
+        if video != nil {
+            sendVideoMessage(message: message, video: video!, memberIds: channel.memberIds, channel: channel)
+        }
+        
+        if location != nil {
+            sendLocationMessage(message: message, memberIds: channel.memberIds, channel: channel)
+        }
+        
+        if audio != nil {
+            sendAudioMessage(message: message, audioFileName: audio!, audioDuration: audioDuration, memberIds: channel.memberIds, channel: channel)
+        }
+        
+        PushNotificationService.shared.sendPushNotificationTo(userIds: removerCurrentUserFrom(userIds: channel.memberIds) , body: message.message, channel: channel)
+        
+        channel.editChannel(withValues: [kDATE : Date()])
+    }
+    
+    func sendChannelMessage(message: LocalMessage, channel: Channel) {
+        
+        RealmManager.shared.saveToRealm(message)
+        
+        FirebaseReference(.Messages).document(channel.id).collection(channel.id).document(message.id).setData(messageDictionary)
+    }
+
 
     class func updateMessage(withId: String, chatRoomId: String, memberIds: [String]) {
         
@@ -94,17 +142,22 @@ class OutgoingMessage {
 }
 
 
-func sendTextMessage(message: LocalMessage, text: String, memberIds: [String]) {
+func sendTextMessage(message: LocalMessage, text: String, memberIds: [String], channel: Channel? = nil) {
     
     message.message = text
     message.type = kTEXT
     
     let outgoingMessage = OutgoingMessage(message: message, memberIds: memberIds)
-    outgoingMessage.sendMessage(message: message, memberIds: memberIds)
+    
+    if channel != nil {
+        outgoingMessage.sendChannelMessage(message: message, channel: channel!)
+    } else {
+        outgoingMessage.sendMessage(message: message, memberIds: memberIds)
+    }
 }
 
 
-func sendPictureMessage(message: LocalMessage, photo: UIImage, memberIds: [String]) {
+func sendPictureMessage(message: LocalMessage, photo: UIImage, memberIds: [String], channel: Channel? = nil) {
 
     message.message = "Picture message"
     message.type = kPICTURE
@@ -121,13 +174,18 @@ func sendPictureMessage(message: LocalMessage, photo: UIImage, memberIds: [Strin
             message.pictureUrl = imageURL ?? ""
             let outgoingMessage = OutgoingMessage(pictureMessage: message, memberIds: memberIds)
 
-            outgoingMessage.sendMessage(message: message, memberIds: memberIds)
+            if channel != nil {
+                outgoingMessage.sendChannelMessage(message: message, channel: channel!)
+            } else {
+                outgoingMessage.sendMessage(message: message, memberIds: memberIds)
+            }
+            
         }
     }
 }
 
 
-func sendVideoMessage(message: LocalMessage, video: Video, memberIds: [String]) {
+func sendVideoMessage(message: LocalMessage, video: Video, memberIds: [String], channel: Channel? = nil) {
     
     message.message = "Video message"
     message.type = kVIDEO
@@ -160,7 +218,13 @@ func sendVideoMessage(message: LocalMessage, video: Video, memberIds: [String]) 
                         message.videoUrl = videoLink ?? ""
                         
                         let outgoingMessage = OutgoingMessage(message: message, memberIds: memberIds)
-                        outgoingMessage.sendMessage(message: message, memberIds: memberIds)
+                        
+                        if channel != nil {
+                            outgoingMessage.sendChannelMessage(message: message, channel: channel!)
+                        } else {
+                            outgoingMessage.sendMessage(message: message, memberIds: memberIds)
+                        }
+                        
                     }
                 }
             } //End of Uploads
@@ -173,7 +237,7 @@ func sendVideoMessage(message: LocalMessage, video: Video, memberIds: [String]) 
 }
 
 
-func sendLocationMessage(message: LocalMessage, memberIds: [String]) {
+func sendLocationMessage(message: LocalMessage, memberIds: [String], channel: Channel? = nil) {
     
     let currentLocation = LocationManager.shared.currentLocation
     message.message = "Location message"
@@ -182,11 +246,17 @@ func sendLocationMessage(message: LocalMessage, memberIds: [String]) {
     message.longitude = currentLocation?.longitude ?? 0.0
     
     let outgoingMessage = OutgoingMessage(message: message, memberIds: memberIds)
-    outgoingMessage.sendMessage(message: message, memberIds: memberIds)
+    
+    if channel != nil {
+        outgoingMessage.sendChannelMessage(message: message, channel: channel!)
+    } else {
+        outgoingMessage.sendMessage(message: message, memberIds: memberIds)
+    }
+    
 }
 
 
-func sendAudioMessage(message: LocalMessage, audioFileName: String, audioDuration: Float = 0.0, memberIds: [String]) {
+func sendAudioMessage(message: LocalMessage, audioFileName: String, audioDuration: Float = 0.0, memberIds: [String], channel: Channel? = nil) {
 
     message.message = "Audio message"
     message.type = kAUDIO
@@ -199,7 +269,12 @@ func sendAudioMessage(message: LocalMessage, audioFileName: String, audioDuratio
             message.audioUrl = audioUrl ?? ""
             message.audioDuration = Double(audioDuration)
             let outgoingMessage = OutgoingMessage(message: message, memberIds: memberIds)
-            outgoingMessage.sendMessage(message: message, memberIds: memberIds)
+            
+            if channel != nil {
+                outgoingMessage.sendChannelMessage(message: message, channel: channel!)
+            } else {
+                outgoingMessage.sendMessage(message: message, memberIds: memberIds)
+            }
         }
 
     }

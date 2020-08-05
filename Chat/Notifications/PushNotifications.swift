@@ -14,12 +14,15 @@ class PushNotificationService {
     
     private init() {}
     
-    func sendPushNotificationTo(userIds: [String], body: String) {
+    func sendPushNotificationTo(userIds: [String], body: String, channel: Channel? = nil) {
         
         FirebaseUserListener.shared.downloadUserFromFirebase(withIds: userIds) { (users) in
             
             for user in users {
-                self.sendMessageToUser(to: user.pushId, title: user.username, body: body)
+                
+                let title = channel != nil ? channel!.name : user.username
+                
+                self.sendMessageToUser(to: user.pushId, title: title, body: body)
             }
         }
     }
@@ -50,7 +53,7 @@ class PushNotificationService {
             do {
                 if let jsonData = data {
                     if let jsonDataDict  = try JSONSerialization.jsonObject(with: jsonData, options: JSONSerialization.ReadingOptions.allowFragments) as? [String: AnyObject] {
-                        NSLog("Received data:\n\(jsonDataDict))")
+                        //NSLog("Received data:\n\(jsonDataDict))")
                     }
                 }
             } catch let err as NSError {

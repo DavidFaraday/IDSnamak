@@ -94,10 +94,13 @@ class FileStorage {
                         
                         let imageToReturn = UIImage(data: data! as Data)
                         
+                        //save all
+                        FileStorage.saveFileLocally(fileData: data!, fileName: imageFileName)
+
                         //save locally if its a message
-                        if isMessage {
-                            FileStorage.saveFileLocally(fileData: data!, fileName: imageFileName)
-                        }
+//                        if isMessage {
+//                            FileStorage.saveFileLocally(fileData: data!, fileName: imageFileName)
+//                        }
                         
                         DispatchQueue.main.async {
                             completion(imageToReturn!)

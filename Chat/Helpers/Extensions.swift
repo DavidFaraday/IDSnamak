@@ -60,7 +60,6 @@ extension UIImage {
     }
     
     
-    
     func scaleImageToSize(newSize: CGSize) -> UIImage {
         var scaledImageRect = CGRect.zero
         

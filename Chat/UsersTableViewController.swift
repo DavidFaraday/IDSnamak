@@ -21,8 +21,7 @@ class UsersTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-
-        tableView.tableFooterView = UIView()
+       
         setupSearchController()
         downloadUsers()
     }
@@ -112,6 +111,7 @@ class UsersTableViewController: UITableViewController {
         profileVc.user = user
         self.navigationController?.pushViewController(profileVc, animated: true)
     }
+
 
 }
 

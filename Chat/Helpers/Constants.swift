@@ -65,4 +65,8 @@ public let kSENT = "Sent"
 public let kREAD = "Read"
 
 
-
+//Channel
+public let kNAME = "name"
+public let kADMINID = "adminId"
+public let kCREATEDDATE = "createdDate"
+public let kABOUTCHANNEL = "aboutChannel"

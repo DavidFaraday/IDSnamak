@@ -35,7 +35,7 @@ class IncomingMessage {
             mkMessage.kind = MessageKind.photo(photoItem)
             
             FileStorage.downloadImage(imageUrl: localMessage.pictureUrl, isMessage: true) { (image) in
-
+                print("set image", Date())
                 mkMessage.photoItem?.image = image
                 self.messagesCollectionView.messagesCollectionView.reloadData()
             }
