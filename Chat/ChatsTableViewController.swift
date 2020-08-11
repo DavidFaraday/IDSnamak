@@ -91,7 +91,7 @@ class ChatsTableViewController: UITableViewController {
         if editingStyle == .delete {
             
             let recent = searchController.isActive ? filteredRecents[indexPath.row] : allRecents[indexPath.row]
-            recent.deleteRecent()
+            FirebaseRecentListener.shared.deleteRecent(recent)
             
             searchController.isActive ? self.filteredRecents.remove(at: indexPath.row) : self.allRecents.remove(at: indexPath.row)
             

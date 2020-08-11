@@ -79,9 +79,9 @@ class MyChannelsTableViewController: UITableViewController {
         
         if editingStyle == .delete {
             
-            let deleteChannel = myChannels[indexPath.row]
+            let channelToDelete = myChannels[indexPath.row]
             myChannels.remove(at: indexPath.row)
-            deleteChannel.deleteChannel()
+            FirebaseChannelListener.shared.deleteChannel(channelToDelete)
             
             tableView.deleteRows(at: [indexPath], with: .automatic)
         }

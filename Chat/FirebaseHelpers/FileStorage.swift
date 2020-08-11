@@ -212,7 +212,7 @@ class FileStorage {
                 
                 if let audioData = NSData(contentsOfFile: fileInDocumentsDirectory(filename: fileName)) {
                     
-                    print("have data")
+                    print("have audio data")
                     
                     task = storageRef.putData(audioData as Data, metadata: nil, completion: {
                         metadata, error in

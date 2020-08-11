@@ -67,7 +67,7 @@ class SettingsTableViewController: UITableViewController {
     
     //MARK: - IBActions
     @IBAction func logoutButtonPressed(_ sender: Any) {
-        User.logOutCurrentUser { (error) in
+        FirebaseUserListener.shared.logOutCurrentUser { (error) in
             
             if error == nil {
                 let loginView = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "loginView")
@@ -87,7 +87,7 @@ class SettingsTableViewController: UITableViewController {
     
     //MARK: - Update UI
     private func showUserInfo() {
-        if let user = User.currentUser() {
+        if let user = User.currentUser {
             usernameLabel.text = user.username
             statusLabel.text = user.status
             

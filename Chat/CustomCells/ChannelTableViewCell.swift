@@ -33,7 +33,7 @@ class ChannelTableViewCell: UITableViewCell {
         aboutLabel.text = channel.aboutChannel
         setAvatar(avatarLink: channel.avatarLink)
         memberCountLabel.text = "\(channel.memberIds.count) members"
-        lasstMessageDateLabel.text = timeElapsed(channel.lastMessageDate)
+        lasstMessageDateLabel.text = timeElapsed(channel.lastMessageDate ?? Date())
         lasstMessageDateLabel.adjustsFontSizeToFitWidth = true
     }
     
@@ -41,7 +41,7 @@ class ChannelTableViewCell: UITableViewCell {
         
         if avatarLink != "" {
             FileStorage.downloadImage(imageUrl: avatarLink) { (avatarImage) in
-                self.avatarImageView.image = avatarImage?.circleMasked
+                self.avatarImageView.image = avatarImage != nil ? avatarImage?.circleMasked : UIImage(named: "avatar")?.circleMasked
             }
         } else {
             self.avatarImageView.image = UIImage(named: "avatar")?.circleMasked

@@ -49,10 +49,10 @@ class FirebaseUserListener {
                 
                 //create user and save it
                 if authDataResult?.user != nil {
-                    let user = User(id: authDataResult!.user.uid, userName: "User", email: email, pushId: "", avatarLink: "")
+                    let user = User(id: authDataResult!.user.uid, username: email, email: email, pushId: "", avatarLink: "", status: "Hey there I'm using Chat!")
                                             
-                    user.saveUserLocally()
-                    user.saveUserToFireStore()
+                    saveUserLocally(user)
+                    self.saveUserToFireStore(user)
                 }
             }
         })
@@ -76,17 +76,36 @@ class FirebaseUserListener {
         }
     }
     
+    func logOutCurrentUser(completion: @escaping (_ error: Error?) -> Void) {
+
+        do {
+            try Auth.auth().signOut()
+            
+            userDefaults.removeObject(forKey: kCURRENTUSER)
+            userDefaults.synchronize()
+            completion(nil)
+            
+        } catch let error as NSError {
+            completion(error)
+        }
+    }
+
+    
     //MARK: - Download 
     func downloadUserFromFirebase(userId: String, email: String? = nil) {
-        
-        FirebaseReference(.User).document(userId).getDocument { (snapshot, error) in
-            guard let snapshot = snapshot else {  return }
-            
-            if snapshot.exists {
 
-                let user = User(dictionary: snapshot.data()!)
-                user.saveUserLocally()
+        FirebaseReference(.User).document(userId).getDocument { (querySnapshot, error) in
+
+            guard let document = querySnapshot else {
+                print("no document for user")
+                return
             }
+
+            let user = try? document.data(as: User.self)
+
+            //TODO: check if ok
+
+            saveUserLocally(user!)
         }
     }
 
@@ -94,28 +113,26 @@ class FirebaseUserListener {
         
         var users:[User] = []
         
-        FirebaseReference(.User).limit(to: 500).getDocuments { (snapshot, error) in
+        FirebaseReference(.User).limit(to: 500).getDocuments { (querySnapshot, error) in
             
-            guard let snapshot = snapshot else { return }
-            
-            if !snapshot.isEmpty {
-                
-                for userData in snapshot.documents {
-                    
-                    let userObject = userData.data()
-                    
-                    //don't add current users
-                    if User.currentId() != userData[kID] as! String {
-                        users.append(User(dictionary: userObject))
-                    }
-                }
-                
-                completion(users)
-                
-            } else {
-                print("no users to fetch!")
-                completion(users)
+            guard let documents = querySnapshot?.documents else {
+                print("no document for all users")
+                return
             }
+            
+            let allUsers = documents.compactMap { (queryDocumentSnapshot) -> User? in
+                return try? queryDocumentSnapshot.data(as: User.self)
+            }
+            
+            
+            for user in allUsers {
+                //don't add current users
+                if User.currentId != user.id {
+                    users.append(user)
+                }
+            }
+            
+            completion(users)
         }
     }
     
@@ -127,26 +144,35 @@ class FirebaseUserListener {
         //go through each user and download it from firestore
         for userId in withIds {
             
-            FirebaseReference(.User).document(userId).getDocument { (snapshot, error) in
+            FirebaseReference(.User).document(userId).getDocument { (querySnapshot, error) in
                 
-                guard let snapshot = snapshot else {  return }
+                guard let document = querySnapshot else {
+                    print("no document for user per id")
+                    completion(usersArray)
+                    return
+                }
                 
-                if snapshot.exists {
+                let user = try? document.data(as: User.self)
+                //TODO: check if ok
 
-                    let user = User(dictionary: snapshot.data()!)
-                    
-                    usersArray.append(user)
-                    count += 1
-                    
-                    if count == withIds.count {
-                        //we have finished, return the array
-                        completion(usersArray)
-                    }
+                usersArray.append(user!)
+                count += 1
 
-                } else {
+                if count == withIds.count {
                     completion(usersArray)
                 }
             }
+        }
+    }
+
+
+    //MARK: - Saving user
+    func saveUserToFireStore(_ user: User) {
+        do {
+            let _ = try FirebaseReference(.User).document(user.id).setData(from: user)
+        }
+        catch {
+          print(error.localizedDescription, "adding user....")
         }
     }
 
@@ -155,25 +181,15 @@ class FirebaseUserListener {
     
     //MARK: - Update
     
-    func updateUserInFireStore(withValues : [String : Any], completion: @escaping (_ error: Error?) -> Void) {
+    func updateUserInFireStore(_ user: User) {
         
-        if let dictionary = userDefaults.object(forKey: kCURRENTUSER) {
-            
-            //get user object from userDefaults and update its values
-            let userObject = (dictionary as! NSDictionary).mutableCopy() as! NSMutableDictionary
-            userObject.setValuesForKeys(withValues)
-            
-            FirebaseReference(.User).document(User.currentId()).updateData(withValues) { (error) in
-                
-                completion(error)
-                if error == nil {
-                    User(dictionary: userObject as! [String : Any]).saveUserLocally()
-                } else {
-                    print("error updating user, ", error!.localizedDescription)
-                }
-            }
+        do {
+            let _ = try FirebaseReference(.User).document(user.id).setData(from: user)
         }
+        catch {
+            print(error.localizedDescription, "updating user....")
+        }
+        
+        saveUserLocally(user)
     }
-
-
 }

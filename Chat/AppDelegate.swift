@@ -90,12 +90,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private func updateUserPushId(newPushId: String) {
         
-        if let user = User.currentUser() {
+        if var user = User.currentUser {
             user.pushId = newPushId
-            user.saveUserLocally()
-            FirebaseUserListener.shared.updateUserInFireStore(withValues: [kPUSHID : newPushId]) { (error) in
-                print("updated push id and error is ", error)
-            }
+            saveUserLocally(user)
+            FirebaseUserListener.shared.updateUserInFireStore(user)
         }
     }
 

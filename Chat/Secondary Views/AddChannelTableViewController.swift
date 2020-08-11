@@ -61,15 +61,10 @@ class AddChannelTableViewController: UITableViewController {
     //MARK: - Save funcs
     private func saveChannel() {
         
-        let channel = Channel()
-        channel.id = channelId
-        channel.name = nameTextField.text!
-        channel.adminId = User.currentId()
-        channel.memberIds = [User.currentId()]
-        channel.aboutChannel = aboutTextView.text
-        channel.avatarLink = avatarLink
+        let channel = Channel(name: nameTextField.text!, adminId: User.currentId, memberIds: [User.currentId], avatarLink: avatarLink, aboutChannel: aboutTextView.text)
+            
+        FirebaseChannelListener.shared.addChannel(channel)
 
-        channel.saveToFirestore()
         self.navigationController?.popViewController(animated: true)
     }
 
@@ -88,7 +83,7 @@ class AddChannelTableViewController: UITableViewController {
     
     private func configureEditingView() {
         self.nameTextField.text = channelToEdit!.name
-        self.channelId = channelToEdit!.id
+        self.channelId = channelToEdit!.id ?? ""
         self.aboutTextView.text = channelToEdit!.aboutChannel
         self.avatarLink = channelToEdit!.avatarLink
         
@@ -118,7 +113,7 @@ class AddChannelTableViewController: UITableViewController {
             
             self.avatarLink = avatarLink ?? ""
             
-            FileStorage.saveFileLocally(fileData: image.jpegData(compressionQuality: 1.0)! as NSData, fileName:  User.currentId())
+            FileStorage.saveFileLocally(fileData: image.jpegData(compressionQuality: 1.0)! as NSData, fileName:  User.currentId)
         }
     }
     

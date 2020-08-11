@@ -33,7 +33,7 @@ class OutgoingMessage {
     //MARK: - Send Message
     class func send(chatId: String, text: String?, photo: UIImage?, video: Video?, audio: String?, audioDuration: Float = 0.0, location: String?, memberIds: [String]) {
 
-        let currentUser = User.currentUser()!
+        let currentUser = User.currentUser!
         
         let message = LocalMessage()
         message.id = UUID().uuidString
@@ -83,11 +83,12 @@ class OutgoingMessage {
     
     class func sendChannel(channel: Channel, text: String?, photo: UIImage?, video: Video?, audio: String?, audioDuration: Float = 0.0, location: String?) {
         
-        let currentUser = User.currentUser()!
+        let currentUser = User.currentUser!
+        var channel = channel
         
         let message = LocalMessage()
         message.id = UUID().uuidString
-        message.chatRoomId = channel.id
+        message.chatRoomId = channel.id ?? "unknownChannel"
         message.senderId = currentUser.id
         message.senderName = currentUser.username
         
@@ -118,14 +119,15 @@ class OutgoingMessage {
         
         PushNotificationService.shared.sendPushNotificationTo(userIds: removerCurrentUserFrom(userIds: channel.memberIds) , body: message.message, channel: channel)
         
-        channel.editChannel(withValues: [kDATE : Date()])
+        channel.lastMessageDate = Date()
+        FirebaseChannelListener.shared.updateChannel(channel)
     }
     
     func sendChannelMessage(message: LocalMessage, channel: Channel) {
         
         RealmManager.shared.saveToRealm(message)
         
-        FirebaseReference(.Messages).document(channel.id).collection(channel.id).document(message.id).setData(messageDictionary)
+        FirebaseReference(.Messages).document(channel.id ?? "unknownChannel").collection(channel.id ?? "unknownChannel").document(message.id).setData(messageDictionary)
     }
 
 

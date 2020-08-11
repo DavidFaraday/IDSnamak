@@ -24,7 +24,7 @@ class ChannelChatViewController: MessagesViewController {
 
     var channel: Channel!
     
-    let currentUser = MKSender(senderId: User.currentId(), displayName: User.currentUser()!.username)
+    let currentUser = MKSender(senderId: User.currentId, displayName: User.currentUser!.username)
     let refreshControl = UIRefreshControl()
     var gallery: GalleryController!
 
@@ -52,8 +52,8 @@ class ChannelChatViewController: MessagesViewController {
 
         super.init(nibName: nil, bundle: nil)
 
-        self.chatId = channel.id
-        self.recipientId = channel.id
+        self.chatId = channel.id!
+        self.recipientId = channel.id!
         self.recipientName = channel.name
         self.channel = channel
     }
@@ -112,7 +112,7 @@ class ChannelChatViewController: MessagesViewController {
 
     private func configureMessageInputBar() {
         
-        messageInputBar.isHidden = channel.adminId != User.currentId()
+        messageInputBar.isHidden = channel.adminId != User.currentId
         
         messageInputBar.delegate = self
 
@@ -199,7 +199,7 @@ class ChannelChatViewController: MessagesViewController {
 
     private func listenForNewChats() {
         
-        newChatListener = FirebaseReference(.Messages).document(channel.id).collection(channel.id).whereField(kDATE, isGreaterThan: lastMessageDate()).addSnapshotListener({ (snapshot, error) in
+        newChatListener = FirebaseReference(.Messages).document(channel.id!).collection(channel.id!).whereField(kDATE, isGreaterThan: lastMessageDate()).addSnapshotListener({ (snapshot, error) in
             
             guard let snapshot = snapshot else { return }
             
@@ -218,7 +218,7 @@ class ChannelChatViewController: MessagesViewController {
     
     private func checkForOldChats() {
         
-        FirebaseReference(.Messages).document(channel.id).collection(channel.id).getDocuments { (snapshot, error) in
+        FirebaseReference(.Messages).document(channel.id!).collection(channel.id!).getDocuments { (snapshot, error) in
 
             guard let snapshot = snapshot else { return }
             
@@ -433,7 +433,6 @@ extension ChannelChatViewController: GalleryControllerDelegate {
     func galleryController(_ controller: GalleryController, didSelectImages images: [Image]) {
         if images.count > 0 {
             images.first!.resolve(completion: { (image) in
-                print("image")
                 self.messageSend(text: nil, photo: image, video: nil, audio: nil, location: nil)
             })
         }

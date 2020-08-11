@@ -22,7 +22,7 @@ class ChatViewController: MessagesViewController {
 
     open lazy var audioController = BasicAudioController(messageCollectionView: messagesCollectionView)
 
-    let currentUser = MKSender(senderId: User.currentId(), displayName: User.currentUser()!.username)
+    let currentUser = MKSender(senderId: User.currentId, displayName: User.currentUser!.username)
     let refreshControl = UIRefreshControl()
     var gallery: GalleryController!
 
@@ -199,7 +199,7 @@ class ChatViewController: MessagesViewController {
 
     private func listenForNewChats() {
         
-        newChatListener = FirebaseReference(.Messages).document(User.currentId()).collection(chatId).whereField(kDATE, isGreaterThan: lastMessageDate()).addSnapshotListener({ (snapshot, error) in
+        newChatListener = FirebaseReference(.Messages).document(User.currentId).collection(chatId).whereField(kDATE, isGreaterThan: lastMessageDate()).addSnapshotListener({ (snapshot, error) in
             
             guard let snapshot = snapshot else { return }
             
@@ -218,7 +218,7 @@ class ChatViewController: MessagesViewController {
     
     private func checkForOldChats() {
         
-        FirebaseReference(.Messages).document(User.currentId()).collection(chatId).getDocuments { (snapshot, error) in
+        FirebaseReference(.Messages).document(User.currentId).collection(chatId).getDocuments { (snapshot, error) in
 
             guard let snapshot = snapshot else { return }
             
@@ -236,7 +236,7 @@ class ChatViewController: MessagesViewController {
     
     private func listenForReadStatusChange() {
         
-        updatedChatListener = FirebaseReference(.Messages).document(User.currentId()).collection(chatId).addSnapshotListener { (snapshot, error) in
+        updatedChatListener = FirebaseReference(.Messages).document(User.currentId).collection(chatId).addSnapshotListener { (snapshot, error) in
 
             guard let snapshot = snapshot else { return }
 
@@ -319,9 +319,9 @@ class ChatViewController: MessagesViewController {
 
     private func markMessageAsRead(_ localMessage: LocalMessage) {
         
-        if localMessage.senderId != User.currentId() {
+        if localMessage.senderId != User.currentId {
             
-            OutgoingMessage.updateMessage(withId: localMessage.id, chatRoomId: chatId, memberIds: [User.currentId(), recipientId])
+            OutgoingMessage.updateMessage(withId: localMessage.id, chatRoomId: chatId, memberIds: [User.currentId, recipientId])
         }
     }
 
@@ -344,7 +344,7 @@ class ChatViewController: MessagesViewController {
     
     func messageSend(text: String?, photo: UIImage?, video: Video?, audio: String?, location: String?, audioDuration: Float = 0.0) {
 
-        OutgoingMessage.send(chatId: chatId, text: text, photo: photo, video: video, audio: audio, audioDuration: audioDuration, location: location, memberIds: [User.currentId(), recipientId])
+        OutgoingMessage.send(chatId: chatId, text: text, photo: photo, video: video, audio: audio, audioDuration: audioDuration, location: location, memberIds: [User.currentId, recipientId])
     }
 
     private func actionAttachMessage() {
@@ -364,7 +364,7 @@ class ChatViewController: MessagesViewController {
         }
         
         let shareLocation = UIAlertAction(title: NSLocalizedString("Share Location", comment: ""), style: .default) { (alert: UIAlertAction!) in
-            print(LocationManager.shared.currentLocation, "......")
+
             if let _ = LocationManager.shared.currentLocation {
                 print("will send loc")
                 self.messageSend(text: nil, photo: nil, video: nil, audio: nil, location: kLOCATION)

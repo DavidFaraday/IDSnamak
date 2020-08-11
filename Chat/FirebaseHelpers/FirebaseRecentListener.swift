@@ -15,86 +15,156 @@ class FirebaseRecentListener {
     
     private init() {}
 
+    /// Starts listening for recents from FIrebase for current user, returns recents
+    ///
+    /// - Parameters:
+    ///   - callback: All up to date recents of current user.
     func downloadRecentChatsFromFireStore(completion: @escaping (_ allRecents: [RecentChat]) -> Void) {
         
-        FirebaseReference(.Recent).whereField(kSENDERID, isEqualTo: User.currentId()).addSnapshotListener() { (querySnapshot, error) in
+        FirebaseReference(.Recent).whereField(kSENDERID, isEqualTo: User.currentId).addSnapshotListener() { (querySnapshot, error) in
         
             var recentChats: [RecentChat] = []
 
-            guard let snapshot = querySnapshot else { return }
-            
-            if !snapshot.isEmpty {
-
-                for recentDocument in snapshot.documents {
-
-                    if recentDocument[kLASTMESSAGE] as! String != "" && recentDocument[kCHATROOMID] != nil && recentDocument[kID] != nil {
-                        
-                        let recent = RecentChat(recentDocument.data())
-                        recentChats.append(recent)
-                        
-                    }
-                }
-
-                recentChats.sort(by: { $0.date > $1.date })
-                completion(recentChats)
-            } else {
-                completion(recentChats)
+            guard let documents = querySnapshot?.documents else {
+                print("no document for recent chats")
+                return
             }
+            
+            let allRecents = documents.compactMap { (queryDocumentSnapshot) -> RecentChat? in
+
+                return try? queryDocumentSnapshot.data(as: RecentChat.self)
+            }
+            
+            for recent in allRecents {
+                if recent.lastMessage != "" {
+                    recentChats.append(recent)
+                }
+            }
+            
+            recentChats.sort(by: { $0.date! > $1.date! })
+            completion(recentChats)
         }
     }
     
+    /// Updates recentObjects of the chat with given last message
+    ///
+    /// - Parameters:
+    ///   - chatRoomId: The `Id` of chatroom.
+    ///   - lastMessage: The `lastMessage` sent.
     func updateRecents(chatRoomId: String, lastMessage: String) {
 
-        FirebaseReference(.Recent).whereField(kCHATROOMID, isEqualTo: chatRoomId).getDocuments { (snapshot, error) in
+        FirebaseReference(.Recent).whereField(kCHATROOMID, isEqualTo: chatRoomId).getDocuments { (querySnapshot, error) in
             
-            guard let snapshot = snapshot else { return }
+            guard let documents = querySnapshot?.documents else {
+                print("no document for recent update")
+                return
+            }
             
-            if !snapshot.isEmpty {
-                
-                for recent in snapshot.documents {
-                    
-                    let recentChat = RecentChat(recent.data() )
-                    
-                    self.updateRecentItem(recent: recentChat, lastMessage: lastMessage)
-                }
+            let allRecents = documents.compactMap { (queryDocumentSnapshot) -> RecentChat? in
+                return try? queryDocumentSnapshot.data(as: RecentChat.self)
+            }
+
+            for recentChat in allRecents {
+                self.updateRecentItemWithNewMessage(recent: recentChat, lastMessage: lastMessage)
             }
         }
     }
-
-
-    private func updateRecentItem(recent: RecentChat, lastMessage: String) {
-            
-        if recent.senderId != User.currentId() {
-            recent.unreadCounter += 1
-        }
-        
-        let values = [kLASTMESSAGE : lastMessage, kUNREADCOUNTER : recent.unreadCounter, kDATE : Date()] as [String : Any]
-        
-        FirebaseReference(.Recent).document(recent.id).updateData(values)
-    }
     
-    
+
+    /// Resets the counter of the recent object that belongs to current user in specific chatroom
+    ///
+    /// - Parameters:
+    ///   - chatRoomId: The `Id` of chatroom where user is member.
     func resetRecentCounter(chatRoomId: String) {
         
-        FirebaseReference(.Recent).whereField(kCHATROOMID, isEqualTo: chatRoomId).whereField(kSENDERID, isEqualTo: User.currentId()).getDocuments { (snapshot, error) in
+        FirebaseReference(.Recent).whereField(kCHATROOMID, isEqualTo: chatRoomId).whereField(kSENDERID, isEqualTo: User.currentId).getDocuments { (querySnapshot, error) in
             
-            guard let snapshot = snapshot else { return }
+            guard let documents = querySnapshot?.documents else {
+                print("no document for recent counter")
+                return
+            }
             
-            if !snapshot.isEmpty {
-                
-                if let recentData = snapshot.documents.first?.data() {
-                    let recent = RecentChat(recentData)
-                    self.clearUnreadCounter(recent: recent)
-                }
+            let allRecents = documents.compactMap { (queryDocumentSnapshot) -> RecentChat? in
+                return try? queryDocumentSnapshot.data(as: RecentChat.self)
+            }
+            
+            if allRecents.count > 0 {
+                self.clearUnreadCounter(recent: allRecents.first!)
             }
         }
     }
 
+    /// The function resents the counter of specific recent object
+    ///
+    /// - Parameters:
+    ///   - recent: The `RecentChat` to reset counter for.
 
     func clearUnreadCounter(recent: RecentChat) {
         
-        let values = [kUNREADCOUNTER : 0] as [String : Any]
+        var recent = recent
+        recent.unreadCounter = 0
         
-        FirebaseReference(.Recent).document(recent.id).updateData(values)
+        self.updateRecent(recent)
     }
+    
+    /// Updates specific RecentObject with given last message, increments unread for other member
+    ///
+    /// - Parameters:
+    ///   - recent: The `Recent` Recent to update.
+    ///   - lastMessage: The `lastMessage` sent.
+    private func updateRecentItemWithNewMessage(recent: RecentChat, lastMessage: String) {
+            
+        var recent = recent
+        
+        if recent.senderId != User.currentId {
+            recent.unreadCounter += 1
+        }
+        
+        recent.lastMessage = lastMessage
+        recent.date = Date()
+        
+        self.updateRecent(recent)
+    }
+
+    
+    //MARK: - Add Update Delete
+    /// Saves Specific Recent Object to firebase
+    ///
+    /// - Parameters:
+    ///   - recent: The `Recent` Recent Object.
+    func addRecent(_ recent: RecentChat) {
+      do {
+        let _ = try FirebaseReference(.Recent).addDocument(from: recent)
+      }
+      catch {
+        print(error.localizedDescription, "adding recent....")
+      }
+    }
+
+    /// Updates Specific Recent Object in firebase
+    ///
+    /// - Parameters:
+    ///   - recent: The `Recent` Recent Object.
+    func updateRecent(_ recent: RecentChat) {
+        
+        if let id = recent.id {
+            do {
+                let _ = try FirebaseReference(.Recent).document(id).setData(from: recent)
+            }
+            catch {
+                print(error.localizedDescription, "updating recent....")
+            }
+        }
+    }
+
+    /// Deletes Specific Recent Object from firebase
+    ///
+    /// - Parameters:
+    ///   - recent: The `Recent` Recent Object.
+    func deleteRecent(_ recent: RecentChat) {
+        if let id = recent.id {
+            FirebaseReference(.Recent).document(id).delete()
+        }
+    }
+
 }

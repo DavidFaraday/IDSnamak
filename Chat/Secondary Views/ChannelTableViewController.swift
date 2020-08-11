@@ -60,8 +60,8 @@ class ChannelTableViewController: UITableViewController {
 
     //MARK: - Actions
     @objc func followChannel() {
-        channel.memberIds.append(User.currentId())
-        channel.editChannel(withValues: [kMEMBERIDS : channel.memberIds])
+        channel.memberIds.append(User.currentId)
+        FirebaseChannelListener.shared.updateChannel(channel)
         delegate?.didClickFollow()
         self.navigationController?.popViewController(animated: true)
     }

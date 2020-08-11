@@ -9,19 +9,19 @@
 import UIKit
 
 class UsersTableViewController: UITableViewController {
-
+    
     //MARK: - Vars
     var allUsers:[User] = []
     var filteredUsers:[User] = []
     
     let searchController = UISearchController(searchResultsController: nil)
-
+    
     
     //MARK: - View lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
-       
+        tableView.tableFooterView = UIView()
         setupSearchController()
         downloadUsers()
     }
@@ -32,21 +32,21 @@ class UsersTableViewController: UITableViewController {
         navigationItem.largeTitleDisplayMode = .always
         navigationController?.navigationBar.prefersLargeTitles = true
     }
-
+    
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-
+        
         return searchController.isActive ? filteredUsers.count : allUsers.count
     }
-
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! UserTableViewCell
         
         let user = searchController.isActive ? filteredUsers[indexPath.row] : allUsers[indexPath.row]
-
+        
         cell.configure(user: user)
-
+        
         return cell
     }
     
@@ -60,7 +60,7 @@ class UsersTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-       let headerView = UIView()
+        let headerView = UIView()
         headerView.backgroundColor = UIColor(named: "tableBackgroundColor")
         return headerView
     }
@@ -68,8 +68,8 @@ class UsersTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 0
     }
-
-
+    
+    
     //MARK: - Download users
     
     private func downloadUsers() {
@@ -81,7 +81,7 @@ class UsersTableViewController: UITableViewController {
             }
         }
     }
-
+    
     
     //MARK: - SearchController
     private func setupSearchController() {
@@ -93,7 +93,7 @@ class UsersTableViewController: UITableViewController {
         searchController.searchResultsUpdater = self
         definesPresentationContext = true
     }
-
+    
     private func filteredContentForSearchText(searchText: String) {
         
         filteredUsers = allUsers.filter({ (user) -> Bool in
@@ -103,7 +103,7 @@ class UsersTableViewController: UITableViewController {
         
         tableView.reloadData()
     }
-
+    
     //MARK: - Navigation
     private func showUserProfile(_ user: User) {
         let profileVc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "ProfileView") as! ProfileTableViewController
@@ -111,8 +111,8 @@ class UsersTableViewController: UITableViewController {
         profileVc.user = user
         self.navigationController?.pushViewController(profileVc, animated: true)
     }
-
-
+    
+    
 }
 
 extension UsersTableViewController: UISearchResultsUpdating {

@@ -570,7 +570,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mCe-dA-EP1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3452" y="-269.70443349753697"/>
+            <point key="canvasLocation" x="3452" y="-270"/>
         </scene>
         <!--My Channels-->
         <scene sceneID="Pkp-od-Ty3">
@@ -677,7 +677,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="q1s-qD-tLH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4296.8000000000002" y="-270.44334975369458"/>
+            <point key="canvasLocation" x="4298" y="-271"/>
         </scene>
         <!--New Channel-->
         <scene sceneID="RhM-kW-jfV">
@@ -777,7 +777,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uST-RR-tZB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5161" y="-270"/>
+            <point key="canvasLocation" x="5162" y="-271"/>
         </scene>
         <!--Users-->
         <scene sceneID="5Rq-mS-1Of">
@@ -1246,7 +1246,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="lAe-ov-cDr" kind="relationship" relationship="rootViewController" id="nU1-O1-n5o"/>
+                        <segue destination="lAe-ov-cDr" kind="relationship" relationship="rootViewController" id="kG8-fa-ajd"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Vce-6L-35n" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1351,7 +1351,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ILU-f2-puV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6237.6000000000004" y="-270.44334975369458"/>
+            <point key="canvasLocation" x="6210" y="-271"/>
         </scene>
     </scenes>
     <resources>

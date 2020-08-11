@@ -17,86 +17,113 @@ class FirebaseChannelListener {
 
     private init() {}
  
+    //MARK: - Fetching
     func downloadUserChannelsFromFireStore(completion: @escaping (_ allRecents: [Channel]) -> Void) {
         
-        channelListener = FirebaseReference(.Channel).whereField(kADMINID, isEqualTo: User.currentId()).addSnapshotListener() { (snapshot, error) in
+        channelListener = FirebaseReference(.Channel).whereField(kADMINID, isEqualTo: User.currentId).addSnapshotListener() { (querySnapshot, error) in
         
-            var allChannels: [Channel] = []
-
-            guard let snapshot = snapshot else { return }
-            
-            if !snapshot.isEmpty {
-
-                for channelDocument in snapshot.documents {
-
-                    allChannels.append(Channel(channelDocument.data()))
-                }
-
-                allChannels.sort(by: { $0.createdDate > $1.createdDate })
-                completion(allChannels)
-                
-            } else {
-                completion(allChannels)
+            guard let documents = querySnapshot?.documents else {
+                print("no document for user channels")
+                return
             }
+            
+            var allChannels = documents.compactMap { (queryDocumentSnapshot) -> Channel? in
+                print(queryDocumentSnapshot)
+                return try? queryDocumentSnapshot.data(as: Channel.self)
+            }
+            
+            allChannels.sort(by: { $0.memberIds.count > $1.memberIds.count })
+            completion(allChannels)
+
         }
     }
     
     func downloadSubscribedChannels(completion: @escaping (_ allRecents: [Channel]) -> Void) {
         
-        channelListener = FirebaseReference(.Channel).whereField(kMEMBERIDS, arrayContains: User.currentId()).addSnapshotListener() { (snapshot, error) in
+        channelListener = FirebaseReference(.Channel).whereField(kMEMBERIDS, arrayContains: User.currentId).addSnapshotListener() { (querySnapshot, error) in
 
-            var allChannels: [Channel] = []
-
-            guard let snapshot = snapshot else { return }
-            
-            if !snapshot.isEmpty {
-
-                for channelDocument in snapshot.documents {
-
-                    allChannels.append(Channel(channelDocument.data()))
-                }
-
-                allChannels.sort(by: { $0.memberIds.count > $1.memberIds.count })
-                completion(allChannels)
-                
-            } else {
-                completion(allChannels)
+            guard let documents = querySnapshot?.documents else {
+                print("no document for subscribed channels")
+                return
             }
+            
+            var allChannels = documents.compactMap { (queryDocumentSnapshot) -> Channel? in
+                return try? queryDocumentSnapshot.data(as: Channel.self)
+            }
+            
+            allChannels.sort(by: { $0.memberIds.count > $1.memberIds.count })
+            completion(allChannels)
+            
         }
     }
 
     
     func downloadAllChannels(completion: @escaping (_ allRecents: [Channel]) -> Void) {
         
-        FirebaseReference(.Channel).getDocuments { (snapshot, error) in
+        FirebaseReference(.Channel).getDocuments { (querySnapshot, error) in
             
-            var allChannels: [Channel] = []
-
-            guard let snapshot = snapshot else { return }
-            
-            if !snapshot.isEmpty {
-
-                for channelDocument in snapshot.documents {
-                    
-                    let channel = Channel(channelDocument.data())
-                    if !channel.memberIds.contains(User.currentId()) {
-                        allChannels.append(channel)
-                    }
-                }
-
-                allChannels.sort(by: { $0.memberIds.count > $1.memberIds.count })
-                completion(allChannels)
-                
-            } else {
-                completion(allChannels)
+            guard let documents = querySnapshot?.documents else {
+                print("no document for all channels")
+                return
             }
+            
+            var allChannels = documents.compactMap { (queryDocumentSnapshot) -> Channel? in
+                return try? queryDocumentSnapshot.data(as: Channel.self)
+            }
+            
+            allChannels = self.removeSubscribedChannels(allChannels)
+            allChannels.sort(by: { $0.memberIds.count > $1.memberIds.count })
+            completion(allChannels)
         }
     }
 
     
+    //MARK: - Add Update Delete
+    func addChannel(_ channel: Channel) {
+      do {
+        let _ = try FirebaseReference(.Channel).addDocument(from: channel)
+      }
+      catch {
+        print(error.localizedDescription, "adding channel....")
+      }
+    }
+
+    func updateChannel(_ channel: Channel) {
+        if let id = channel.id {
+            do {
+                let _ = try FirebaseReference(.Channel).document(id).setData(from: channel)
+            }
+            catch {
+                print(error.localizedDescription, "updating channel....")
+            }
+        }
+    }
+
+    func deleteChannel(_ channel: Channel) {
+        if let id = channel.id {
+            FirebaseReference(.Channel).document(id).delete()
+        }
+    }
+
+
+    
+    //MARK: - Helpers
+
+    func removeSubscribedChannels(_ allChannels: [Channel]) -> [Channel] {
+        
+        var newChannels: [Channel] = []
+        
+        for channel in allChannels {
+            if !channel.memberIds.contains(User.currentId) {
+                newChannels.append(channel)
+            }
+        }
+        
+        return newChannels
+    }
+    
     func removeChannelListener() {
         self.channelListener.remove()
     }
-
 
 }

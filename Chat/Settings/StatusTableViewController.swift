@@ -34,7 +34,7 @@ class StatusTableViewController: UITableViewController {
         let status = allStatuses[indexPath.row]
         cell.textLabel?.text = status
         
-        cell.accessoryType = User.currentUser()?.status == status ? .checkmark : .none
+        cell.accessoryType = User.currentUser?.status == status ? .checkmark : .none
 
         return cell
     }
@@ -66,10 +66,10 @@ class StatusTableViewController: UITableViewController {
     //MARK: - Helpers
     private func updateCellCheck(_ indexPath: IndexPath) {
         
-        if let user = User.currentUser() {
+        if var user = User.currentUser {
             user.status = allStatuses[indexPath.row]
-            user.saveUserLocally()
-            user.saveUserToFireStore()
+            saveUserLocally(user)
+            FirebaseUserListener.shared.saveUserToFireStore(user)
         }
     }
 

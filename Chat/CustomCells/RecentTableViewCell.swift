@@ -54,7 +54,7 @@ class RecentTableViewCell: UITableViewCell {
             }
         
             setAvatar(avatarLink: recent.avatarLink)
-            timeLabel.text = timeElapsed(recent.date)
+            timeLabel.text = timeElapsed(recent.date ?? Date())
             timeLabel.adjustsFontSizeToFitWidth = true
 
     }

@@ -24,16 +24,16 @@ class FirebaseTypingListener {
             guard let snapshot = snapshot else { return }
             
             if snapshot.exists {
-                print("typing ", Date())
+
                 for data in snapshot.data()! {
-                    if data.key != User.currentId() {
+                    if data.key != User.currentId {
                         completion(data.value as! Bool)
                     }
                 }
                 
             } else {
                 completion(false)
-                FirebaseReference(.Typing).document(chatRoomId).setData([User.currentId() : false])
+                FirebaseReference(.Typing).document(chatRoomId).setData([User.currentId : false])
             }
         })
     }
@@ -41,7 +41,7 @@ class FirebaseTypingListener {
 
     class func saveTypingCounter(typing: Bool, chatRoomId: String) {
         
-        FirebaseReference(.Typing).document(chatRoomId).updateData([User.currentId() : typing])
+        FirebaseReference(.Typing).document(chatRoomId).updateData([User.currentId : typing])
     }
     
     func removeTypingListener() {

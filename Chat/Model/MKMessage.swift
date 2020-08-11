@@ -72,6 +72,6 @@ class MKMessage: NSObject, MessageType {
         self.senderInitials = message.senderInitials
         self.sentDate = message.date
         self.readDate = message.readDate
-        self.incoming = User.currentId() != mksender.senderId
+        self.incoming = User.currentId != mksender.senderId
     }
 }

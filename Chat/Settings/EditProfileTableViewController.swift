@@ -85,7 +85,7 @@ class EditProfileTableViewController: UITableViewController {
     //MARK: - Update UI
     private func showUserInfo() {
         
-        if let user = User.currentUser() {
+        if let user = User.currentUser {
             usernameTextField.text = user.username
             statusLabel.text = user.status
             
@@ -112,17 +112,17 @@ class EditProfileTableViewController: UITableViewController {
     
     private func uploadAvatarImage(_ image: UIImage) {
         
-        let fileDirectory = "Avatars/" + "_" + "\(User.currentId())" + ".jpg"
+        let fileDirectory = "Avatars/" + "_" + "\(User.currentId)" + ".jpg"
 
         FileStorage.uploadImage(image, directory: fileDirectory) { (avatarLink) in
             
-            if let user = User.currentUser() {
+            if var user = User.currentUser {
                 user.avatarLink = avatarLink ?? ""
-                user.saveUserLocally()
-                user.saveUserToFireStore()
+                saveUserLocally(user)
+                FirebaseUserListener.shared.saveUserToFireStore(user)
             }
             
-            FileStorage.saveFileLocally(fileData: image.jpegData(compressionQuality: 1.0)! as NSData, fileName:  User.currentId())
+            FileStorage.saveFileLocally(fileData: image.jpegData(compressionQuality: 1.0)! as NSData, fileName:  User.currentId)
         }
     }
 
@@ -137,10 +137,10 @@ extension EditProfileTableViewController: UITextFieldDelegate {
             
             if textField.text != "" {
                 
-                if let user = User.currentUser() {
+                if var user = User.currentUser {
                     user.username = textField.text!
-                    user.saveUserLocally()
-                    user.saveUserToFireStore()
+                    saveUserLocally(user)
+                    FirebaseUserListener.shared.saveUserToFireStore(user)
                 }
             }
             

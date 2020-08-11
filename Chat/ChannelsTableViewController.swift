@@ -62,14 +62,14 @@ class ChannelsTableViewController: UITableViewController {
         
         let tempChannel = channelSegmentOutlet.selectedSegmentIndex == 1 ? allChannels[indexPath.row] : subscribedChannels[indexPath.row]
 
-        return tempChannel.adminId != User.currentId()
+        return tempChannel.adminId != User.currentId
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         
         if editingStyle == .delete {
             
-            let channelToDelete: Channel!
+            var channelToDelete: Channel!
             
             if channelSegmentOutlet.selectedSegmentIndex == 1 {
                 channelToDelete = allChannels[indexPath.row]
@@ -79,11 +79,12 @@ class ChannelsTableViewController: UITableViewController {
                 subscribedChannels.remove(at: indexPath.row)
             }
 
-            if let index = channelToDelete.memberIds.firstIndex(of: User.currentId()) {
+            if let index = channelToDelete.memberIds.firstIndex(of: User.currentId) {
                 channelToDelete.memberIds.remove(at: index)
             }
             
-            channelToDelete.editChannel(withValues: [kMEMBERIDS : channelToDelete.memberIds])
+            
+            FirebaseChannelListener.shared.updateChannel(channelToDelete)
             tableView.reloadData()
         }
     }

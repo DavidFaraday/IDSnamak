@@ -32,7 +32,7 @@ func restartChat(chatRoomId: String, memberIds: [String]) {
 func getReceiverFrom(users: [User]) -> User {
 
     var allUsers = users
-    allUsers.remove(at: allUsers.firstIndex(of: User.currentUser()!)!)
+    allUsers.remove(at: allUsers.firstIndex(of: User.currentUser!)!)
     
     return allUsers.first!
 }
@@ -56,29 +56,16 @@ func createRecentItems(chatRoomId: String, users: [User]) {
         //create recents for remaining users
         for userId in memberIdsToCreateRecent {
             
-            let senderUser = userId == User.currentId() ? User.currentUser()! : getReceiverFrom(users: users)
-
-            let receiverUser = userId == User.currentId() ? getReceiverFrom(users: users) : User.currentUser()!
-
-            let recentObject = RecentChat()
+            let senderUser = userId == User.currentId ? User.currentUser! : getReceiverFrom(users: users)
             
-            recentObject.id = UUID().uuidString
-            recentObject.chatRoomId = chatRoomId
-            recentObject.senderId = senderUser.id
-            recentObject.senderName = senderUser.username
-            recentObject.receiverId = receiverUser.id
-            recentObject.receiverName = receiverUser.username
-            recentObject.date = Date()
-            recentObject.memberIds = [senderUser.id, receiverUser.id]
-            recentObject.lastMessage = ""
-            recentObject.unreadCounter = 0
-            recentObject.avatarLink = receiverUser.avatarLink
-            
-            recentObject.saveToFirestore()
+            let receiverUser = userId == User.currentId ? getReceiverFrom(users: users) : User.currentUser!
+
+            let recentObject = RecentChat(chatRoomId: chatRoomId, senderId: senderUser.id, senderName: senderUser.username, receiverId: receiverUser.id, receiverName: receiverUser.username, memberIds: [senderUser.id, receiverUser.id], lastMessage: "", unreadCounter: 0, avatarLink: receiverUser.avatarLink)
+   
+            FirebaseRecentListener.shared.addRecent(recentObject)
         }
     }
- 
-}
+ }
 
 
 

@@ -8,89 +8,53 @@
 
 import Foundation
 import Firebase
+import FirebaseFirestoreSwift
 
-class User: Equatable {
-    
-    var id: String
+struct User: Codable, Equatable {
+    var id = ""
     var username: String
     var email: String
     var pushId: String = ""
     var avatarLink: String = ""
     var status: String
     
-    init(id: String, userName: String, email: String, pushId: String, avatarLink: String) {
-        
-        self.id = id
-        self.username = userName
-        self.email = email
-        self.pushId = pushId
-        self.avatarLink = avatarLink
-        self.status = "Hey there I'm using Chat"
+    static var currentId: String {
+        return Auth.auth().currentUser!.uid
     }
     
-    init(dictionary: [String : Any]) {
-        
-        id = dictionary[kID] as? String ?? ""
-        email = dictionary[kEMAIL] as? String ?? ""
-        username = dictionary[kUSERNAME] as? String ?? ""
-        pushId = dictionary[kPUSHID] as? String ?? ""
-        avatarLink = dictionary[kAVATARLINK] as? String ?? ""
-        status = dictionary[kSTATUS] as? String ?? ""
-    }
-    
-    
-    var dictionary : [String : Any] {
-        return [kID : id, kUSERNAME: username, kEMAIL : email, kPUSHID : pushId, kAVATARLINK: avatarLink, kSTATUS: status]
+    static var currentUser: User? {
+        if Auth.auth().currentUser != nil {
+            if let dictionary = UserDefaults.standard.data(forKey: kCURRENTUSER) {
+
+                let decoder = JSONDecoder()
+                do {
+                    let object = try decoder.decode(User.self, from: dictionary)
+                    return object
+                } catch {
+                    print("error decoding user from userDefaults. ", error.localizedDescription)
+                }
+            }
+        }
+        return nil
     }
     
     //for Equatable
     static func == (lhs: User, rhs: User) -> Bool {
         lhs.id == rhs.id
     }
+
+}
+
+func saveUserLocally(_ user: User) {
     
-    class func currentId() -> String {
-        return Auth.auth().currentUser!.uid
+    let encoder = JSONEncoder()
+    do {
+        let data = try encoder.encode(user)
+        userDefaults.set(data, forKey: kCURRENTUSER)
+
+    } catch {
+        print("error saving user locally, ", error.localizedDescription)
     }
-
-    class func currentUser () -> User? {
-        if Auth.auth().currentUser != nil {
-            if let dictionary = UserDefaults.standard.object(forKey: kCURRENTUSER) {
-                return User.init(dictionary: dictionary as! [String : Any])
-            }
-        }
-        return nil
-    }
-
-    
-    func saveUserLocally() {
-        userDefaults.set(self.dictionary, forKey: kCURRENTUSER)
-        userDefaults.synchronize()
-    }
-    
-    func saveUserToFireStore() {
-
-        FirebaseReference(.User).document(self.id).setData(self.dictionary) { (error) in
-            if error != nil {
-                print("error saving user \(error!.localizedDescription)")
-            }
-        }
-    }
-
-    //MARK: - LogOut
-    class func logOutCurrentUser(completion: @escaping (_ error: Error?) -> Void) {
-
-        do {
-            try Auth.auth().signOut()
-            
-            userDefaults.removeObject(forKey: kCURRENTUSER)
-            userDefaults.synchronize()
-            completion(nil)
-            
-        } catch let error as NSError {
-            completion(error)
-        }
-    }
-
 }
 
 
@@ -104,16 +68,15 @@ func createUsers() {
     for i in 0..<5 {
 
         let id = UUID().uuidString
-//        let randomNumber = Int.random(in: 0 ... 5)
         
         let fileDirectory = "Avatars/" + "\(id)" + ".jpg"
 
         FileStorage.uploadImage(UIImage(named: "user\(ImageIndex)")!, directory: fileDirectory) { (avatarLink) in
             
-            let user = User(id: id, userName: names[i], email: "user\(UserIndex)@mail.com", pushId: "", avatarLink: avatarLink ?? "")
+            let user = User(id: id, username: names[i], email: "user\(UserIndex)@mail.com", pushId: "", avatarLink: avatarLink ?? "", status: "No Status")
                 
             UserIndex += 1
-            user.saveUserToFireStore()
+            FirebaseUserListener.shared.saveUserToFireStore(user)
         }
 
         ImageIndex += 1
