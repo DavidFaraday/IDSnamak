@@ -12,7 +12,7 @@ import Firebase
 import FirebaseFirestoreSwift
 
 struct RecentChat: Codable {
-    @DocumentID var id = ""
+    var id = ""
     var chatRoomId = ""
     var senderId = ""
     var senderName = ""

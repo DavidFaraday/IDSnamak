@@ -24,8 +24,6 @@ class LocalMessage: Object, Codable {
     @objc dynamic var audioUrl = ""
     @objc dynamic var videoUrl = ""
     @objc dynamic var pictureUrl = ""
-    @objc dynamic var photoWidth = 0//delete
-    @objc dynamic var photoHeight = 0//delete
     @objc dynamic var latitude = 0.0
     @objc dynamic var longitude = 0.0
     @objc dynamic var audioDuration = 0.0
@@ -33,50 +31,6 @@ class LocalMessage: Object, Codable {
     override static func primaryKey() -> String? {
         return "id"
     }
-
-//    var dictionary: NSDictionary {
-//        
-//        return NSDictionary(objects: [self.id,
-//                                      self.chatRoomId,
-//                                      self.date,
-//                                      self.senderName,
-//                                      self.senderId,
-//                                      self.senderInitials,
-//                                      self.readDate,
-//                                      self.type,
-//                                      self.status,
-//                                      self.message,
-//                                      self.audioUrl,
-//                                      self.videoUrl,
-//                                      self.pictureUrl,
-//                                      self.photoWidth,
-//                                      self.photoHeight,
-//                                      self.latitude,
-//                                      self.longitude,
-//                                      self.audioDuration
-//            ],
-//                            forKeys: [kID as NSCopying,
-//                                      kCHATROOMID as NSCopying,
-//                                      kDATE as NSCopying,
-//                                      kSENDERNAME as NSCopying,
-//                                      kSENDERID as NSCopying,
-//                                      kSENDERINITIALS as NSCopying,
-//                                      kREADDATE as NSCopying,
-//                                      kTYPE as NSCopying,
-//                                      kSTATUS as NSCopying,
-//                                      kMESSAGE as NSCopying,
-//                                      kAUDIOURL as NSCopying,
-//                                      kVIDEOURL as NSCopying,
-//                                      kPICTUREURL as NSCopying,
-//                                      kPICTUREWIDTH as NSCopying,
-//                                      kPICTUREHEIGHT as NSCopying,
-//                                      kLATITUDE as NSCopying,
-//                                      kLONGITUDE as NSCopying,
-//                                      kAUDIODURATION as NSCopying
-//            ]
-//        )
-//    }
-
 }
 
 

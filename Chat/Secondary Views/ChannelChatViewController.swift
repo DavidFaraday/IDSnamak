@@ -52,8 +52,8 @@ class ChannelChatViewController: MessagesViewController {
 
         super.init(nibName: nil, bundle: nil)
 
-        self.chatId = channel.id!
-        self.recipientId = channel.id!
+        self.chatId = channel.id
+        self.recipientId = channel.id
         self.recipientName = channel.name
         self.channel = channel
     }
@@ -199,38 +199,13 @@ class ChannelChatViewController: MessagesViewController {
 
     private func listenForNewChats() {
         
-        newChatListener = FirebaseReference(.Messages).document(channel.id!).collection(channel.id!).whereField(kDATE, isGreaterThan: lastMessageDate()).addSnapshotListener({ (snapshot, error) in
-            
-            guard let snapshot = snapshot else { return }
-            
-            if !snapshot.isEmpty {
-                
-                for change in snapshot.documentChanges {
-                    
-                    if change.type == .added {
-                        createLocalMessage(messageDictionary: change.document.data())
-                    }
-                }
-            }
-        })
+        FirebaseMessageListener.shared.listenForNewChats(channel.id, collectionId: channel.id, lastMessageDate: lastMessageDate())
     }
 
     
     private func checkForOldChats() {
         
-        FirebaseReference(.Messages).document(channel.id!).collection(channel.id!).getDocuments { (snapshot, error) in
-
-            guard let snapshot = snapshot else { return }
-            
-            if !snapshot.isEmpty {
-                
-                let sortedMessageDictionary = ((self.dictionaryArrayFromSnapshots(snapshot.documents)) as NSArray).sortedArray(using: [NSSortDescriptor(key: kDATE, ascending: true)]) as! [Dictionary<String, Any>]
-                
-                for dictionary in sortedMessageDictionary {
-                    createLocalMessage(messageDictionary: dictionary)
-                }
-            }
-        }
+        FirebaseMessageListener.shared.checkForOldChats(channel.id, collectionId: channel.id)
     }
 
 

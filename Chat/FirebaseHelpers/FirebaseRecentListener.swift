@@ -133,12 +133,13 @@ class FirebaseRecentListener {
     /// - Parameters:
     ///   - recent: The `Recent` Recent Object.
     func addRecent(_ recent: RecentChat) {
-      do {
-        let _ = try FirebaseReference(.Recent).addDocument(from: recent)
-      }
-      catch {
-        print(error.localizedDescription, "adding recent....")
-      }
+        
+        do {
+            let _ = try FirebaseReference(.Recent).document(recent.id).setData(from: recent)
+        }
+        catch {
+            print(error.localizedDescription, "adding recent....")
+        }
     }
 
     /// Updates Specific Recent Object in firebase
@@ -147,14 +148,13 @@ class FirebaseRecentListener {
     ///   - recent: The `Recent` Recent Object.
     func updateRecent(_ recent: RecentChat) {
         
-        if let id = recent.id {
-            do {
-                let _ = try FirebaseReference(.Recent).document(id).setData(from: recent)
-            }
-            catch {
-                print(error.localizedDescription, "updating recent....")
-            }
+        do {
+            let _ = try FirebaseReference(.Recent).document(recent.id).setData(from: recent)
         }
+        catch {
+            print(error.localizedDescription, "updating recent....")
+        }
+        
     }
 
     /// Deletes Specific Recent Object from firebase
@@ -162,9 +162,7 @@ class FirebaseRecentListener {
     /// - Parameters:
     ///   - recent: The `Recent` Recent Object.
     func deleteRecent(_ recent: RecentChat) {
-        if let id = recent.id {
-            FirebaseReference(.Recent).document(id).delete()
-        }
+        FirebaseReference(.Recent).document(recent.id).delete()
     }
 
 }

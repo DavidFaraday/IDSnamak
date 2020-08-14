@@ -70,7 +70,7 @@ class OutgoingMessage {
         
         let message = LocalMessage()
         message.id = UUID().uuidString
-        message.chatRoomId = channel.id ?? "unknownChannel"
+        message.chatRoomId = channel.id
         message.senderId = currentUser.id
         message.senderName = currentUser.username
         
@@ -99,7 +99,7 @@ class OutgoingMessage {
             sendAudioMessage(message: message, audioFileName: audio!, audioDuration: audioDuration, memberIds: channel.memberIds, channel: channel)
         }
         
-        PushNotificationService.shared.sendPushNotificationTo(userIds: removerCurrentUserFrom(userIds: channel.memberIds) , body: message.message, channel: channel, chatRoomId: channel.id ?? "")
+        PushNotificationService.shared.sendPushNotificationTo(userIds: removerCurrentUserFrom(userIds: channel.memberIds) , body: message.message, channel: channel, chatRoomId: channel.id)
         
         channel.lastMessageDate = Date()
         FirebaseChannelListener.shared.updateChannel(channel)
@@ -110,17 +110,6 @@ class OutgoingMessage {
         RealmManager.shared.saveToRealm(message)
         
         FirebaseMessageListener.shared.addChannelMessage(message, channel: channel)
-    }
-
-
-    class func updateMessage(withId: String, chatRoomId: String, memberIds: [String]) {
-        
-        let values = [kSTATUS : kREAD, kREADDATE : Date()] as [String : Any]
-        
-        for userId in memberIds {
-           
-            FirebaseReference(.Messages).document(userId).collection(chatRoomId).document(withId).updateData(values)
-        }
     }
     
 }

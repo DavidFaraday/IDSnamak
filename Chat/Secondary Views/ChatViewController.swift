@@ -39,8 +39,6 @@ class ChatViewController: MessagesViewController {
     let micButton = InputBarButtonItem()
 
     //listeners
-    var newChatListener: ListenerRegistration?
-    var updatedChatListener: ListenerRegistration?
     var notificationToken: NotificationToken?
 
     var longPressGesture: UILongPressGestureRecognizer!
@@ -199,55 +197,21 @@ class ChatViewController: MessagesViewController {
 
     private func listenForNewChats() {
         
-        newChatListener = FirebaseReference(.Messages).document(User.currentId).collection(chatId).whereField(kDATE, isGreaterThan: lastMessageDate()).addSnapshotListener({ (snapshot, error) in
-            
-            guard let snapshot = snapshot else { return }
-            
-            if !snapshot.isEmpty {
-                
-                for change in snapshot.documentChanges {
-                    
-                    if change.type == .added {
-                        createLocalMessage(messageDictionary: change.document.data())
-                    }
-                }
-            }
-        })
+        FirebaseMessageListener.shared.listenForNewChats(User.currentId, collectionId: chatId, lastMessageDate: lastMessageDate())
     }
 
     
     private func checkForOldChats() {
         
-        FirebaseReference(.Messages).document(User.currentId).collection(chatId).getDocuments { (snapshot, error) in
-
-            guard let snapshot = snapshot else { return }
-            
-            if !snapshot.isEmpty {
-                
-                let sortedMessageDictionary = ((self.dictionaryArrayFromSnapshots(snapshot.documents)) as NSArray).sortedArray(using: [NSSortDescriptor(key: kDATE, ascending: true)]) as! [Dictionary<String, Any>]
-                
-                for dictionary in sortedMessageDictionary {
-                    createLocalMessage(messageDictionary: dictionary)
-                }
-            }
-        }
+        FirebaseMessageListener.shared.checkForOldChats(User.currentId, collectionId: chatId)
     }
 
     
     private func listenForReadStatusChange() {
         
-        updatedChatListener = FirebaseReference(.Messages).document(User.currentId).collection(chatId).addSnapshotListener { (snapshot, error) in
-
-            guard let snapshot = snapshot else { return }
-
-            if !snapshot.isEmpty {
-                snapshot.documentChanges.forEach { change in
-                    
-                    if (change.type == .modified) {
-                        self.updateMessage(messageDictionary: change.document.data())
-                    }
-                }
-            }
+        FirebaseMessageListener.shared.listenForReadStatusChange(User.currentId, collectionId: chatId) { (updatedMessage) in
+            
+            self.updateMessage(localMessage: updatedMessage)
         }
     }
 
@@ -297,18 +261,18 @@ class ChatViewController: MessagesViewController {
     }
 
     //MARK: UpdateReadMessagesStatus
-    func updateMessage(messageDictionary: Dictionary<String, Any>) {
+    func updateMessage(localMessage: LocalMessage) {
 
         for index in 0 ..< mkmessages.count {
             
             let tempMessage = mkmessages[index]
 
-            if messageDictionary[kID] as! String == tempMessage.messageId {
+            if localMessage.id == tempMessage.messageId {
 
-                mkmessages[index].status = messageDictionary[kSTATUS] as? String ?? kSENT
-                mkmessages[index].readDate = (messageDictionary[kREADDATE] as? Timestamp)?.dateValue() ?? Date()
-                    
-                createLocalMessage(messageDictionary: messageDictionary)
+                mkmessages[index].status = localMessage.status
+                mkmessages[index].readDate = localMessage.readDate
+                
+                RealmManager.shared.saveToRealm(localMessage)
 
                 if mkmessages[index].status == kREAD {
                     self.messagesCollectionView.reloadData()
@@ -320,8 +284,7 @@ class ChatViewController: MessagesViewController {
     private func markMessageAsRead(_ localMessage: LocalMessage) {
         
         if localMessage.senderId != User.currentId {
-            
-            OutgoingMessage.updateMessage(withId: localMessage.id, chatRoomId: chatId, memberIds: [User.currentId, recipientId])
+            FirebaseMessageListener.shared.updateMessageInFireStore(localMessage, memberIds: [User.currentId, recipientId])
         }
     }
 
@@ -403,15 +366,8 @@ class ChatViewController: MessagesViewController {
 
     //MARK: - Helpers
     private func removeListeners() {
-        
         FirebaseTypingListener.shared.removeTypingListener()
-
-        if newChatListener != nil {
-            newChatListener!.remove()
-        }
-        if updatedChatListener != nil {
-            updatedChatListener!.remove()
-        }
+        FirebaseMessageListener.shared.removeTypingListener()
     }
 
     private func lastMessageDate() -> Date {
@@ -493,7 +449,7 @@ class ChatViewController: MessagesViewController {
         switch longPressGesture.state {
         case .began:
             
-            AudioPlayer.shared.playSound(soundName: "ding", format: "mp3")
+//            AudioPlayer.shared.playSound(soundName: "ding", format: "mp3")
             
             audioDuration = Date()
             audioFileName = Date().stringDate()
@@ -504,11 +460,10 @@ class ChatViewController: MessagesViewController {
 
             if fileExistsAtPath(path: audioFileName + ".m4a") {
                 let audioD = audioDuration.interval(ofComponent: .second, fromDate: Date())
-                print("............have file, duration ", audioDuration.interval(ofComponent: .second, fromDate: Date()))
                     
                 messageSend(text: nil, photo: nil, video: nil, audio: audioFileName, location: nil, audioDuration: audioD)
             } else {
-                print("no file")
+                print("no audio file")
             }
             
             audioFileName = ""

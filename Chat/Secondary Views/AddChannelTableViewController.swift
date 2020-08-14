@@ -83,7 +83,7 @@ class AddChannelTableViewController: UITableViewController {
     
     private func configureEditingView() {
         self.nameTextField.text = channelToEdit!.name
-        self.channelId = channelToEdit!.id ?? ""
+        self.channelId = channelToEdit!.id
         self.aboutTextView.text = channelToEdit!.aboutChannel
         self.avatarLink = channelToEdit!.avatarLink
         

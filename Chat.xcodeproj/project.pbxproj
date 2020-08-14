@@ -41,7 +41,6 @@
 		5592DE422493B16F0023EF5D /* MKMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5592DE412493B16F0023EF5D /* MKMessage.swift */; };
 		5592DE442493B3A50023EF5D /* LocalMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5592DE432493B3A50023EF5D /* LocalMessage.swift */; };
 		5592DE472493B5DE0023EF5D /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5592DE462493B5DE0023EF5D /* RealmManager.swift */; };
-		5592DE492493C07B0023EF5D /* RealmMessageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5592DE482493C07B0023EF5D /* RealmMessageHelper.swift */; };
 		55943D02248CAC2E00A7D557 /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55943D01248CAC2E00A7D557 /* Status.swift */; };
 		55943D07248CE0A600A7D557 /* FileStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55943D06248CE0A600A7D557 /* FileStorage.swift */; };
 		55943D09248CE0D200A7D557 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55943D08248CE0D200A7D557 /* Reachability.swift */; };
@@ -109,7 +108,6 @@
 		5592DE412493B16F0023EF5D /* MKMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MKMessage.swift; sourceTree = "<group>"; };
 		5592DE432493B3A50023EF5D /* LocalMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalMessage.swift; sourceTree = "<group>"; };
 		5592DE462493B5DE0023EF5D /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
-		5592DE482493C07B0023EF5D /* RealmMessageHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmMessageHelper.swift; sourceTree = "<group>"; };
 		55943D01248CAC2E00A7D557 /* Status.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Status.swift; sourceTree = "<group>"; };
 		55943D06248CE0A600A7D557 /* FileStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileStorage.swift; sourceTree = "<group>"; };
 		55943D08248CE0D200A7D557 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
@@ -253,7 +251,6 @@
 			children = (
 				5592DE432493B3A50023EF5D /* LocalMessage.swift */,
 				5592DE462493B5DE0023EF5D /* RealmManager.swift */,
-				5592DE482493C07B0023EF5D /* RealmMessageHelper.swift */,
 			);
 			path = RealmMessages;
 			sourceTree = "<group>";
@@ -483,7 +480,6 @@
 				557758C624880846000799E2 /* LoginViewController.swift in Sources */,
 				55C65B5E248C06BD00B28303 /* RecentTableViewCell.swift in Sources */,
 				5596561624DFC31800345E58 /* Channel.swift in Sources */,
-				5592DE492493C07B0023EF5D /* RealmMessageHelper.swift in Sources */,
 				551D53522496822B00548BF3 /* VideoMessage.swift in Sources */,
 				551B96D2248FEAA90028C2E4 /* MessageDataSource.swift in Sources */,
 				55C65B65248C0A1600B28303 /* ChatsTableViewController.swift in Sources */,

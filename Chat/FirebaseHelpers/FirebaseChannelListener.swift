@@ -80,29 +80,25 @@ class FirebaseChannelListener {
     
     //MARK: - Add Update Delete
     func addChannel(_ channel: Channel) {
-      do {
-        let _ = try FirebaseReference(.Channel).addDocument(from: channel)
-      }
-      catch {
-        print(error.localizedDescription, "adding channel....")
-      }
+        do {
+            let _ = try FirebaseReference(.Channel).document(channel.id).setData(from: channel)
+        }
+        catch {
+            print(error.localizedDescription, "adding channel....")
+        }
     }
-
+    
     func updateChannel(_ channel: Channel) {
-        if let id = channel.id {
-            do {
-                let _ = try FirebaseReference(.Channel).document(id).setData(from: channel)
-            }
-            catch {
-                print(error.localizedDescription, "updating channel....")
-            }
+        do {
+            let _ = try FirebaseReference(.Channel).document(channel.id).setData(from: channel)
+        }
+        catch {
+            print(error.localizedDescription, "updating channel....")
         }
     }
 
     func deleteChannel(_ channel: Channel) {
-        if let id = channel.id {
-            FirebaseReference(.Channel).document(id).delete()
-        }
+        FirebaseReference(.Channel).document(channel.id).delete()
     }
 
 
@@ -122,6 +118,7 @@ class FirebaseChannelListener {
         return newChannels
     }
     
+    //currently not used
     func removeChannelListener() {
         self.channelListener.remove()
     }
