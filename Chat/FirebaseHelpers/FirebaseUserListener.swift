@@ -101,11 +101,23 @@ class FirebaseUserListener {
                 return
             }
 
-            let user = try? document.data(as: User.self)
-
-            //TODO: check if ok
-
-            saveUserLocally(user!)
+            let result = Result {
+                try? document.data(as: User.self)
+            }
+            
+            switch result {
+            case .success(let userObject):
+                if let user = userObject {
+                    saveUserLocally(user)
+                } else {
+                    // A nil value was successfully initialized from the DocumentSnapshot,
+                    // or the DocumentSnapshot was nil.
+                    print("Document does not exist")
+                }
+            case .failure(let error):
+                // A `City` value could not be initialized from the DocumentSnapshot.
+                print("Error decoding city: \(error)")
+            }
         }
     }
 

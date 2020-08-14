@@ -37,6 +37,7 @@
 		558162922493F92800343442 /* IncomingMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558162912493F92800343442 /* IncomingMessage.swift */; };
 		55897647248D4DE000D544F1 /* UsersTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55897646248D4DE000D544F1 /* UsersTableViewController.swift */; };
 		55897649248D4E4300D544F1 /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55897648248D4E4300D544F1 /* UserTableViewCell.swift */; };
+		55899FFF24E6A0BD00BA9D32 /* FirebaseMessageListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55899FFE24E6A0BD00BA9D32 /* FirebaseMessageListener.swift */; };
 		5592DE422493B16F0023EF5D /* MKMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5592DE412493B16F0023EF5D /* MKMessage.swift */; };
 		5592DE442493B3A50023EF5D /* LocalMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5592DE432493B3A50023EF5D /* LocalMessage.swift */; };
 		5592DE472493B5DE0023EF5D /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5592DE462493B5DE0023EF5D /* RealmManager.swift */; };
@@ -104,6 +105,7 @@
 		558162912493F92800343442 /* IncomingMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomingMessage.swift; sourceTree = "<group>"; };
 		55897646248D4DE000D544F1 /* UsersTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersTableViewController.swift; sourceTree = "<group>"; };
 		55897648248D4E4300D544F1 /* UserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
+		55899FFE24E6A0BD00BA9D32 /* FirebaseMessageListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseMessageListener.swift; sourceTree = "<group>"; };
 		5592DE412493B16F0023EF5D /* MKMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MKMessage.swift; sourceTree = "<group>"; };
 		5592DE432493B3A50023EF5D /* LocalMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalMessage.swift; sourceTree = "<group>"; };
 		5592DE462493B5DE0023EF5D /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
@@ -307,6 +309,7 @@
 				55C65B68248C0B7100B28303 /* FirebaseRecentListener.swift */,
 				551B96DE248FED990028C2E4 /* FirebaseTypingListener.swift */,
 				55C024CF24D6A71300F037EC /* FirebaseChannelListener.swift */,
+				55899FFE24E6A0BD00BA9D32 /* FirebaseMessageListener.swift */,
 				55C65B562489092900B28303 /* FCollectionReference.swift */,
 				55943D06248CE0A600A7D557 /* FileStorage.swift */,
 			);
@@ -499,6 +502,7 @@
 				55C65B63248C095400B28303 /* Extensions.swift in Sources */,
 				55C65B69248C0B7200B28303 /* FirebaseRecentListener.swift in Sources */,
 				55897647248D4DE000D544F1 /* UsersTableViewController.swift in Sources */,
+				55899FFF24E6A0BD00BA9D32 /* FirebaseMessageListener.swift in Sources */,
 				551B96D4248FEB340028C2E4 /* MessageCellDelegate.swift in Sources */,
 				551B96D6248FEB4D0028C2E4 /* MessagesDisplayDelegate.swift in Sources */,
 				551B96DF248FED990028C2E4 /* FirebaseTypingListener.swift in Sources */,

@@ -101,6 +101,42 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 extension AppDelegate : UNUserNotificationCenterDelegate {
     
+        func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+             
+            let userInfo = response.notification.request.content.userInfo
+
+            guard let rootViewController = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.window?.rootViewController else {
+                return
+            }
+
+            // root view controller is tab bar controller
+            // the selected tab is a navigation controller
+            // then we push the new view controller to it
+            if let tabBarController = rootViewController as? UITabBarController,
+                let navController = tabBarController.selectedViewController as? UINavigationController {
+
+                let chatView = ChatViewController(chatId: userInfo["chatRoomId"] as! String, recipientId: userInfo["senderId"] as! String, recipientName: titleFromNotification(payload: userInfo))
+                
+                    navController.pushViewController(chatView, animated: true)
+            }
+
+            completionHandler()
+        }
+
+    //MARK: - Helpers
+    private func titleFromNotification(payload: [AnyHashable : Any]) -> String {
+        
+        var title = "Unknown"
+        
+        if let aps = payload["aps"] as? NSDictionary {
+            if let alert = aps["alert"] as? NSDictionary {
+                title = alert["title"] as? String ?? "Unknown"
+            }
+        }
+        
+        return title
+
+    }
     
 }
 

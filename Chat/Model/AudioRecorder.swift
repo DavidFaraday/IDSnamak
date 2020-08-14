@@ -2,7 +2,7 @@
 //  AudioRecorder.swift
 //  Chat
 //
-//  Created by David Kababyan on 22/06/2020.
+//  Created by David Kababyan on 22/06/2020.ganq?
 //  Copyright © 2020 David Kababyan. All rights reserved.
 //
 
@@ -14,7 +14,6 @@ class AudioRecorder: NSObject, AVAudioRecorderDelegate {
     var recordingSession: AVAudioSession!
     var audioRecorder: AVAudioRecorder!
     var isAudioRecordingGranted: Bool!
-    var isRecording = false //not needed?
     
     static let shared = AudioRecorder()
     
@@ -63,7 +62,8 @@ class AudioRecorder: NSObject, AVAudioRecorderDelegate {
     }
     
     func startRecording(fileName: String) {
-        
+        print("Start .....")
+
         let audioFilename = getDocumentsURL().appendingPathComponent(fileName + ".m4a", isDirectory: false)
 
         let settings = [
@@ -78,22 +78,23 @@ class AudioRecorder: NSObject, AVAudioRecorderDelegate {
             audioRecorder = try AVAudioRecorder(url: audioFilename, settings: settings)
             audioRecorder.delegate = self
             audioRecorder.record()
-            isRecording = true
 
         } catch {
-            print("Error recording")
-            isRecording = false
+            print("Error recording......")
             finishRecording()
         }
     }
     
     func finishRecording() {
-        
+        print("stop recording.......")
         if audioRecorder != nil {
-            isRecording = false
             audioRecorder.stop()
             audioRecorder = nil
         }
     }
 
+    func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
+        
+        print("finished flag ......", flag)
+    }
 }

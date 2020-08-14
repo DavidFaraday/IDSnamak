@@ -14,7 +14,7 @@ class PushNotificationService {
     
     private init() {}
     
-    func sendPushNotificationTo(userIds: [String], body: String, channel: Channel? = nil) {
+    func sendPushNotificationTo(userIds: [String], body: String, channel: Channel? = nil, chatRoomId: String) {
         
         FirebaseUserListener.shared.downloadUserFromFirebase(withIds: userIds) { (users) in
             
@@ -22,12 +22,12 @@ class PushNotificationService {
                 
                 let title = channel != nil ? channel!.name : user.username
                 
-                self.sendMessageToUser(to: user.pushId, title: title, body: body)
+                self.sendMessageToUser(to: user.pushId, title: title, body: body, chatRoomId: chatRoomId)
             }
         }
     }
 
-    private func sendMessageToUser(to token: String, title: String, body: String) {
+    private func sendMessageToUser(to token: String, title: String, body: String, chatRoomId: String) {
 
         let urlString = "https://fcm.googleapis.com/fcm/send"
         
@@ -40,7 +40,10 @@ class PushNotificationService {
                                              "badge" : "1",
                                              "sound" : "default"
                                             ],
-                                           "data" : ["user cool" : "yo wazuup"] //this is to pass extra info with message
+                                           "data" : ["chatRoomId" : chatRoomId,
+                                                     "senderId" : User.currentId
+                                                    ]
+            //this is to pass extra info with message
         ]
         
         let request = NSMutableURLRequest(url: url as URL)

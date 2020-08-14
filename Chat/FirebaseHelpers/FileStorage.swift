@@ -202,7 +202,7 @@ class FileStorage {
     class func uploadAudio(audioFileName: String, directory: String, completion: @escaping (_ audioLink: String?) -> Void) {
         
         let fileName = audioFileName + ".m4a"
-        
+
         if Reachability.HasConnection() {
             
             let storageRef = storage.reference(forURL: kFILEREFERENCE).child(directory)
@@ -212,7 +212,12 @@ class FileStorage {
                 
                 if let audioData = NSData(contentsOfFile: fileInDocumentsDirectory(filename: fileName)) {
                     
-                    print("have audio data")
+                    let bcf = ByteCountFormatter()
+                    bcf.allowedUnits = [.useBytes] // optional: restricts the units to MB only
+                    bcf.countStyle = .file
+                    let string = bcf.string(fromByteCount: Int64(audioData.count))
+                    print("formatted result: \(string)")
+                    print("have audio data", audioData)
                     
                     task = storageRef.putData(audioData as Data, metadata: nil, completion: {
                         metadata, error in

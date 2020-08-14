@@ -9,7 +9,7 @@
 import Foundation
 import RealmSwift
 
-class LocalMessage: Object {
+class LocalMessage: Object, Codable {
     
     @objc dynamic var id = ""
     @objc dynamic var chatRoomId = ""
@@ -34,48 +34,48 @@ class LocalMessage: Object {
         return "id"
     }
 
-    var dictionary: NSDictionary {
-        
-        return NSDictionary(objects: [self.id,
-                                      self.chatRoomId,
-                                      self.date,
-                                      self.senderName,
-                                      self.senderId,
-                                      self.senderInitials,
-                                      self.readDate,
-                                      self.type,
-                                      self.status,
-                                      self.message,
-                                      self.audioUrl,
-                                      self.videoUrl,
-                                      self.pictureUrl,
-                                      self.photoWidth,
-                                      self.photoHeight,
-                                      self.latitude,
-                                      self.longitude,
-                                      self.audioDuration
-            ],
-                            forKeys: [kID as NSCopying,
-                                      kCHATROOMID as NSCopying,
-                                      kDATE as NSCopying,
-                                      kSENDERNAME as NSCopying,
-                                      kSENDERID as NSCopying,
-                                      kSENDERINITIALS as NSCopying,
-                                      kREADDATE as NSCopying,
-                                      kTYPE as NSCopying,
-                                      kSTATUS as NSCopying,
-                                      kMESSAGE as NSCopying,
-                                      kAUDIOURL as NSCopying,
-                                      kVIDEOURL as NSCopying,
-                                      kPICTUREURL as NSCopying,
-                                      kPICTUREWIDTH as NSCopying,
-                                      kPICTUREHEIGHT as NSCopying,
-                                      kLATITUDE as NSCopying,
-                                      kLONGITUDE as NSCopying,
-                                      kAUDIODURATION as NSCopying
-            ]
-        )
-    }
+//    var dictionary: NSDictionary {
+//        
+//        return NSDictionary(objects: [self.id,
+//                                      self.chatRoomId,
+//                                      self.date,
+//                                      self.senderName,
+//                                      self.senderId,
+//                                      self.senderInitials,
+//                                      self.readDate,
+//                                      self.type,
+//                                      self.status,
+//                                      self.message,
+//                                      self.audioUrl,
+//                                      self.videoUrl,
+//                                      self.pictureUrl,
+//                                      self.photoWidth,
+//                                      self.photoHeight,
+//                                      self.latitude,
+//                                      self.longitude,
+//                                      self.audioDuration
+//            ],
+//                            forKeys: [kID as NSCopying,
+//                                      kCHATROOMID as NSCopying,
+//                                      kDATE as NSCopying,
+//                                      kSENDERNAME as NSCopying,
+//                                      kSENDERID as NSCopying,
+//                                      kSENDERINITIALS as NSCopying,
+//                                      kREADDATE as NSCopying,
+//                                      kTYPE as NSCopying,
+//                                      kSTATUS as NSCopying,
+//                                      kMESSAGE as NSCopying,
+//                                      kAUDIOURL as NSCopying,
+//                                      kVIDEOURL as NSCopying,
+//                                      kPICTUREURL as NSCopying,
+//                                      kPICTUREWIDTH as NSCopying,
+//                                      kPICTUREHEIGHT as NSCopying,
+//                                      kLATITUDE as NSCopying,
+//                                      kLONGITUDE as NSCopying,
+//                                      kAUDIODURATION as NSCopying
+//            ]
+//        )
+//    }
 
 }
 
