@@ -21,7 +21,11 @@ class UsersTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.refreshControl = UIRefreshControl()
+        self.tableView.refreshControl = self.refreshControl
+
         tableView.tableFooterView = UIView()
+        
         setupSearchController()
         downloadUsers()
     }
@@ -112,7 +116,15 @@ class UsersTableViewController: UITableViewController {
         self.navigationController?.pushViewController(profileVc, animated: true)
     }
     
-    
+    // MARK: - UIScrollViewDelegate
+    override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+
+        if self.refreshControl!.isRefreshing {
+            self.downloadUsers()
+            self.refreshControl!.endRefreshing()
+        }
+    }
+
 }
 
 extension UsersTableViewController: UISearchResultsUpdating {

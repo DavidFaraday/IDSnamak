@@ -69,7 +69,7 @@ func createUsers() {
 
         let id = UUID().uuidString
         
-        let fileDirectory = "Avatars/" + "\(id)" + ".jpg"
+        let fileDirectory = "Avatars/" + "_\(id)" + ".jpg"
 
         FileStorage.uploadImage(UIImage(named: "user\(ImageIndex)")!, directory: fileDirectory) { (avatarLink) in
             

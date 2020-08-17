@@ -72,6 +72,7 @@ class FileStorage {
         if fileExistsAtPath(path: imageFileName) {
 
             if let contentsOfFile = UIImage(contentsOfFile: fileInDocumentsDirectory(filename: imageFileName)) {
+//                print("have local", imageFileName)
                 completion(contentsOfFile)
             } else {
                 print("couldn't generate local image")
@@ -81,7 +82,8 @@ class FileStorage {
         } else {
             
             if imageUrl != "" {
-                
+//                print("no local", imageFileName)
+
                 let documentURL = URL(string: imageUrl)
                 
                 let downloadQueue = DispatchQueue(label: "imageDownloadQueue")

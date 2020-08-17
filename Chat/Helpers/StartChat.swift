@@ -60,7 +60,7 @@ func createRecentItems(chatRoomId: String, users: [User]) {
             
             let receiverUser = userId == User.currentId ? getReceiverFrom(users: users) : User.currentUser!
 
-            let recentObject = RecentChat(chatRoomId: chatRoomId, senderId: senderUser.id, senderName: senderUser.username, receiverId: receiverUser.id, receiverName: receiverUser.username, memberIds: [senderUser.id, receiverUser.id], lastMessage: "", unreadCounter: 0, avatarLink: receiverUser.avatarLink)
+            let recentObject = RecentChat(id: UUID().uuidString, chatRoomId: chatRoomId, senderId: senderUser.id, senderName: senderUser.username, receiverId: receiverUser.id, receiverName: receiverUser.username, memberIds: [senderUser.id, receiverUser.id], lastMessage: "", unreadCounter: 0, avatarLink: receiverUser.avatarLink)
    
             FirebaseRecentListener.shared.addRecent(recentObject)
         }

@@ -43,7 +43,7 @@ class MapViewViewController: UIViewController {
     }
     
     private func configureLeftBarButton() {
-        self.navigationItem.leftBarButtonItems = [UIBarButtonItem(image: UIImage(named: "back"), style: .plain, target: self, action: #selector(self.backButtonPressed))]
+        self.navigationItem.leftBarButtonItems = [UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: #selector(self.backButtonPressed))]
 
     }
 

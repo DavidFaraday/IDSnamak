@@ -114,7 +114,7 @@ class FirebaseMessageListener {
 
     func addChannelMessage(_ message: LocalMessage, channel: Channel) {
       do {
-        let _ = try FirebaseReference(.Messages).document(channel.id).collection(channel.id ?? "unknownChannel").document(message.id).setData(from: message)
+        let _ = try FirebaseReference(.Messages).document(channel.id).collection(channel.id).document(message.id).setData(from: message)
       }
       catch {
         print(error.localizedDescription, "adding message....")

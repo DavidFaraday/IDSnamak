@@ -30,6 +30,8 @@ class AddChannelTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationItem.largeTitleDisplayMode = .never
+        
         tableView.tableFooterView = UIView()
         configureGestures()
         configureLeftBarButton()
@@ -61,7 +63,7 @@ class AddChannelTableViewController: UITableViewController {
     //MARK: - Save funcs
     private func saveChannel() {
         
-        let channel = Channel(name: nameTextField.text!, adminId: User.currentId, memberIds: [User.currentId], avatarLink: avatarLink, aboutChannel: aboutTextView.text)
+        let channel = Channel(id: UUID().uuidString, name: nameTextField.text!, adminId: User.currentId, memberIds: [User.currentId], avatarLink: avatarLink, aboutChannel: aboutTextView.text)
             
         FirebaseChannelListener.shared.addChannel(channel)
 
@@ -77,7 +79,7 @@ class AddChannelTableViewController: UITableViewController {
     }
 
     private func configureLeftBarButton() {
-        self.navigationItem.leftBarButtonItems = [UIBarButtonItem(image: UIImage(named: "back"), style: .plain, target: self, action: #selector(self.backButtonPressed))]
+        self.navigationItem.leftBarButtonItems = [UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: #selector(self.backButtonPressed))]
 
     }
     

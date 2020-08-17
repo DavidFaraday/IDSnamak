@@ -18,23 +18,12 @@ public let kNUMBEROFMESSAGES = 12
 
 
 //MARK: - User
-public let kID = "id"
-public let kEMAIL = "email"
-public let kUSERNAME = "username"
-public let kAVATARLINK = "avatarLink"
-public let kPUSHID = "pushId"
 public let kCURRENTUSER = "currentUser"
 public let kSTATUS = "status"
-
 
 //Recents
 public let kCHATROOMID = "chatRoomId"
 public let kSENDERID = "senderId"
-public let kSENDERNAME = "senderName"
-public let kRECEIVERID = "receiverId"
-public let kRECEIVERNAME = "receiverName"
-public let kLASTMESSAGE = "lastMessage"
-public let kUNREADCOUNTER = "unreadCounter"
 public let kMEMBERIDS = "memberIds"
 public let kDATE = "date"
 
@@ -42,17 +31,6 @@ public let kFIRSTRUN = "firstRun"
 
 //Message
 public let kREADDATE = "readDate"
-public let kTYPE = "type"
-public let kMESSAGE = "message"
-public let kPICTUREURL = "pictureUrl"
-public let kVIDEOURL = "videoUrl"
-public let kAUDIOURL = "audioUrl"
-public let kPICTUREWIDTH = "pictureWidth"
-public let kPICTUREHEIGHT = "pictureHeight"
-public let kLATITUDE = "latitude"
-public let kLONGITUDE = "longitude"
-public let kSENDERINITIALS = "senderInitials"
-public let kAUDIODURATION = "audioDuration"
 
 //message types
 public let kTEXT = "text"
@@ -66,7 +44,4 @@ public let kREAD = "Read"
 
 
 //Channel
-public let kNAME = "name"
 public let kADMINID = "adminId"
-public let kCREATEDDATE = "createdDate"
-public let kABOUTCHANNEL = "aboutChannel"

@@ -45,8 +45,9 @@ class SettingsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         tableView.deselectRow(at: indexPath, animated: true)
-        
-        performSegue(withIdentifier: "settingsToEditProfileSeg", sender: self)
+        if indexPath.section == 0 && indexPath.row == 0 {
+            performSegue(withIdentifier: "settingsToEditProfileSeg", sender: self)
+        }
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

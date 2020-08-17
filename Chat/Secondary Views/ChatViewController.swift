@@ -128,7 +128,10 @@ class ChatViewController: MessagesViewController {
             self.actionAttachMessage()
         }
 
-        micButton.image = UIImage(named: "mic")
+        micButton.image = UIImage(systemName: "mic.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))
+
+
+        //UIImage(named: "mic")
         micButton.setSize(CGSize(width: 30, height: 30), animated: false)
         micButton.addGestureRecognizer(longPressGesture)
         
@@ -155,8 +158,7 @@ class ChatViewController: MessagesViewController {
     }
     
     private func configureLeftBarButton() {
-        self.navigationItem.leftBarButtonItems = [UIBarButtonItem(image: UIImage(named: "back"), style: .plain, target: self, action: #selector(self.backButtonPressed))]
-
+        self.navigationItem.leftBarButtonItems = [UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: #selector(self.backButtonPressed))]
     }
     
     //MARK: - Load chats
@@ -337,9 +339,9 @@ class ChatViewController: MessagesViewController {
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
-        takePhotoOrVideo.setValue(UIImage(named: "cameraIcon"), forKey: "image")
-        shareMedia.setValue(UIImage(named: "pictureLibrary"), forKey: "image")
-        shareLocation.setValue(UIImage(named: "locationIcon"), forKey: "image")
+        takePhotoOrVideo.setValue(UIImage(systemName: "camera"), forKey: "image")
+        shareMedia.setValue(UIImage(systemName: "photo.fill"), forKey: "image")
+        shareLocation.setValue(UIImage(systemName: "mappin.and.ellipse"), forKey: "image")
         
         optionMenu.addAction(takePhotoOrVideo)
         optionMenu.addAction(shareMedia)
@@ -448,9 +450,7 @@ class ChatViewController: MessagesViewController {
 
         switch longPressGesture.state {
         case .began:
-            
-//            AudioPlayer.shared.playSound(soundName: "ding", format: "mp3")
-            
+                        
             audioDuration = Date()
             audioFileName = Date().stringDate()
             AudioRecorder.shared.startRecording(fileName: audioFileName)

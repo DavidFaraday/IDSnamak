@@ -19,8 +19,8 @@ class PushNotificationService {
         FirebaseUserListener.shared.downloadUserFromFirebase(withIds: userIds) { (users) in
             
             for user in users {
-                
-                let title = channel != nil ? channel!.name : user.username
+
+                let title = channel != nil ? channel!.name : User.currentUser?.username ?? "User"
                 
                 self.sendMessageToUser(to: user.pushId, title: title, body: body, chatRoomId: chatRoomId)
             }
@@ -52,17 +52,8 @@ class PushNotificationService {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("key= \(kSERVERKEY)", forHTTPHeaderField: "Authorization")
         
-        let task =  URLSession.shared.dataTask(with: request as URLRequest)  { (data, response, error) in
-            do {
-                if let jsonData = data {
-                    if let jsonDataDict  = try JSONSerialization.jsonObject(with: jsonData, options: JSONSerialization.ReadingOptions.allowFragments) as? [String: AnyObject] {
-                        //NSLog("Received data:\n\(jsonDataDict))")
-                    }
-                }
-            } catch let err as NSError {
-                print("error sending mess", err.debugDescription)
-            }
-        }
+        let task = URLSession.shared.dataTask(with: request as URLRequest)
+            
         task.resume()
     }
 }

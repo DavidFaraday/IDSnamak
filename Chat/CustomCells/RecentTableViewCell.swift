@@ -9,7 +9,7 @@
 import UIKit
 
 class RecentTableViewCell: UITableViewCell {
-
+    
     //MARK: - IBOutlets
     
     //UIViews
@@ -30,35 +30,40 @@ class RecentTableViewCell: UITableViewCell {
         unreadCountBackgroundView.layer.cornerRadius = unreadCountBackgroundView.frame.width/2
         // Initialization code
     }
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
+        
         // Configure the view for the selected state
     }
     
     func configureCell(recent: RecentChat) {
         
-            userNameLabel.text = recent.receiverName
-            lastMessageLabel.text = recent.lastMessage
-            lastMessageLabel.adjustsFontSizeToFitWidth = true
-            
-            //set counter if available
-            if recent.unreadCounter != 0 {
-                self.unreadCountLabel.text = "\(recent.unreadCounter)"
-                self.unreadCountBackgroundView.isHidden = false
-                self.unreadCountBackgroundView.isHidden = false
-            } else {
-                self.unreadCountBackgroundView.isHidden = true
-                self.unreadCountBackgroundView.isHidden = true
-            }
+        userNameLabel.text = recent.receiverName
+        userNameLabel.adjustsFontSizeToFitWidth = true
+        userNameLabel.minimumScaleFactor = 0.9
+
+        lastMessageLabel.text = recent.lastMessage
+        lastMessageLabel.adjustsFontSizeToFitWidth = true
+        lastMessageLabel.numberOfLines = 2
+        lastMessageLabel.minimumScaleFactor = 0.9
         
-            setAvatar(avatarLink: recent.avatarLink)
-            timeLabel.text = timeElapsed(recent.date ?? Date())
-            timeLabel.adjustsFontSizeToFitWidth = true
-
+        //set counter if available
+        if recent.unreadCounter != 0 {
+            self.unreadCountLabel.text = "\(recent.unreadCounter)"
+            self.unreadCountBackgroundView.isHidden = false
+            self.unreadCountBackgroundView.isHidden = false
+        } else {
+            self.unreadCountBackgroundView.isHidden = true
+            self.unreadCountBackgroundView.isHidden = true
+        }
+        
+        setAvatar(avatarLink: recent.avatarLink)
+        timeLabel.text = timeElapsed(recent.date ?? Date())
+        timeLabel.adjustsFontSizeToFitWidth = true
+        
     }
-
+    
     private func setAvatar(avatarLink: String) {
         
         if avatarLink != "" {
@@ -69,6 +74,6 @@ class RecentTableViewCell: UITableViewCell {
             self.avatarImageView.image = UIImage(named: "avatar")?.circleMasked
         }
     }
-        
-
+    
+    
 }

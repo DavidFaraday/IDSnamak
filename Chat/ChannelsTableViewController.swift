@@ -12,8 +12,6 @@ class ChannelsTableViewController: UITableViewController {
 
     
     //MARK: - IBOutlets
-    
-    @IBOutlet weak var headerView: UIView!
     @IBOutlet weak var channelSegmentOutlet: UISegmentedControl!
     
     //MARK: - Vars
@@ -23,10 +21,12 @@ class ChannelsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        navigationItem.largeTitleDisplayMode = .always
+        self.title = "Channels"
         self.refreshControl = UIRefreshControl()
         self.tableView.refreshControl = self.refreshControl
                 
-        tableView.tableHeaderView = headerView
+        tableView.tableFooterView = UIView()
         downloadChannels()
     }
 

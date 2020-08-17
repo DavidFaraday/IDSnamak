@@ -32,7 +32,6 @@
 		557758C82488178A000799E2 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557758C72488178A000799E2 /* User.swift */; };
 		557758CA24881888000799E2 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557758C924881888000799E2 /* Constants.swift */; };
 		557EF1B324D5525A00A86039 /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557EF1B224D5525A00A86039 /* AudioPlayer.swift */; };
-		557EF1B524D5552500A86039 /* ding.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 557EF1B424D5552500A86039 /* ding.mp3 */; };
 		558162902493E68E00343442 /* OutgoingMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5581628F2493E68E00343442 /* OutgoingMessage.swift */; };
 		558162922493F92800343442 /* IncomingMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558162912493F92800343442 /* IncomingMessage.swift */; };
 		55897647248D4DE000D544F1 /* UsersTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55897646248D4DE000D544F1 /* UsersTableViewController.swift */; };
@@ -99,7 +98,6 @@
 		557758C72488178A000799E2 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		557758C924881888000799E2 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		557EF1B224D5525A00A86039 /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
-		557EF1B424D5552500A86039 /* ding.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ding.mp3; sourceTree = "<group>"; };
 		5581628F2493E68E00343442 /* OutgoingMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutgoingMessage.swift; sourceTree = "<group>"; };
 		558162912493F92800343442 /* IncomingMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomingMessage.swift; sourceTree = "<group>"; };
 		55897646248D4DE000D544F1 /* UsersTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersTableViewController.swift; sourceTree = "<group>"; };
@@ -229,7 +227,6 @@
 				55C65B53248908E000B28303 /* Model */,
 				55C65B52248908D700B28303 /* Helpers */,
 				557758B724880184000799E2 /* Main.storyboard */,
-				557EF1B424D5552500A86039 /* ding.mp3 */,
 				557758BA24880186000799E2 /* Assets.xcassets */,
 				557758BC24880186000799E2 /* LaunchScreen.storyboard */,
 				557758BF24880186000799E2 /* Info.plist */,
@@ -398,7 +395,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				557EF1B524D5552500A86039 /* ding.mp3 in Resources */,
 				557758BE24880186000799E2 /* LaunchScreen.storyboard in Resources */,
 				557758BB24880186000799E2 /* Assets.xcassets in Resources */,
 				557758B924880184000799E2 /* Main.storyboard in Resources */,

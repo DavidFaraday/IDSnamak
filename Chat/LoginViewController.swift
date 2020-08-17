@@ -10,7 +10,7 @@ import UIKit
 import ProgressHUD
 
 class LoginViewController: UIViewController {
-
+    
     //MARK: - IBOutlet
     //labels
     @IBOutlet weak var emailLabelOutlet: UILabel!
@@ -33,12 +33,12 @@ class LoginViewController: UIViewController {
     
     //MARK: - Vars
     var isLogin = true
-
+    
     
     //MARK: - ViewLifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         updateUIFor(login: true)
         setupTextFieldDelegates()
         setupBackgroundTap()
@@ -62,7 +62,7 @@ class LoginViewController: UIViewController {
         }
     }
     
-
+    
     @IBAction func signUpButtonPressed(_ sender: UIButton) {
         updateUIFor(login: sender.titleLabel?.text == "Login")
         isLogin.toggle()
@@ -83,7 +83,7 @@ class LoginViewController: UIViewController {
         self.signUpButtonOutlet.setTitle(login ? "SignUp" : "Login", for: .normal)
         
         self.signUpLabel.text = login ? "Don't have an account?" : "Have an account?"
-                
+        
         UIView.animate(withDuration: 0.5) {
             
             self.repeatPasswordTextField.isHidden = login
@@ -91,7 +91,7 @@ class LoginViewController: UIViewController {
             self.repeatPasswordLineView.isHidden = login
         }
     }
-
+    
     private func updatePlaceholderLabels(textField: UITextField) {
         
         switch textField {
@@ -104,7 +104,7 @@ class LoginViewController: UIViewController {
         }
         
     }
-
+    
     
     //MARK: - Setup
     private func setupTextFieldDelegates() {
@@ -112,7 +112,7 @@ class LoginViewController: UIViewController {
         passwordTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         repeatPasswordTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
     }
-
+    
     @objc func textFieldDidChange(_ textField: UITextField) {
         updatePlaceholderLabels(textField: textField)
     }
@@ -135,7 +135,7 @@ class LoginViewController: UIViewController {
                     self.goToApp()
                 } else {
                     ProgressHUD.showFailed("Please verify email.")
-
+                    
                     self.resendEmailButtonOutlet.isHidden = false
                 }
             } else {
@@ -143,20 +143,20 @@ class LoginViewController: UIViewController {
             }
         }
     }
-
+    
     private func registerUser() {
         FirebaseUserListener.shared.registerUserWith(email: emailTextField.text!, password: passwordTextField.text!) { (error) in
             
             if error == nil {
                 ProgressHUD.showSucceed("Verification email sent.")
                 self.resendEmailButtonOutlet.isHidden = false
-
+                
             } else {
                 ProgressHUD.showFailed(error!.localizedDescription)
             }
         }
     }
-
+    
     private func resetPassword() {
         FirebaseUserListener.shared.resetPasswordFor(email: emailTextField.text!) { (error) in
             if error == nil {
@@ -183,7 +183,6 @@ class LoginViewController: UIViewController {
         case "login":
             return emailTextField.text != "" && passwordTextField.text != ""
         case "register":
-            
             return emailTextField.text != "" && passwordTextField.text != "" && repeatPasswordTextField.text != ""
         default:
             return emailTextField.text != ""
@@ -197,6 +196,6 @@ class LoginViewController: UIViewController {
         mainView.modalPresentationStyle = .fullScreen
         self.present(mainView, animated: true, completion: nil)
     }
-
+    
 }
 
