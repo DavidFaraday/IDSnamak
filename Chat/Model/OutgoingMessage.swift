@@ -23,16 +23,16 @@ class OutgoingMessage {
         message.chatRoomId = chatId
         message.senderId = currentUser.id
         message.senderName = currentUser.username
-        
+
         message.date = Date()
         message.senderInitials = String(currentUser.username.first!)
         message.status = kSENT
-        
-        
+
+
         if text != nil {
             sendTextMessage(message: message, text: text!, memberIds: memberIds)
         }
-        
+
         if photo != nil {
             sendPictureMessage(message: message, photo: photo!, memberIds: memberIds)
         }
@@ -54,8 +54,9 @@ class OutgoingMessage {
         FirebaseRecentListener.shared.updateRecents(chatRoomId: chatId, lastMessage: message.message)
     }
 
+
     class func sendMessage(message: LocalMessage, memberIds: [String]) {
-  
+
         RealmManager.shared.saveToRealm(message)
 
         for memberId in memberIds {
@@ -82,7 +83,7 @@ class OutgoingMessage {
         if text != nil {
             sendTextMessage(message: message, text: text!, memberIds: channel.memberIds, channel: channel)
         }
-        
+
         if photo != nil {
             sendPictureMessage(message: message, photo: photo!, memberIds: channel.memberIds, channel: channel)
         }
@@ -102,24 +103,22 @@ class OutgoingMessage {
         PushNotificationService.shared.sendPushNotificationTo(userIds: removerCurrentUserFrom(userIds: channel.memberIds) , body: message.message, channel: channel, chatRoomId: channel.id)
         
         channel.lastMessageDate = Date()
-        FirebaseChannelListener.shared.updateChannel(channel)
+        FirebaseChannelListener.shared.saveChannel(channel)
     }
     
     class func sendChannelMessage(message: LocalMessage, channel: Channel) {
         
         RealmManager.shared.saveToRealm(message)
-        
         FirebaseMessageListener.shared.addChannelMessage(message, channel: channel)
     }
-    
 }
 
 
 func sendTextMessage(message: LocalMessage, text: String, memberIds: [String], channel: Channel? = nil) {
-    
+
     message.message = text
     message.type = kTEXT
-    
+
     if channel != nil {
         OutgoingMessage.sendChannelMessage(message: message, channel: channel!)
     } else {
@@ -132,8 +131,7 @@ func sendPictureMessage(message: LocalMessage, photo: UIImage, memberIds: [Strin
 
     message.message = "Picture message"
     message.type = kPICTURE
-    
-    
+
     let fileName = Date().stringDate()
     let fileDirectory = "MediaMessages/Photo/" + "\(message.chatRoomId)/" + "_" + fileName + ".jpg"
 
@@ -144,62 +142,61 @@ func sendPictureMessage(message: LocalMessage, photo: UIImage, memberIds: [Strin
         if imageURL != nil {
             message.pictureUrl = imageURL ?? ""
 
-            
+
             if channel != nil {
                 OutgoingMessage.sendChannelMessage(message: message, channel: channel!)
             } else {
                 OutgoingMessage.sendMessage(message: message, memberIds: memberIds)
             }
-            
         }
     }
 }
 
 
 func sendVideoMessage(message: LocalMessage, video: Video, memberIds: [String], channel: Channel? = nil) {
-    
+
     message.message = "Video message"
     message.type = kVIDEO
-    
+
     let fileName = Date().stringDate()
     let thumbnailDirectory = "MediaMessages/Photo/" + "\(message.chatRoomId)/" + "_" + fileName + ".jpg"
     let videoDirectory = "MediaMessages/Video/" + "\(message.chatRoomId)/" + "_" + fileName + ".mov"
-    
-    
+
+
     let editor = VideoEditor()
     editor.process(video: video) { (processedVideo, videoURL) in
-        
+
         if let tempPath = videoURL {
-            
+
             let thumbnail = videoThumbnail(video: tempPath)
             FileStorage.saveFileLocally(fileData: thumbnail.jpegData(compressionQuality: 0.7)! as NSData, fileName: fileName)
-            
+
             //upload thumbnail and video
             FileStorage.uploadImage(thumbnail, directory: thumbnailDirectory, isThumbnail: true) { (imageLink) in
 
                 if imageLink != nil {
-                    
+
                     let videoData = NSData(contentsOfFile: tempPath.path)
-                    
+
                     FileStorage.saveFileLocally(fileData: videoData!, fileName: fileName + ".mov")
-                    
+
                     FileStorage.uploadVideo(video: videoData!, directory: videoDirectory) { (videoLink) in
-                        
+
                         message.pictureUrl = imageLink ?? ""
                         message.videoUrl = videoLink ?? ""
-                        
-                        
+
+
                         if channel != nil {
                             OutgoingMessage.sendChannelMessage(message: message, channel: channel!)
                         } else {
                             OutgoingMessage.sendMessage(message: message, memberIds: memberIds)
                         }
-                        
+
                     }
                 }
             } //End of Uploads
-            
-            
+
+
         } else {
             print("path is nil")
         }
@@ -208,20 +205,20 @@ func sendVideoMessage(message: LocalMessage, video: Video, memberIds: [String], 
 
 
 func sendLocationMessage(message: LocalMessage, memberIds: [String], channel: Channel? = nil) {
-    
+
     let currentLocation = LocationManager.shared.currentLocation
     message.message = "Location message"
     message.type = kLOCATION
     message.latitude = currentLocation?.latitude ?? 0.0
     message.longitude = currentLocation?.longitude ?? 0.0
-    
-    
+
+
     if channel != nil {
         OutgoingMessage.sendChannelMessage(message: message, channel: channel!)
     } else {
         OutgoingMessage.sendMessage(message: message, memberIds: memberIds)
     }
-    
+
 }
 
 
@@ -229,15 +226,15 @@ func sendAudioMessage(message: LocalMessage, audioFileName: String, audioDuratio
 
     message.message = "Audio message"
     message.type = kAUDIO
-    
+
     let fileDirectory = "MediaMessages/Audio/" + "\(message.chatRoomId)/" + "_" + audioFileName + ".m4a"
 
     FileStorage.uploadAudio(audioFileName: audioFileName, directory: fileDirectory) { (audioUrl) in
-        
+
         if audioUrl != nil {
             message.audioUrl = audioUrl ?? ""
             message.audioDuration = Double(audioDuration)
-            
+
             if channel != nil {
                 OutgoingMessage.sendChannelMessage(message: message, channel: channel!)
             } else {

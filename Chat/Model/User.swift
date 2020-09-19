@@ -17,11 +17,11 @@ struct User: Codable, Equatable {
     var pushId: String = ""
     var avatarLink: String = ""
     var status: String
-    
+
     static var currentId: String {
         return Auth.auth().currentUser!.uid
     }
-    
+
     static var currentUser: User? {
         if Auth.auth().currentUser != nil {
             if let dictionary = UserDefaults.standard.data(forKey: kCURRENTUSER) {
@@ -37,7 +37,7 @@ struct User: Codable, Equatable {
         }
         return nil
     }
-    
+
     //for Equatable
     static func == (lhs: User, rhs: User) -> Bool {
         lhs.id == rhs.id
@@ -59,29 +59,29 @@ func saveUserLocally(_ user: User) {
 
 
 //needed only to populate with dummy
-func createUsers() {
-    
-    let names = ["Alison Stamp", "Inayah Duggan", "Alfie Thornton", "Rachelle Neale", "Anya Gates", "Juanita Bate"]
-    var ImageIndex = 1
-    var UserIndex = 1
-
-    for i in 0..<5 {
-
-        let id = UUID().uuidString
-        
-        let fileDirectory = "Avatars/" + "_\(id)" + ".jpg"
-
-        FileStorage.uploadImage(UIImage(named: "user\(ImageIndex)")!, directory: fileDirectory) { (avatarLink) in
-            
-            let user = User(id: id, username: names[i], email: "user\(UserIndex)@mail.com", pushId: "", avatarLink: avatarLink ?? "", status: "No Status")
-                
-            UserIndex += 1
-            FirebaseUserListener.shared.saveUserToFireStore(user)
-        }
-
-        ImageIndex += 1
-        if ImageIndex == 5 {
-            ImageIndex = 1
-        }
-    }
-}
+//func createUsers() {
+//    
+//    let names = ["Alison Stamp", "Inayah Duggan", "Alfie Thornton", "Rachelle Neale", "Anya Gates", "Juanita Bate"]
+//    var ImageIndex = 1
+//    var UserIndex = 1
+//
+//    for i in 0..<5 {
+//
+//        let id = UUID().uuidString
+//        
+//        let fileDirectory = "Avatars/" + "_\(id)" + ".jpg"
+//
+//        FileStorage.uploadImage(UIImage(named: "user\(ImageIndex)")!, directory: fileDirectory) { (avatarLink) in
+//            
+//            let user = User(id: id, username: names[i], email: "user\(UserIndex)@mail.com", pushId: "", avatarLink: avatarLink ?? "", status: "No Status")
+//                
+//            UserIndex += 1
+//            FirebaseUserListener.shared.saveUserToFireStore(user)
+//        }
+//
+//        ImageIndex += 1
+//        if ImageIndex == 5 {
+//            ImageIndex = 1
+//        }
+//    }
+//}

@@ -47,12 +47,12 @@ extension ChatViewController: MessagesDisplayDelegate {
 
     // MARK: - Media Messages
 
-    func configureMediaMessageImageView(_ imageView: UIImageView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
-//        let mkmessage = mkmessageAt(indexPath)
-//        if let messageContainerView = imageView.superview as? MessageContainerView {
-//            updateMediaMessageStatus(mkmessage, in: messageContainerView)
-//        }
-    }
+//    func configureMediaMessageImageView(_ imageView: UIImageView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+////        let mkmessage = mkmessageAt(indexPath)
+////        if let messageContainerView = imageView.superview as? MessageContainerView {
+////            updateMediaMessageStatus(mkmessage, in: messageContainerView)
+////        }
+//    }
 }
 
 
@@ -96,11 +96,11 @@ extension ChannelChatViewController: MessagesDisplayDelegate {
 
     // MARK: - Media Messages
 
-    func configureMediaMessageImageView(_ imageView: UIImageView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
-//        let mkmessage = mkmessageAt(indexPath)
-//        if let messageContainerView = imageView.superview as? MessageContainerView {
-//            updateMediaMessageStatus(mkmessage, in: messageContainerView)
-//        }
-    }
+//    func configureMediaMessageImageView(_ imageView: UIImageView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+////        let mkmessage = mkmessageAt(indexPath)
+////        if let messageContainerView = imageView.superview as? MessageContainerView {
+////            updateMediaMessageStatus(mkmessage, in: messageContainerView)
+////        }
+//    }
 }
 

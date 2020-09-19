@@ -10,7 +10,6 @@ import Foundation
 import MessageKit
 import CoreLocation
 
-
 class IncomingMessage {
     
     var messagesCollectionView: MessagesViewController
@@ -22,7 +21,6 @@ class IncomingMessage {
     
     
     //MARK: CreateMessage
-    
     func createMessage(localMessage: LocalMessage) -> MKMessage? {
 
         let mkMessage = MKMessage(message: localMessage)
@@ -33,9 +31,8 @@ class IncomingMessage {
 
             mkMessage.photoItem = photoItem
             mkMessage.kind = MessageKind.photo(photoItem)
-            
+
             FileStorage.downloadImage(imageUrl: localMessage.pictureUrl, isMessage: true) { (image) in
-                print("set image", Date())
                 mkMessage.photoItem?.image = image
                 self.messagesCollectionView.messagesCollectionView.reloadData()
             }
@@ -71,18 +68,19 @@ class IncomingMessage {
         if localMessage.type == kAUDIO {
 
             let audioMessage = AudioMessage(duration: Float(localMessage.audioDuration))
-            
+
             mkMessage.audioItem = audioMessage
             mkMessage.kind = MessageKind.audio(audioMessage)
 
             FileStorage.downloadAudio(audioUrl: localMessage.audioUrl) { (fileName) in
-                
+
                 let audioURL = URL(fileURLWithPath: fileInDocumentsDirectory(filename: fileName))
 
                 mkMessage.audioItem?.url = audioURL
 
             }
-            self.messagesCollectionView.messagesCollectionView.reloadData()
+        //not needed?
+//            self.messagesCollectionView.messagesCollectionView.reloadData()
 
         }
 

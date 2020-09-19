@@ -43,11 +43,20 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
 
     
     //MARK: - Delegates
-
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-            print("Failed to get location")
+        print("Failed to get location")
     }
     
+
+    @available(iOS 14.0, *)
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        if self.locationManager!.authorizationStatus == .notDetermined {
+            self.locationManager!.requestWhenInUseAuthorization()
+        }
+    }
+
+
+    @available(iOS 13.0, *)
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         
         switch status {
@@ -61,18 +70,14 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
             manager.startUpdatingLocation()
             break
         case .restricted:
-            // restricted by e.g. parental controls. User can't enable Location Services
             break
         case .denied:
             locationManager = nil
-            print("Denied location")
-            // user denied your app access to Location Services, but can grant access from Settings.app
             break
         @unknown default:
             print("Unknown Location error")
         }
     }
-    
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         currentLocation = locations.last!.coordinate

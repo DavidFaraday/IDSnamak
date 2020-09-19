@@ -12,7 +12,6 @@ import Firebase
 class FirebaseTypingListener {
     
     static let shared = FirebaseTypingListener()
-    
     var typingListener: ListenerRegistration!
 
     private init() {}
@@ -45,7 +44,9 @@ class FirebaseTypingListener {
     }
     
     func removeTypingListener() {
-        self.typingListener.remove()
+        if typingListener != nil {
+            self.typingListener.remove()
+        }
     }
 
 }

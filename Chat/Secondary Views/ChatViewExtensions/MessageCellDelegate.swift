@@ -52,15 +52,15 @@ extension ChatViewController: MessageCellDelegate {
     
     
     func didTapMessage(in cell: MessageCollectionViewCell) {
-        
+
         if let indexPath = messagesCollectionView.indexPath(for: cell) {
             let mkmessage = mkmessages[indexPath.section]
-            
+
             if mkmessage.locationItem != nil {
-                
+
                 let mapView = MapViewViewController()
                 mapView.location = mkmessage.locationItem?.location
-                
+
                 navigationController?.pushViewController(mapView, animated: true)
             }
         }

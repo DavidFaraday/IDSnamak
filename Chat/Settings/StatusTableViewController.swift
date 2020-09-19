@@ -26,19 +26,18 @@ class StatusTableViewController: UITableViewController {
 
         return allStatuses.count
     }
-    
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
+
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        
+
         let status = allStatuses[indexPath.row]
         cell.textLabel?.text = status
-        
+
         cell.accessoryType = User.currentUser?.status == status ? .checkmark : .none
 
         return cell
     }
-
 
 
     //MARK: - TableView Delegate
@@ -72,6 +71,4 @@ class StatusTableViewController: UITableViewController {
             FirebaseUserListener.shared.saveUserToFireStore(user)
         }
     }
-
-
 }

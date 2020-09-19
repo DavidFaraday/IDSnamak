@@ -11,7 +11,6 @@ import UIKit
 class RecentTableViewCell: UITableViewCell {
     
     //MARK: - IBOutlets
-    
     //UIViews
     @IBOutlet weak var unreadCountBackgroundView: UIView!
     
@@ -28,13 +27,11 @@ class RecentTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         unreadCountBackgroundView.layer.cornerRadius = unreadCountBackgroundView.frame.width/2
-        // Initialization code
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         
-        // Configure the view for the selected state
     }
     
     func configureCell(recent: RecentChat) {
@@ -71,9 +68,8 @@ class RecentTableViewCell: UITableViewCell {
                 self.avatarImageView.image = avatarImage?.circleMasked
             }
         } else {
-            self.avatarImageView.image = UIImage(named: "avatar")?.circleMasked
+            self.avatarImageView.image = UIImage(named: "avatar")
         }
     }
-    
-    
+
 }

@@ -32,19 +32,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
-    func applicationWillEnterForeground(_ application: UIApplication) {
-        
-        application.applicationIconBadgeNumber = 0
-    }
     
-    func applicationDidEnterBackground(_ application: UIApplication) {
-        
-        application.applicationIconBadgeNumber = 0
-    }
     
     // MARK: UISceneSession Lifecycle
 
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
+
         // Called when a new scene session is being created.
         // Use this method to select a configuration to create the new scene with.
         return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
@@ -58,7 +51,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     //added for notifications
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
-        
+
     }
 
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any],
@@ -78,7 +71,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         firstRun = userDefaults.bool(forKey: kFIRSTRUN)
         
         if !firstRun! {
-            let status = Status.array.map { $0.rawValue }
+            let status = Status.allCases.map { $0.rawValue }
             
             userDefaults.set(true, forKey: kFIRSTRUN)
             userDefaults.set(status, forKey: kSTATUS)
@@ -103,7 +96,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if var user = User.currentUser {
             user.pushId = newPushId
             saveUserLocally(user)
-            FirebaseUserListener.shared.updateUserInFireStore(user)
+            FirebaseUserListener.shared.saveUserToFireStore(user)
         }
     }
 
@@ -113,6 +106,8 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
     
         func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
              
+            completionHandler()
+
             let userInfo = response.notification.request.content.userInfo
 
             guard let rootViewController = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.window?.rootViewController else {
@@ -125,13 +120,19 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
             if let tabBarController = rootViewController as? UITabBarController,
                 let navController = tabBarController.selectedViewController as? UINavigationController {
 
-                let chatView = ChatViewController(chatId: userInfo["chatRoomId"] as! String, recipientId: userInfo["senderId"] as! String, recipientName: titleFromNotification(payload: userInfo))
+                if let chatView = navController.visibleViewController as? ChatViewController {
+                    //we have chat room as current view
+                    if chatView.chatId == userInfo["chatRoomId"] as? String {
+                        return
+                    }
+                }
                 
-                    navController.pushViewController(chatView, animated: true)
-            }
+                //we have other view as current view
+                let chatView = ChatViewController(chatId: userInfo["chatRoomId"] as! String, recipientId: userInfo["senderId"] as! String, recipientName: titleFromNotification(payload: userInfo))
 
-            completionHandler()
-        }
+                navController.pushViewController(chatView, animated: true)
+            }
+    }
 
     //MARK: - Helpers
     private func titleFromNotification(payload: [AnyHashable : Any]) -> String {

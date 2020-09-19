@@ -14,6 +14,7 @@ class SettingsTableViewController: UITableViewController {
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var avatarImageView: UIImageView!
+    @IBOutlet weak var appVersionLabel: UILabel!
     
     //MARK: - ViewLifeCycle
     override func viewDidLoad() {
@@ -26,18 +27,6 @@ class SettingsTableViewController: UITableViewController {
         super.viewDidAppear(animated)
         
         showUserInfo()
-    }
-
-    // MARK: - Table view data source
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-
-        return 3
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-
-        return section == 0 ? 1 : 2
     }
 
     
@@ -57,11 +46,7 @@ class SettingsTableViewController: UITableViewController {
     }
 
 
-    
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return ""
-    }
-    
+        
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return section == 0 ? 0.0 : 10.0
     }
@@ -91,6 +76,7 @@ class SettingsTableViewController: UITableViewController {
         if let user = User.currentUser {
             usernameLabel.text = user.username
             statusLabel.text = user.status
+            appVersionLabel.text = "App Version \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")"
             
             if user.avatarLink != "" {
                 FileStorage.downloadImage(imageUrl: user.avatarLink) { (avatarImage) in

@@ -31,18 +31,16 @@ class ChatsTableViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        navigationItem.largeTitleDisplayMode = .always
-        navigationController?.navigationBar.prefersLargeTitles = true
     }
     
     //MARK: - IBAction
     @IBAction func composeButtonPressed(_ sender: Any) {
 
         let userView = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(identifier: "usersView") as! UsersTableViewController
-        
+
         navigationController?.pushViewController(userView, animated: true)
     }
-    
+
 
     //MARK: - DownloadRecents
     private func downloadRecentChats() {
@@ -64,22 +62,22 @@ class ChatsTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
+
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! RecentTableViewCell
 
         let recentChat = searchController.isActive ? filteredRecents[indexPath.row] : allRecents[indexPath.row]
 
         cell.configureCell(recent: recentChat)
-        
+
         return cell
     }
 
     // MARK: - Table view delegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+
         tableView.deselectRow(at: indexPath, animated: true)
-        
+
         let recent = searchController.isActive ? filteredRecents[indexPath.row] : allRecents[indexPath.row]
 
         FirebaseRecentListener.shared.clearUnreadCounter(recent: recent)
@@ -87,23 +85,23 @@ class ChatsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        
+
         if editingStyle == .delete {
-            
+
             let recent = searchController.isActive ? filteredRecents[indexPath.row] : allRecents[indexPath.row]
             FirebaseRecentListener.shared.deleteRecent(recent)
-            
+
             searchController.isActive ? self.filteredRecents.remove(at: indexPath.row) : self.allRecents.remove(at: indexPath.row)
-            
+
             tableView.deleteRows(at: [indexPath], with: .automatic)
         }
     }
-    
+
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        
+
         return true
     }
-    
+
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
        let headerView = UIView()
         headerView.backgroundColor = UIColor(named: "tableBackgroundColor")
@@ -128,7 +126,7 @@ class ChatsTableViewController: UITableViewController {
 
     //MARK: - SearchController
     private func setupSearchController() {
-        
+
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = true
         searchController.obscuresBackgroundDuringPresentation = false
@@ -138,12 +136,12 @@ class ChatsTableViewController: UITableViewController {
     }
 
     private func filteredContentForSearchText(searchText: String) {
-        
+
         filteredRecents = allRecents.filter({ (recent) -> Bool in
-            
+
             return recent.receiverName.lowercased().contains(searchText.lowercased())
         })
-        
+
         tableView.reloadData()
     }
 }

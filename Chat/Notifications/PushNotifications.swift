@@ -28,7 +28,7 @@ class PushNotificationService {
     }
 
     private func sendMessageToUser(to token: String, title: String, body: String, chatRoomId: String) {
-
+        
         let urlString = "https://fcm.googleapis.com/fcm/send"
         
         let url = NSURL(string: urlString)!

@@ -27,6 +27,7 @@ extension ChatViewController: MessagesDataSource {
         return mkmessages[indexPath.section]
     }
 
+    //MARK: - Cell top label
     func cellTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
 
         if (indexPath.section % 3 == 0) {
@@ -40,7 +41,7 @@ extension ChatViewController: MessagesDataSource {
         return nil
     }
 
-
+    //MARK: - Cell Bottom label
     func cellBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
 
         if (isFromCurrentSender(message: message)) {
@@ -52,11 +53,8 @@ extension ChatViewController: MessagesDataSource {
         return nil
     }
 
-    func messageTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
-
-        return nil
-    }
-
+    
+    //MARK: - Message Bottom Label
     func messageBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
 
         if indexPath.section != mkmessages.count - 1 {
@@ -67,7 +65,6 @@ extension ChatViewController: MessagesDataSource {
             return nil
         }
     }
-    
 }
 
 
@@ -106,34 +103,10 @@ extension ChannelChatViewController: MessagesDataSource {
     }
 
 
+    func messageBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
 
-    func messageTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
-
-        return nil
+        return NSAttributedString(string: message.sentDate.time(), attributes: [.font : UIFont.boldSystemFont(ofSize: 10), .foregroundColor: UIColor.darkGray])
     }
-
-//    func messageBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
-//
-//        if indexPath.section != mkmessages.count - 1 {
-//            let font = UIFont.boldSystemFont(ofSize: 10)
-//            let color = UIColor.darkGray
-//            return NSAttributedString(string: message.sentDate.time(), attributes: [.font: font, .foregroundColor: color])
-//        } else {
-//            return nil
-//        }
-//    }
-//    
-//    func cellBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
-//
-//        if (isFromCurrentSender(message: message)) {
-//            let message = mkmessages[indexPath.section]
-//            let status = indexPath.section == mkmessages.count - 1 ? message.status + " " + message.readDate.time() : ""
-//
-//            return NSAttributedString(string: status, attributes: [.font: UIFont.boldSystemFont(ofSize: 10), .foregroundColor: UIColor.darkGray])
-//        }
-//        return nil
-//    }
-
 }
 
 

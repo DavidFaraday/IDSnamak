@@ -15,42 +15,41 @@ let storage = Storage.storage()
 class FileStorage {
     
     //MARK: - Image
-    
     class func uploadImage(_ image: UIImage, directory: String, isThumbnail: Bool = false, completion: @escaping (_ documentLink: String?) -> Void) {
-        
+
         if Reachability.HasConnection() {
-            
+
             let storageRef = storage.reference(forURL: kFILEREFERENCE).child(directory)
-            
+
             let imageData = image.jpegData(compressionQuality: isThumbnail ? 0.3 : 0.7)
-            
+
             var task : StorageUploadTask!
-            
-            
+
+
             task = storageRef.putData(imageData!, metadata: nil, completion: {
                 metadata, error in
-                
+
                 task.removeAllObservers()
                 ProgressHUD.dismiss()
-                
+
                 if error != nil {
-                    
+
                     print("error uploading document \(error!.localizedDescription)")
                     return
                 }
-                
+
                 storageRef.downloadURL(completion: { (url, error) in
-                    
+
                     guard let downloadUrl = url else {
                         completion(nil)
                         return
                     }
-                    
+
                     completion(downloadUrl.absoluteString)
                 })
-                
+
             })
-            
+
             if !isThumbnail {
                 task.observe(StorageTaskStatus.progress, handler: {
                     snapshot in
@@ -58,7 +57,7 @@ class FileStorage {
                     ProgressHUD.showProgress(CGFloat(progress))
                 })
             }
-            
+
         } else {
             print("No Internet Connection!")
         }
@@ -66,36 +65,34 @@ class FileStorage {
     
     
     class func downloadImage(imageUrl: String, isMessage: Bool = false, completion: @escaping (_ image: UIImage?) -> Void) {
-        
+
         let imageFileName = fileNameFrom(fileUrl: imageUrl)
 
         if fileExistsAtPath(path: imageFileName) {
 
             if let contentsOfFile = UIImage(contentsOfFile: fileInDocumentsDirectory(filename: imageFileName)) {
-//                print("have local", imageFileName)
                 completion(contentsOfFile)
             } else {
                 print("couldn't generate local image")
-                completion(UIImage(named: "samplePhoto"))
+                completion(UIImage(named: "avatar"))
             }
-            
+
         } else {
-            
+
             if imageUrl != "" {
-//                print("no local", imageFileName)
 
                 let documentURL = URL(string: imageUrl)
-                
+
                 let downloadQueue = DispatchQueue(label: "imageDownloadQueue")
-                
+
                 downloadQueue.async {
 
                     let data = NSData(contentsOf: documentURL!)
-                    
+
                     if data != nil {
-                        
+
                         let imageToReturn = UIImage(data: data! as Data)
-                        
+
                         //save all
                         FileStorage.saveFileLocally(fileData: data!, fileName: imageFileName)
 
@@ -103,11 +100,11 @@ class FileStorage {
 //                        if isMessage {
 //                            FileStorage.saveFileLocally(fileData: data!, fileName: imageFileName)
 //                        }
-                        
+
                         DispatchQueue.main.async {
                             completion(imageToReturn!)
                         }
-                        
+
                     } else {
                         DispatchQueue.main.async {
                             print("No document in database")
@@ -115,9 +112,9 @@ class FileStorage {
                         }
                     }
                 }
-                
+
             } else {
-                completion(UIImage(named: "samplePhoto"))
+                completion(UIImage(named: "avatar"))
             }
         }
     }
@@ -214,12 +211,12 @@ class FileStorage {
                 
                 if let audioData = NSData(contentsOfFile: fileInDocumentsDirectory(filename: fileName)) {
                     
-                    let bcf = ByteCountFormatter()
-                    bcf.allowedUnits = [.useBytes] // optional: restricts the units to MB only
-                    bcf.countStyle = .file
-                    let string = bcf.string(fromByteCount: Int64(audioData.count))
-                    print("formatted result: \(string)")
-                    print("have audio data", audioData)
+//                    let bcf = ByteCountFormatter()
+//                    bcf.allowedUnits = [.useBytes] // optional: restricts the units to MB only
+//                    bcf.countStyle = .file
+//                    let string = bcf.string(fromByteCount: Int64(audioData.count))
+//                    print("formatted result: \(string)")
+//                    print("have audio data", audioData)
                     
                     task = storageRef.putData(audioData as Data, metadata: nil, completion: {
                         metadata, error in
@@ -266,29 +263,29 @@ class FileStorage {
 
     
     class func downloadAudio(audioUrl: String, completion: @escaping ( _ audioFileName: String) -> Void) {
-        
+
         let audioFileName = fileNameFrom(fileUrl: audioUrl)  + ".m4a"
-        
+
         if fileExistsAtPath(path: audioFileName) {
 
             completion(audioFileName)
-            
+
         } else {
-            
+
             let downloadQueue = DispatchQueue(label: "audioDownloadQueue")
-            
+
             downloadQueue.async {
 
                 let data = NSData(contentsOf: URL(string: audioUrl)!)
-                
+
                 if data != nil {
-                    
+
                     FileStorage.saveFileLocally(fileData: data!, fileName: audioFileName)
-                    
+
                     DispatchQueue.main.async {
                         completion(audioFileName)
                     }
-                    
+
                 } else {
                     print("No audio in database")
                 }
@@ -298,43 +295,23 @@ class FileStorage {
     
     //MARK: - Save locally
     class func saveFileLocally(fileData: NSData, fileName: String) {
-        
-        var docURL = getDocumentsURL()
-        
-        docURL = docURL.appendingPathComponent(fileName, isDirectory: false)
-        
-        (fileData).write(to: docURL, atomically: true)
+        let docUrl = getDocumentsURL().appendingPathComponent(fileName, isDirectory: false)
+        fileData.write(to: docUrl, atomically: true)
     }
-    
+
 }
 
-//Helpers
+//MARK: - Helpers
 func fileInDocumentsDirectory(filename: String) -> String {
-    
-    let fileURL = getDocumentsURL().appendingPathComponent(filename)
-    return fileURL.path
+    return getDocumentsURL().appendingPathComponent(filename).path
 }
 
 func getDocumentsURL() -> URL {
-    
-    let documentURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last
-    
-    return documentURL!
+    return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!
 }
 
 
 func fileExistsAtPath(path: String) -> Bool {
-    var doesExist = false
-    
-    let filePath = fileInDocumentsDirectory(filename: path)
-    let fileManager = FileManager.default
-
-    if fileManager.fileExists(atPath: filePath) {
-        doesExist = true
-    } else {
-        doesExist = false
-    }
-    
-    return doesExist
+    return FileManager.default.fileExists(atPath: fileInDocumentsDirectory(filename: path))
 }
 

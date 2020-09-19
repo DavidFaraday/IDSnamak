@@ -15,15 +15,14 @@ class MyChannelsTableViewController: UITableViewController {
 
     
     //MARK: - ViewLife Cycle
-
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         tableView.tableFooterView = UIView()
-        
+
         downloadUserChannels()
     }
-        
+
     //MARK: - IBActions
     
     @IBAction func addButtonPressed(_ sender: Any) {
@@ -57,7 +56,7 @@ class MyChannelsTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! ChannelTableViewCell
 
         cell.configure(channel: myChannels[indexPath.row])
-        
+
         return cell
     }
 
@@ -65,24 +64,24 @@ class MyChannelsTableViewController: UITableViewController {
     //MARK: - TableViewDelegates
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+
         tableView.deselectRow(at: indexPath, animated: true)
-        
+
         performSegue(withIdentifier: "myChannelToAddSeg", sender: myChannels[indexPath.row])
     }
     
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
-    
+
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        
+
         if editingStyle == .delete {
-            
+
             let channelToDelete = myChannels[indexPath.row]
             myChannels.remove(at: indexPath.row)
             FirebaseChannelListener.shared.deleteChannel(channelToDelete)
-            
+
             tableView.deleteRows(at: [indexPath], with: .automatic)
         }
     }

@@ -20,27 +20,27 @@ class FirebaseRecentListener {
     /// - Parameters:
     ///   - callback: All up to date recents of current user.
     func downloadRecentChatsFromFireStore(completion: @escaping (_ allRecents: [RecentChat]) -> Void) {
-        
+
         FirebaseReference(.Recent).whereField(kSENDERID, isEqualTo: User.currentId).addSnapshotListener() { (querySnapshot, error) in
-        
+
             var recentChats: [RecentChat] = []
 
             guard let documents = querySnapshot?.documents else {
                 print("no document for recent chats")
                 return
             }
-            
+
             let allRecents = documents.compactMap { (queryDocumentSnapshot) -> RecentChat? in
 
                 return try? queryDocumentSnapshot.data(as: RecentChat.self)
             }
-            
+
             for recent in allRecents {
                 if recent.lastMessage != "" {
                     recentChats.append(recent)
                 }
             }
-            
+
             recentChats.sort(by: { $0.date! > $1.date! })
             completion(recentChats)
         }
@@ -54,12 +54,12 @@ class FirebaseRecentListener {
     func updateRecents(chatRoomId: String, lastMessage: String) {
 
         FirebaseReference(.Recent).whereField(kCHATROOMID, isEqualTo: chatRoomId).getDocuments { (querySnapshot, error) in
-            
+
             guard let documents = querySnapshot?.documents else {
                 print("no document for recent update")
                 return
             }
-            
+
             let allRecents = documents.compactMap { (queryDocumentSnapshot) -> RecentChat? in
                 return try? queryDocumentSnapshot.data(as: RecentChat.self)
             }
@@ -76,18 +76,18 @@ class FirebaseRecentListener {
     /// - Parameters:
     ///   - chatRoomId: The `Id` of chatroom where user is member.
     func resetRecentCounter(chatRoomId: String) {
-        
+
         FirebaseReference(.Recent).whereField(kCHATROOMID, isEqualTo: chatRoomId).whereField(kSENDERID, isEqualTo: User.currentId).getDocuments { (querySnapshot, error) in
-            
+
             guard let documents = querySnapshot?.documents else {
                 print("no document for recent counter")
                 return
             }
-            
+
             let allRecents = documents.compactMap { (queryDocumentSnapshot) -> RecentChat? in
                 return try? queryDocumentSnapshot.data(as: RecentChat.self)
             }
-            
+
             if allRecents.count > 0 {
                 self.clearUnreadCounter(recent: allRecents.first!)
             }
@@ -100,10 +100,10 @@ class FirebaseRecentListener {
     ///   - recent: The `RecentChat` to reset counter for.
 
     func clearUnreadCounter(recent: RecentChat) {
-        
+
         var recent = recent
         recent.unreadCounter = 0
-        
+
         self.updateRecent(recent)
     }
     
@@ -112,17 +112,18 @@ class FirebaseRecentListener {
     /// - Parameters:
     ///   - recent: The `Recent` Recent to update.
     ///   - lastMessage: The `lastMessage` sent.
+
     private func updateRecentItemWithNewMessage(recent: RecentChat, lastMessage: String) {
-            
+
         var recent = recent
-        
+
         if recent.senderId != User.currentId {
             recent.unreadCounter += 1
         }
-        
+
         recent.lastMessage = lastMessage
         recent.date = Date()
-        
+
         self.updateRecent(recent)
     }
 
@@ -133,7 +134,7 @@ class FirebaseRecentListener {
     /// - Parameters:
     ///   - recent: The `Recent` Recent Object.
     func addRecent(_ recent: RecentChat) {
-        
+
         do {
             let _ = try FirebaseReference(.Recent).document(recent.id).setData(from: recent)
         }
@@ -147,14 +148,13 @@ class FirebaseRecentListener {
     /// - Parameters:
     ///   - recent: The `Recent` Recent Object.
     func updateRecent(_ recent: RecentChat) {
-        
+
         do {
             let _ = try FirebaseReference(.Recent).document(recent.id).setData(from: recent)
         }
         catch {
             print(error.localizedDescription, "updating recent....")
         }
-        
     }
 
     /// Deletes Specific Recent Object from firebase
@@ -164,5 +164,4 @@ class FirebaseRecentListener {
     func deleteRecent(_ recent: RecentChat) {
         FirebaseReference(.Recent).document(recent.id).delete()
     }
-
 }

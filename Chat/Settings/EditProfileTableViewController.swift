@@ -26,7 +26,6 @@ class EditProfileTableViewController: UITableViewController {
         
         tableView.tableFooterView = UIView()
         configureTextField()
-        showUserInfo()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -42,15 +41,6 @@ class EditProfileTableViewController: UITableViewController {
     }
 
     
-    // MARK: - Table view data source
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-
-        return section == 0 ? 2 : 1
-    }
     
     //MARK: - TableView Delegate
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -125,7 +115,6 @@ class EditProfileTableViewController: UITableViewController {
             FileStorage.saveFileLocally(fileData: image.jpegData(compressionQuality: 1.0)! as NSData, fileName:  User.currentId)
         }
     }
-
 }
 
 
@@ -149,7 +138,6 @@ extension EditProfileTableViewController: UITextFieldDelegate {
         }
         return true
     }
-    
 }
 
 
@@ -186,5 +174,4 @@ extension EditProfileTableViewController: GalleryControllerDelegate {
     func galleryControllerDidCancel(_ controller: GalleryController) {
         controller.dismiss(animated: true, completion: nil)
     }
-
 }

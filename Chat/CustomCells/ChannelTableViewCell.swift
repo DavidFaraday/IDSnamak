@@ -7,6 +7,7 @@
 //
 
 import UIKit
+//all done
 
 class ChannelTableViewCell: UITableViewCell {
 
@@ -19,13 +20,11 @@ class ChannelTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
-        // Configure the view for the selected state
     }
 
     func configure(channel: Channel) {
@@ -41,10 +40,10 @@ class ChannelTableViewCell: UITableViewCell {
         
         if avatarLink != "" {
             FileStorage.downloadImage(imageUrl: avatarLink) { (avatarImage) in
-                self.avatarImageView.image = avatarImage != nil ? avatarImage?.circleMasked : UIImage(named: "avatar")?.circleMasked
+                self.avatarImageView.image = avatarImage != nil ? avatarImage?.circleMasked : UIImage(named: "avatar")
             }
         } else {
-            self.avatarImageView.image = UIImage(named: "avatar")?.circleMasked
+            self.avatarImageView.image = UIImage(named: "avatar")
         }
     }
 

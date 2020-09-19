@@ -78,14 +78,14 @@ class LoginViewController: UIViewController {
     
     //MARK: - Animations
     private func updateUIFor(login: Bool) {
-        
+
         self.loginButtonOutlet.setImage(UIImage(named: login ? "loginBtn" : "registerBtn"), for: .normal)
         self.signUpButtonOutlet.setTitle(login ? "SignUp" : "Login", for: .normal)
-        
+
         self.signUpLabel.text = login ? "Don't have an account?" : "Have an account?"
-        
+
         UIView.animate(withDuration: 0.5) {
-            
+
             self.repeatPasswordTextField.isHidden = login
             self.repeatPasswordLabelOutlet.isHidden = login
             self.repeatPasswordLineView.isHidden = login
@@ -93,7 +93,7 @@ class LoginViewController: UIViewController {
     }
     
     private func updatePlaceholderLabels(textField: UITextField) {
-        
+
         switch textField {
         case emailTextField:
             emailLabelOutlet.text = textField.hasText ? "Email" : ""
@@ -102,7 +102,7 @@ class LoginViewController: UIViewController {
         default:
             repeatPasswordLabelOutlet.text = textField.hasText ? "Repeat Password" : ""
         }
-        
+
     }
     
     
@@ -112,20 +112,20 @@ class LoginViewController: UIViewController {
         passwordTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         repeatPasswordTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
     }
-    
+
     @objc func textFieldDidChange(_ textField: UITextField) {
         updatePlaceholderLabels(textField: textField)
     }
-    
+
     private func setupBackgroundTap() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(backgroundTap))
         view.addGestureRecognizer(tapGesture)
     }
-    
+
     @objc func backgroundTap() {
         view.endEditing(false)
     }
-    
+
     //MARK: - Helpers
     private func loginUser() {
         FirebaseUserListener.shared.loginUserWith(email: emailTextField.text!, password: passwordTextField.text!) { (error, isEmailVerified) in
@@ -176,9 +176,9 @@ class LoginViewController: UIViewController {
             }
         }
     }
-    
+
     private func isDataInputedFor(type: String) -> Bool {
-        
+
         switch type {
         case "login":
             return emailTextField.text != "" && passwordTextField.text != ""

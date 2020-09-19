@@ -44,7 +44,7 @@
 		55943D07248CE0A600A7D557 /* FileStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55943D06248CE0A600A7D557 /* FileStorage.swift */; };
 		55943D09248CE0D200A7D557 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55943D08248CE0D200A7D557 /* Reachability.swift */; };
 		5596561624DFC31800345E58 /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5596561524DFC31800345E58 /* Channel.swift */; };
-		55A31DBA24D73B14007F8643 /* ChannelTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A31DB924D73B14007F8643 /* ChannelTableViewController.swift */; };
+		55A31DBA24D73B14007F8643 /* ChannelDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A31DB924D73B14007F8643 /* ChannelDetailTableViewController.swift */; };
 		55A3616924A0C21E00048E1D /* AudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A3616824A0C21E00048E1D /* AudioRecorder.swift */; };
 		55A3616B24A1293000048E1D /* AudioMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A3616A24A1293000048E1D /* AudioMessage.swift */; };
 		55C024CA24D69ADE00F037EC /* ChannelsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C024C924D69ADE00F037EC /* ChannelsTableViewController.swift */; };
@@ -110,7 +110,7 @@
 		55943D06248CE0A600A7D557 /* FileStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileStorage.swift; sourceTree = "<group>"; };
 		55943D08248CE0D200A7D557 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		5596561524DFC31800345E58 /* Channel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Channel.swift; sourceTree = "<group>"; };
-		55A31DB924D73B14007F8643 /* ChannelTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelTableViewController.swift; sourceTree = "<group>"; };
+		55A31DB924D73B14007F8643 /* ChannelDetailTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelDetailTableViewController.swift; sourceTree = "<group>"; };
 		55A3616824A0C21E00048E1D /* AudioRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorder.swift; sourceTree = "<group>"; };
 		55A3616A24A1293000048E1D /* AudioMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioMessage.swift; sourceTree = "<group>"; };
 		55C024C924D69ADE00F037EC /* ChannelsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsTableViewController.swift; sourceTree = "<group>"; };
@@ -329,7 +329,7 @@
 				5515811B24D87F8D00A99C38 /* ChannelChatViewController.swift */,
 				55C024CD24D6A6C400F037EC /* MyChannelsTableViewController.swift */,
 				55C024CB24D69AEE00F037EC /* AddChannelTableViewController.swift */,
-				55A31DB924D73B14007F8643 /* ChannelTableViewController.swift */,
+				55A31DB924D73B14007F8643 /* ChannelDetailTableViewController.swift */,
 				551B96DB248FEBD90028C2E4 /* ChatViewExtensions */,
 			);
 			path = "Secondary Views";
@@ -458,7 +458,7 @@
 				55C024CE24D6A6C400F037EC /* MyChannelsTableViewController.swift in Sources */,
 				55943D09248CE0D200A7D557 /* Reachability.swift in Sources */,
 				55C024D224D6AB9600F037EC /* ChannelTableViewCell.swift in Sources */,
-				55A31DBA24D73B14007F8643 /* ChannelTableViewController.swift in Sources */,
+				55A31DBA24D73B14007F8643 /* ChannelDetailTableViewController.swift in Sources */,
 				55C6CAD924954D2F006B0051 /* PushNotifications.swift in Sources */,
 				557758CA24881888000799E2 /* Constants.swift in Sources */,
 				5542CC45249F3DD200C2A399 /* MapAnnotaion.swift in Sources */,

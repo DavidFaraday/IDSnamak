@@ -8,11 +8,11 @@
 
 import UIKit
 
-protocol ChannelTableViewControllerDelegate {
+protocol ChannelDetailTableViewControllerDelegate {
     func didClickFollow()
 }
 
-class ChannelTableViewController: UITableViewController {
+class ChannelDetailTableViewController: UITableViewController {
 
     //MARK: - IBOutlets
     @IBOutlet weak var avatarImageView: UIImageView!
@@ -23,7 +23,7 @@ class ChannelTableViewController: UITableViewController {
     
     //MARK: - Vars
     var channel: Channel!
-    var delegate: ChannelTableViewControllerDelegate?
+    var delegate: ChannelDetailTableViewControllerDelegate?
 
     //MARK: - View Life Cycle
     override func viewDidLoad() {
@@ -54,14 +54,14 @@ class ChannelTableViewController: UITableViewController {
                 self.avatarImageView.image = avatarImage?.circleMasked
             }
         } else {
-            self.avatarImageView.image = UIImage(named: "avatar")?.circleMasked
+            self.avatarImageView.image = UIImage(named: "avatar")
         }
     }
 
     //MARK: - Actions
     @objc func followChannel() {
         channel.memberIds.append(User.currentId)
-        FirebaseChannelListener.shared.updateChannel(channel)
+        FirebaseChannelListener.shared.saveChannel(channel)
         delegate?.didClickFollow()
         self.navigationController?.popViewController(animated: true)
     }

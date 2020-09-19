@@ -8,6 +8,7 @@
 
 import UIKit
 
+//all done
 class UsersTableViewController: UITableViewController {
     
     //MARK: - Vars
@@ -20,37 +21,37 @@ class UsersTableViewController: UITableViewController {
     //MARK: - View lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         self.refreshControl = UIRefreshControl()
         self.tableView.refreshControl = self.refreshControl
 
         tableView.tableFooterView = UIView()
-        
+
         setupSearchController()
         downloadUsers()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
+
         navigationItem.largeTitleDisplayMode = .always
         navigationController?.navigationBar.prefersLargeTitles = true
     }
     
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
+
         return searchController.isActive ? filteredUsers.count : allUsers.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
+
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! UserTableViewCell
-        
+
         let user = searchController.isActive ? filteredUsers[indexPath.row] : allUsers[indexPath.row]
-        
+
         cell.configure(user: user)
-        
+
         return cell
     }
     
@@ -68,7 +69,7 @@ class UsersTableViewController: UITableViewController {
         headerView.backgroundColor = UIColor(named: "tableBackgroundColor")
         return headerView
     }
-    
+
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 0
     }
@@ -79,7 +80,7 @@ class UsersTableViewController: UITableViewController {
     private func downloadUsers() {
         FirebaseUserListener.shared.downloadAllUsersFromFirebase { (allFirebaseUsers) in
             self.allUsers = allFirebaseUsers
-            
+
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
@@ -89,7 +90,7 @@ class UsersTableViewController: UITableViewController {
     
     //MARK: - SearchController
     private func setupSearchController() {
-        
+
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = true
         searchController.obscuresBackgroundDuringPresentation = false
@@ -99,12 +100,12 @@ class UsersTableViewController: UITableViewController {
     }
     
     private func filteredContentForSearchText(searchText: String) {
-        
+
         filteredUsers = allUsers.filter({ (user) -> Bool in
-            
+
             return user.username.lowercased().contains(searchText.lowercased())
         })
-        
+
         tableView.reloadData()
     }
     
@@ -128,9 +129,9 @@ class UsersTableViewController: UITableViewController {
 }
 
 extension UsersTableViewController: UISearchResultsUpdating {
-    
+
     func updateSearchResults(for searchController: UISearchController) {
         filteredContentForSearchText(searchText: searchController.searchBar.text!)
     }
-    
+
 }

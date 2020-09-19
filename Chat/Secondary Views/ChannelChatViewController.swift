@@ -16,7 +16,7 @@ import RealmSwift
 class ChannelChatViewController: MessagesViewController {
     
     //MARK: - Vars
-    private var chatId = ""
+    var chatId = ""
     private var recipientId = ""
     private var recipientName = ""
 
@@ -40,7 +40,6 @@ class ChannelChatViewController: MessagesViewController {
     let micButton = InputBarButtonItem()
 
     //listeners
-    var newChatListener: ListenerRegistration?
     var notificationToken: NotificationToken?
 
     var longPressGesture: UILongPressGestureRecognizer!
@@ -199,13 +198,13 @@ class ChannelChatViewController: MessagesViewController {
 
     private func listenForNewChats() {
         
-        FirebaseMessageListener.shared.listenForNewChats(channel.id, collectionId: channel.id, lastMessageDate: lastMessageDate())
+        FirebaseMessageListener.shared.listenForNewChats(chatId, collectionId: chatId, lastMessageDate: lastMessageDate())
     }
 
     
     private func checkForOldChats() {
         
-        FirebaseMessageListener.shared.checkForOldChats(channel.id, collectionId: channel.id)
+        FirebaseMessageListener.shared.checkForOldChats(chatId, collectionId: chatId)
     }
 
 
@@ -257,7 +256,6 @@ class ChannelChatViewController: MessagesViewController {
     private func setChatTitle() {
         self.title = recipientName
     }
-
 
     //MARK: - Actions
     
@@ -329,10 +327,7 @@ class ChannelChatViewController: MessagesViewController {
 
     //MARK: - Helpers
     private func removeListeners() {
-        
-        if newChatListener != nil {
-            newChatListener!.remove()
-        }
+        FirebaseMessageListener.shared.removeMessageListener()
     }
 
     private func lastMessageDate() -> Date {
@@ -341,20 +336,7 @@ class ChannelChatViewController: MessagesViewController {
         //add 1 sec from date because firebase will return same object in date less than date
         return Calendar.current.date(byAdding: .second, value: 1, to: lastMessageDate) ?? lastMessageDate
     }
-    
-
-    private func dictionaryArrayFromSnapshots(_ snapshots: [DocumentSnapshot]) -> [Dictionary<String, Any>] {
-        
-        var allMessages: [Dictionary<String, Any>] = []
-        
-        for snapshot in snapshots {
-            allMessages.append(snapshot.data()!)
-        }
-        
-        return allMessages
-    }
-
-    
+      
     
 
     //MARK: - Gallery
@@ -392,6 +374,14 @@ class ChannelChatViewController: MessagesViewController {
             }
             
             audioFileName = ""
+        case .possible:
+            print("possible")
+        case .changed:
+            print("changed")
+        case .cancelled:
+            print("cancelled")
+        case .failed:
+            print("failed")
         @unknown default:
             print("unknown")
         }
